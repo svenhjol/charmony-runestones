@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "charmony-runestones",
+  "version": "${mod_version}",
+
+  "name": "Runestones",
+  "description": "",
+
+  "authors": [
+    "svenhjol"
+  ],
+  "icon": "assets/charmony-runestones/textures/gui/sprites/icon.png",
+  "license": "MIT",
+  "environment": "*",
+  "accessWidener": "charmony-runestones.accesswidener",
+
+  "entrypoints": {
+    "main": [
+      "svenhjol.charmony.runestones.common.CommonInitializer"
+    ],
+    "client": [
+      "svenhjol.charmony.runestones.client.ClientInitializer"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "*",
+    "java": ">=21",
+    "fabric-api": "*",
+    "charmony": "${charmony_version}",
+    "charmony-api": "${api_version}"
+  },
+
+  "contact": {
+    "homepage": "https://charmony.work",
+    "sources": "https://github.com/svenhjol/${mod_id}"
+  }
+}
