@@ -1,10 +1,17 @@
 package svenhjol.charmony.runestones.client.features.runestones;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
+import svenhjol.charmony.api.RunestoneLocation;
 import svenhjol.charmony.core.base.Setup;
+import svenhjol.charmony.runestones.common.features.runestones.Helpers;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CActivationWarmup;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CTeleportedLocation;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CUniqueWorldSeed;
@@ -50,5 +57,36 @@ public final class Handlers extends Setup<Runestones> {
         this.seed = packet.seed();
         this.hasReceivedSeed = true;
         feature().handlers.cachedRunicNames.clear();
+    }
+
+    public void hudRender(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
+        feature().registers.hudRenderer.render(guiGraphics, deltaTracker);
+    }
+
+    public void playerTick(Player player) {
+        if (player.level().isClientSide()) {
+            feature().registers.hudRenderer.tick(player);
+        }
+    }
+
+    public String runicName(RunestoneLocation location) {
+        if (!hasReceivedSeed) {
+            throw new RuntimeException("Client has not received the unique world seed");
+        }
+
+        var id = location.id();
+        if (!cachedRunicNames.containsKey(id)) {
+            cachedRunicNames.put(id, Helpers.generateRunes(location, seed, 12));
+        }
+
+        return cachedRunicNames.get(id);
+    }
+
+    public BlockPos lookingAtBlock(Player player) {
+        var cameraPosVec = player.getEyePosition(1.0f);
+        var rotationVec = player.getViewVector(1.0f);
+        var vec3d = cameraPosVec.add(rotationVec.x * 6, rotationVec.y * 6, rotationVec.z * 6);
+        var raycast = player.level().clip(new ClipContext(cameraPosVec, vec3d, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
+        return raycast.getBlockPos();
     }
 }

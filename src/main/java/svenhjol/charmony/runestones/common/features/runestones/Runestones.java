@@ -24,8 +24,8 @@ public final class Runestones extends SidedFeature {
 
     public Runestones(Mod mod) {
         super(mod);
-        registers = new Registers(this);
         handlers = new Handlers(this);
+        registers = new Registers(this);
         providers = new Providers(this);
         advancements = new Advancements(this);
     }

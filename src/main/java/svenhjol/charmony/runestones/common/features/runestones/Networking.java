@@ -1,5 +1,6 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -16,6 +17,30 @@ import java.util.Objects;
 public final class Networking extends Setup<Runestones> {
     public Networking(Runestones feature) {
         super(feature);
+    }
+
+    // Client-to-server packet that tells the server what runestone blockpos the player is looking at.
+    public record C2SPlayerLooking(BlockPos pos) implements CustomPacketPayload {
+        public static Type<C2SPlayerLooking> TYPE = new Type<>(RunestonesMod.id("runestones_player_looking"));
+        public static StreamCodec<FriendlyByteBuf, C2SPlayerLooking> CODEC =
+            StreamCodec.of(C2SPlayerLooking::encode, C2SPlayerLooking::decode);
+
+        public static void send(BlockPos pos) {
+            ClientPlayNetworking.send(new C2SPlayerLooking(pos));
+        }
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+
+        private static void encode(FriendlyByteBuf buf, C2SPlayerLooking self) {
+            buf.writeBlockPos(self.pos());
+        }
+
+        private static C2SPlayerLooking decode(FriendlyByteBuf buf) {
+            return new C2SPlayerLooking(buf.readBlockPos());
+        }
     }
 
     // Server-to-client packet that tells the client the location that the player has just teleported to.

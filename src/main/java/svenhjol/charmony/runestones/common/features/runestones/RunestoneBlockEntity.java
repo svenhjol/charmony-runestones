@@ -6,13 +6,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import svenhjol.charmony.api.RunestoneLocation;
+import svenhjol.charmony.core.common.SyncedBlockEntity;
 import svenhjol.charmony.core.helper.PlayerHelper;
 
-// TODO: This might need to be synced to the client.
-public class RunestoneBlockEntity extends BlockEntity {
+public class RunestoneBlockEntity extends SyncedBlockEntity {
     public static final String LOCATION_TAG = "location";
     public static final String TARGET_TAG = "target";
     public static final String SACRIFICE_TAG = "sacrifice";
@@ -80,19 +79,22 @@ public class RunestoneBlockEntity extends BlockEntity {
         var feature = Runestones.feature();
 
         if (!hasTarget()) {
-            feature.handlers.trySetLocation(level, this);
-        }
+            var result = feature.handlers.trySetLocation(level, this);
 
-        if (!hasTarget()) {
-            feature.handlers.explode(level, pos);
+            if (!result) {
+                feature.handlers.explode(level, pos);
+            }
         }
 
         var players = PlayerHelper.getPlayersInRange(level, pos, 8.0d);
 
         // If there's just one player then they're the ones who discovered this.
         if (discovered == null && players.size() == 1) {
-            discovered = players.getFirst().getScoreboardName();
-            setChanged();
+            var player = players.getFirst();
+            if (!player.getAbilities().instabuild) {
+                discovered = player.getScoreboardName();
+                setChanged();
+            }
         }
 
         for (var player : players) {

@@ -1,5 +1,6 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
@@ -68,6 +69,21 @@ public final class Handlers extends Setup<Runestones> {
         }
     }
 
+    public void handlePlayerLooking(Networking.C2SPlayerLooking packet, ServerPlayNetworking.Context context) {
+        var player = context.player();
+        var server = player.server;
+
+        server.execute(() -> {
+            var level = player.level();
+            var pos = packet.pos();
+
+            // If it's a valid runestone that the player is looking at, do the advancement.
+            if (level.getBlockEntity(pos) instanceof RunestoneBlockEntity runestone && runestone.isValid()) {
+                feature().advancements.lookedAtRunestone(player);
+            }
+        });
+    }
+
     public void tickRunestone(Level level, BlockPos pos, BlockState state, RunestoneBlockEntity runestone) {
         if (!(level instanceof ServerLevel serverLevel)) return;
 
@@ -127,7 +143,7 @@ public final class Handlers extends Setup<Runestones> {
         activeTeleports.put(player.getUUID(), teleport);
     }
 
-    public void trySetLocation(ServerLevel level, RunestoneBlockEntity runestone) {
+    public boolean trySetLocation(ServerLevel level, RunestoneBlockEntity runestone) {
         var pos = runestone.getBlockPos();
         var random = RandomSource.create(pos.asLong());
         var target = Helpers.addRandomOffset(level, pos, random, 1000, 2000);
@@ -138,7 +154,7 @@ public final class Handlers extends Setup<Runestones> {
                 var result = level.findClosestBiome3d(x -> x.is(runestone.location.id()), target, 6400, 32, 64);
                 if (result == null) {
                     log().warn("Could not locate biome for " + runestone.location.id());
-                    return;
+                    return false;
                 }
 
                 runestone.target = result.getFirst();
@@ -148,7 +164,7 @@ public final class Handlers extends Setup<Runestones> {
                 var opt = structureRegistry.get(runestone.location.id()).map(HolderSet::direct);
                 if (opt.isEmpty()) {
                     log().warn("Could not get registered structure for " + runestone.location.id());
-                    return;
+                    return false;
                 }
 
                 var structure = opt.get();
@@ -157,7 +173,7 @@ public final class Handlers extends Setup<Runestones> {
 
                 if (result == null) {
                     log().warn("Could not locate structure for " + runestone.location.id());
-                    return;
+                    return false;
                 }
 
                 runestone.target = result.getFirst();
@@ -169,12 +185,13 @@ public final class Handlers extends Setup<Runestones> {
             }
             default -> {
                 log().warn("Not a valid destination type for runestone at " + pos);
-                return;
+                return false;
             }
         }
 
         // Write the target into the runestone.
         runestone.setChanged();
+        return true;
     }
 
     public void explode(Level level, BlockPos pos) {
