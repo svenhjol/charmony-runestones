@@ -10,9 +10,7 @@ import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.common.CommonRegistry;
 import svenhjol.charmony.core.events.PlayerTickCallback;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.C2SPlayerLooking;
-import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CActivationWarmup;
-import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CTeleportedLocation;
-import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CUniqueWorldSeed;
+import svenhjol.charmony.runestones.common.features.runestones.Networking.*;
 import svenhjol.charmony.runestones.common.features.runestones.RunestoneBlock.RunestoneBlockItem;
 
 import java.util.LinkedList;
@@ -58,13 +56,13 @@ public final class Registers extends Setup<Runestones> {
         PayloadTypeRegistry.playS2C().register(S2CTeleportedLocation.TYPE, S2CTeleportedLocation.CODEC);
         PayloadTypeRegistry.playS2C().register(S2CActivationWarmup.TYPE, S2CActivationWarmup.CODEC);
         PayloadTypeRegistry.playS2C().register(S2CUniqueWorldSeed.TYPE, S2CUniqueWorldSeed.CODEC);
+        PayloadTypeRegistry.playS2C().register(S2CDestroyRunestone.TYPE, S2CDestroyRunestone.CODEC);
 
         // Client packet senders.
         PayloadTypeRegistry.playC2S().register(C2SPlayerLooking.TYPE, C2SPlayerLooking.CODEC);
 
         // Handle packets being sent from the client
         ServerPlayNetworking.registerGlobalReceiver(C2SPlayerLooking.TYPE, feature.handlers::handlePlayerLooking);
-
     }
 
     @Override

@@ -54,7 +54,7 @@ public class RunestoneBlock extends BaseEntityBlock {
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, ItemStack stack) {
         super.setPlacedBy(level, pos, state, livingEntity, stack);
-        Runestones.feature().handlers.prepareRunestone(level, pos);
+        Runestones.feature().handlers.prepare(level, pos);
     }
 
     public static class RunestoneBlockItem extends BlockItem {

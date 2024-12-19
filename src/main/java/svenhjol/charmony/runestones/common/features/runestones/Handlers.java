@@ -23,12 +23,14 @@ import net.minecraft.world.phys.AABB;
 import svenhjol.charmony.api.RunestoneDefinition;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.helper.PlayerHelper;
+import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CDestroyRunestone;
 
 import java.util.*;
 
 public final class Handlers extends Setup<Runestones> {
+    public static final String MULTIPLE_PLAYERS_KEY = "gui.charmony-runestones.runestone.multiple_players";
     public static final int MAX_WARMUP_TICKS = 8;
-    public static final int WARMUP_TICKS = 10;
+    public static final int WARMUP_CHECK = 10;
 
     public final Map<Block, List<RunestoneDefinition>> definitions = new HashMap<>();
     private final Map<UUID, RunestoneTeleport> activeTeleports = new HashMap<>();
@@ -87,7 +89,7 @@ public final class Handlers extends Setup<Runestones> {
     public void tickRunestone(Level level, BlockPos pos, BlockState state, RunestoneBlockEntity runestone) {
         if (!(level instanceof ServerLevel serverLevel)) return;
 
-        if (runestone.isValid() && level.getGameTime() % WARMUP_TICKS == 0) {
+        if (runestone.isValid() && level.getGameTime() % WARMUP_CHECK == 0) {
             ItemEntity foundItem = null;
             var itemEntities = level.getEntitiesOfClass(ItemEntity.class, (new AABB(pos)).inflate(4.8d));
             for (var itemEntity : itemEntities) {
@@ -99,7 +101,7 @@ public final class Handlers extends Setup<Runestones> {
             if (foundItem != null) {
                 if (runestone.warmup == 0) {
                     // Don't allow item to be picked up until the ritual is complete...
-                    foundItem.setPickUpDelay(MAX_WARMUP_TICKS * WARMUP_TICKS);
+                    foundItem.setPickUpDelay(MAX_WARMUP_TICKS * WARMUP_CHECK);
 
                     // Start the powerup sound.
                     level.playSound(null, pos, feature().registers.powerUpSound.get(), SoundSource.BLOCKS);
@@ -127,11 +129,14 @@ public final class Handlers extends Setup<Runestones> {
                     } else {
                         foundItem.discard();
                     }
-                    runestone.activate(serverLevel, pos, state);
+                    runestone.warmup = 0;
+                    activate(serverLevel, runestone);
                 }
             } else {
                 runestone.warmup = 0;
             }
+
+            runestone.setChanged();
         }
     }
 
@@ -179,9 +184,7 @@ public final class Handlers extends Setup<Runestones> {
                 runestone.target = result.getFirst();
             }
             case PLAYER -> {
-                if (Helpers.runestoneLinksToSpawnPoint(runestone)) {
-                    runestone.target = null; // Player targets are dynamic.
-                }
+                return true;
             }
             default -> {
                 log().warn("Not a valid destination type for runestone at " + pos);
@@ -194,12 +197,20 @@ public final class Handlers extends Setup<Runestones> {
         return true;
     }
 
-    public void explode(Level level, BlockPos pos) {
-        level.explode(null, pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d, 1, Level.ExplosionInteraction.BLOCK);
+    public void explode(ServerLevel level, BlockPos pos) {
+        var x = pos.getX() + 0.5d;
+        var y = pos.getY() + 0.5d;
+        var z = pos.getZ() + 0.5d;
+        level.explode(null, x, y, z, 1, Level.ExplosionInteraction.BLOCK);
+
+        for (var player : PlayerHelper.getPlayersInRange(level, pos, 8.0d)) {
+            S2CDestroyRunestone.send((ServerPlayer)player, pos);
+        }
+
         level.removeBlock(pos, false);
     }
 
-    public void prepareRunestone(Level level, BlockPos pos) {
+    public void prepare(Level level, BlockPos pos) {
         if (level.isClientSide() || !(level.getBlockEntity(pos) instanceof RunestoneBlockEntity runestone)) {
             return;
         }
@@ -239,5 +250,39 @@ public final class Handlers extends Setup<Runestones> {
         var baseBlock = !blockDefinitions.isEmpty() ? blockDefinitions.getFirst().baseBlock().get() : Blocks.AIR;
         level.setBlock(pos, baseBlock.defaultBlockState(), 2);
         log().debug("Could not resolve a location from runestone at pos " + pos + ", set to base block");
+    }
+
+    /**
+     * Teleport all players around the runestone.
+     */
+    public void activate(ServerLevel level, RunestoneBlockEntity runestone) {
+        var feature = Runestones.feature();
+        var pos = runestone.getBlockPos();
+        var players = PlayerHelper.getPlayersInRange(level, pos, 8.0d);
+
+        if (!runestone.hasBeenDiscovered()) {
+            var result = feature.handlers.trySetLocation(level, runestone);
+
+            if (!result) {
+                feature.handlers.explode(level, pos);
+                return;
+            }
+
+            if (players.size() == 1) {
+                var player = players.getFirst();
+                if (!player.getAbilities().instabuild) {
+                    runestone.discovered = player.getScoreboardName();
+                }
+            } else {
+                runestone.discovered = MULTIPLE_PLAYERS_KEY;
+            }
+
+            runestone.setChanged();
+        }
+
+        for (var player : players) {
+            var teleport = new RunestoneTeleport((ServerPlayer)player, runestone);
+            feature.handlers.setActiveTeleport(player, teleport);
+        }
     }
 }

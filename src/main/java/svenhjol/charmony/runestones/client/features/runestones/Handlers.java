@@ -12,6 +12,7 @@ import net.minecraft.world.level.ClipContext;
 import svenhjol.charmony.api.RunestoneLocation;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.runestones.common.features.runestones.Helpers;
+import svenhjol.charmony.runestones.common.features.runestones.Networking;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CActivationWarmup;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CTeleportedLocation;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CUniqueWorldSeed;
@@ -88,5 +89,24 @@ public final class Handlers extends Setup<Runestones> {
         var vec3d = cameraPosVec.add(rotationVec.x * 6, rotationVec.y * 6, rotationVec.z * 6);
         var raycast = player.level().clip(new ClipContext(cameraPosVec, vec3d, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
         return raycast.getBlockPos();
+    }
+
+    public void handleDestroyRunestone(Networking.S2CDestroyRunestone packet, ClientPlayNetworking.Context context) {
+        context.client().execute(() -> {
+            var pos = packet.runestonePos();
+            var level = Minecraft.getInstance().level;
+            if (level == null) return;
+
+            var x = pos.getX() + 0.5d;
+            var y = pos.getY() + 0.5d;
+            var z = pos.getZ() + 0.5d;
+
+            for (var i = 0; i < 12; i++) {
+                var d = level.random.nextGaussian() * 0.5;
+                var e = level.random.nextGaussian() * 0.5;
+                var f = level.random.nextGaussian() * 0.5;
+                level.addParticle(ParticleTypes.LAVA, x, y, z, d, e, f);
+            }
+        });
     }
 }

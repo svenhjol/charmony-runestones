@@ -7,6 +7,7 @@
   "dimension.minecraft.the_end": "The End",
   "gui.charmony-runestones.runestone.activate_with": "Activate with:",
   "gui.charmony-runestones.runestone.discovered_by": "Discovered by %s",
+  "gui.charmony-runestones.runestone.multiple_players": "multiple players",
   "gui.charmony-runestones.runestone.unknown": "???",
   "item.charmony-runestones.blackstone_runestone": "Blackstone Runestone",
   "item.charmony-runestones.obsidian_runestone": "Obsidian Runestone",

@@ -106,7 +106,7 @@ public class HudRenderer extends BaseHudRenderer {
             discovered = Component.empty();
 
             if (runestone.location == null) {
-                return false;
+                return false; // invalid
             }
 
             if (lastLookedAt == null || lastLookedAt != lookedAt) {
@@ -126,12 +126,13 @@ public class HudRenderer extends BaseHudRenderer {
                 return true;
             }
 
-            if (runestone.hasTarget()) {
+            if (runestone.hasBeenDiscovered()) {
                 name = Component.translatable(Helpers.localeKey(runestone.location));
 
                 if (runestone.discovered != null) {
                     // Show the "Discovered by" message.
-                    discovered = Component.translatable("gui.charmony-runestones.runestone.discovered_by", runestone.discovered);
+                    discovered = Component.translatable("gui.charmony-runestones.runestone.discovered_by",
+                        Component.translatable(runestone.discovered));
                 }
             } else {
                 name = Component.translatable("gui.charmony-runestones.runestone.unknown");

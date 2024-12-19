@@ -92,6 +92,31 @@ public final class Networking extends Setup<Runestones> {
         }
     }
 
+
+    // Server-to-client packet that informs the client that a runestone should be destroyed.
+    public record S2CDestroyRunestone(BlockPos runestonePos) implements CustomPacketPayload {
+        public static Type<S2CDestroyRunestone> TYPE = new Type<>(RunestonesMod.id("runestones_destroy_runestone"));
+        public static StreamCodec<FriendlyByteBuf, S2CDestroyRunestone> CODEC =
+            StreamCodec.of(S2CDestroyRunestone::encode, S2CDestroyRunestone::decode);
+
+        public static void send(ServerPlayer player, BlockPos runestonePos) {
+            ServerPlayNetworking.send(player, new S2CDestroyRunestone(runestonePos));
+        }
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+
+        private static void encode(FriendlyByteBuf buf, S2CDestroyRunestone self) {
+            buf.writeBlockPos(self.runestonePos);
+        }
+
+        private static S2CDestroyRunestone decode(FriendlyByteBuf buf) {
+            return new S2CDestroyRunestone(buf.readBlockPos());
+        }
+    }
+
     // Server-to-client packet that contains a unique seed for the world.
     public record S2CUniqueWorldSeed(long seed) implements CustomPacketPayload {
         public static Type<S2CUniqueWorldSeed> TYPE = new Type<>(RunestonesMod.id("runestones_unique_world_seed"));

@@ -33,6 +33,8 @@ public final class Registers extends Setup<Runestones> {
             feature.handlers::handleActivationWarmup);
         ClientPlayNetworking.registerGlobalReceiver(S2CUniqueWorldSeed.TYPE,
             feature.handlers::handleUniqueWorldSeed);
+        ClientPlayNetworking.registerGlobalReceiver(S2CDestroyRunestone.TYPE,
+            feature.handlers::handleDestroyRunestone);
     }
 
     @Override
