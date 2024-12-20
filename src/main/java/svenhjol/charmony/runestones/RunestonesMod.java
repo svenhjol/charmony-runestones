@@ -8,7 +8,8 @@ import svenhjol.charmony.core.enums.Side;
 @ModDefinition(
     id = RunestonesMod.ID,
     sides = {Side.Client, Side.Common},
-    name = "Runestones"
+    name = "Runestones",
+    description = "Adds runestones and stone circles that allow players to teleport to interesting places."
 )
 public final class RunestonesMod extends Mod {
     public static final String ID = "charmony-runestones";
