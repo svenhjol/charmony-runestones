@@ -1,7 +1,6 @@
 {
   "values": [
     "#minecraft:village",
-    "#minecraft:ocean_ruin",
     "#minecraft:shipwreck",
     "minecraft:ruined_portal",
     "minecraft:ruined_portal_desert",
@@ -10,11 +9,6 @@
     "minecraft:ruined_portal_mountain",
     "minecraft:ruined_portal_ocean",
     "minecraft:pillager_outpost",
-    "minecraft:igloo",
-    "minecraft:mineshaft",
-    "minecraft:swamp_hut",
-    "minecraft:desert_pyramid",
-    "minecraft:jungle_pyramid",
-    "minecraft:trail_ruins"
+    "minecraft:mineshaft"
   ]
 }

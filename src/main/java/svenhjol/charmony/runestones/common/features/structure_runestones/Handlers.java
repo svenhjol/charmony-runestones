@@ -18,6 +18,8 @@ public final class Handlers extends Setup<StructureRunestones> {
     }
 
     public boolean createStrongholdRunestone(ServerLevelAccessor level, BoundingBox boundingBox, int x, int y, int z, BlockPos pos) {
+        if (!feature().enabled()) return false;
+
         var random = level.getRandom();
         if (boundingBox.isInside(pos)
             && y > 2 && y < 5

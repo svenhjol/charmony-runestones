@@ -53,7 +53,8 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
     @Override
     public List<RunestoneDefinition> getRunestoneDefinitions() {
         return List.of(
-            stone(),
+            stoneCommon(),
+            stoneUncommon(),
             stoneRare(),
             stoneSpawnPoint(),
             blackstone(),
@@ -63,7 +64,7 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
         );
     }
 
-    private RunestoneDefinition stone() {
+    private RunestoneDefinition stoneCommon() {
         return new CustomRunestoneDefinition(0.5d, 0.9d) {
             @Override
             public Supplier<? extends Block> runestoneBlock() {
@@ -77,17 +78,46 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
 
             @Override
             public String biomeTagPath() {
-                return "runestone/stone/biome_located";
+                return "runestone/stone/common_biome_located";
             }
 
             @Override
             public String structureTagPath() {
-                return "runestone/stone/structure_located";
+                return "runestone/stone/common_structure_located";
             }
 
             @Override
             public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
                 return () -> Helpers.randomItem(level, random, "runestone/stone/common_items");
+            }
+        };
+    }
+
+    private RunestoneDefinition stoneUncommon() {
+        return new CustomRunestoneDefinition(0.32d, 0.55d) {
+            @Override
+            public Supplier<? extends Block> runestoneBlock() {
+                return feature().registers.stoneBlock;
+            }
+
+            @Override
+            public Supplier<? extends Block> baseBlock() {
+                return () -> Blocks.MOSSY_COBBLESTONE;
+            }
+
+            @Override
+            public String biomeTagPath() {
+                return "runestone/stone/uncommon_biome_located";
+            }
+
+            @Override
+            public String structureTagPath() {
+                return "runestone/stone/uncommon_structure_located";
+            }
+
+            @Override
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
+                return () -> Helpers.randomItem(level, random, "runestone/stone/uncommon_items");
             }
         };
     }
