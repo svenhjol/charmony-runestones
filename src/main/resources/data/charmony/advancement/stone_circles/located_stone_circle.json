@@ -1,0 +1,37 @@
+{
+  "parent": "charmony:runestones",
+  "display": {
+    "title": {
+      "translate": "advancements.charmony.located_stone_circle.title"
+    },
+    "description": {
+      "translate": "advancements.charmony.located_stone_circle.description"
+    },
+    "icon": {
+      "id": "minecraft:cracked_stone_bricks"
+    }
+  },
+  "criteria": {
+    "at_stone_circle": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "#charmony-runestones:stone_circle"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "requirements": [
+    [
+      "at_stone_circle"
+    ]
+  ]
+}

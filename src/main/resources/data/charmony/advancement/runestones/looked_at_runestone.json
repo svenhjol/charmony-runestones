@@ -1,0 +1,31 @@
+{
+  "parent": "charmony:runestones",
+  "display": {
+    "icon": {
+      "id": "charmony-runestones:stone_runestone"
+    },
+    "title": {
+      "translate": "advancements.charmony.looked_at_runestone.title"
+    },
+    "description": {
+      "translate": "advancements.charmony.looked_at_runestone.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "looked_at_runestone": {
+      "trigger": "charmony_action_performed",
+      "conditions": {
+        "action": "charmony:looked_at_runestone"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "looked_at_runestone"
+    ]
+  ]
+}

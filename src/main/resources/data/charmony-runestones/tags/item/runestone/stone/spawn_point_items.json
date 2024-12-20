@@ -1,10 +1,11 @@
 {
   "values": [
-    "minecraft:sand",
-    "minecraft:dirt",
-    "minecraft:clay_ball",
     "minecraft:cobblestone",
     "minecraft:flint",
-    "minecraft:gravel"
+    "minecraft:stick",
+    "minecraft:raw_copper",
+    "minecraft:string",
+    "minecraft:rotten_flesh",
+    "minecraft:bone"
   ]
 }

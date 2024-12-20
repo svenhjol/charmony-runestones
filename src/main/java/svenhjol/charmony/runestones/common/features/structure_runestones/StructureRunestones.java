@@ -47,7 +47,7 @@ public final class StructureRunestones extends SidedFeature {
             This applies to any block within a trail ruins structure.""",
         requireRestart = false
     )
-    private static double trailRuinsChance = 0.07d;
+    private static double trailRuinsChance = 0.04d;
 
     public StructureRunestones(Mod mod) {
         super(mod);

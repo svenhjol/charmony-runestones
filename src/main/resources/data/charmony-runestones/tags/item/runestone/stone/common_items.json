@@ -1,11 +1,13 @@
 {
   "values": [
     "minecraft:raw_copper",
+    "minecraft:raw_iron",
     "minecraft:spider_eye",
     "minecraft:string",
     "minecraft:rotten_flesh",
-    "minecraft:sugar",
+    "minecraft:bone",
     "minecraft:clay_ball",
-    "minecraft:coal"
+    "minecraft:coal",
+    "minecraft:paper"
   ]
 }

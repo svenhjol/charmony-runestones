@@ -4,7 +4,7 @@
   "version": "${mod_version}",
 
   "name": "Runestones",
-  "description": "",
+  "description": "Adds runestones and stone circles that allow players to teleport to interesting places.",
 
   "authors": [
     "svenhjol"

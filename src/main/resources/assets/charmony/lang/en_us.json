@@ -1,0 +1,12 @@
+{
+  "advancements.charmony.runestones.title": "Runestones",
+  "advancements.charmony.runestones.description": "Adds a way for players to teleport to interesting places",
+  "advancements.charmony.located_stone_circle.title": "Old Stones",
+  "advancements.charmony.located_stone_circle.description": "Find a Stone Circle",
+  "advancements.charmony.looked_at_runestone.title": "Writing's On The Wall",
+  "advancements.charmony.looked_at_runestone.description": "Look at a runestone to learn how to activate it",
+  "advancements.charmony.travelled_via_runestone.title": "The Rune Less Travelled",
+  "advancements.charmony.travelled_via_runestone.description": "Throw an item to travel using a runestone",
+  "advancements.charmony.travelled_home_via_runestone.title": "There's No Place Like Home",
+  "advancements.charmony.travelled_home_via_runestone.description": "Travel to spawn point using a runestone"
+}
