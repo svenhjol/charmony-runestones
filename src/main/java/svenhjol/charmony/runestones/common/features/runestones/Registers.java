@@ -38,7 +38,7 @@ public final class Registers extends Setup<Runestones> {
         super(feature);
         var registry = CommonRegistry.forFeature(feature);
 
-        blockEntity = registry.blockEntity("runestone", RunestoneBlockEntity::new);
+        blockEntity = registry.blockEntity("runestone", () -> RunestoneBlockEntity::new);
 
         stoneBlock = registry.block(STONE_ID, RunestoneBlock::new);
         blackstoneBlock = registry.block(BLACKSTONE_ID, RunestoneBlock::new);
