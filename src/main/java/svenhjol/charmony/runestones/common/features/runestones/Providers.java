@@ -221,7 +221,10 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
 
             @Override
             public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random) {
-                return Optional.of(Helpers.SPAWN_POINT);
+                if (random.nextDouble() < 0.33d) {
+                    return Optional.of(Helpers.SPAWN_POINT);
+                }
+                return Optional.empty();
             }
 
             @Override
@@ -274,7 +277,10 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
 
             @Override
             public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random) {
-                return Optional.of(Helpers.SPAWN_POINT);
+                if (random.nextDouble() < 0.25d) {
+                    return Optional.of(Helpers.SPAWN_POINT);
+                }
+                return Optional.empty();
             }
 
             @Override
