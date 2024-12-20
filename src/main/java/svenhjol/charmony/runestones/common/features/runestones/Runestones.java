@@ -8,7 +8,10 @@ import svenhjol.charmony.core.base.SidedFeature;
 import svenhjol.charmony.core.enums.Side;
 import svenhjol.charmony.runestones.RunestonesMod;
 
-@FeatureDefinition(side = Side.Common)
+@FeatureDefinition(side = Side.Common, canBeDisabled = false, description = """
+    Runestones are blocks that teleport nearby players to interesting structures and biomes.
+    Each runestone shows what item is required to teleport.
+    Drop the item near the runestone to activate it.""")
 public final class Runestones extends SidedFeature {
     public final Registers registers;
     public final Handlers handlers;
