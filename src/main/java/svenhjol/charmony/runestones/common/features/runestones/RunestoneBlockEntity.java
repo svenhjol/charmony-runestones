@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import svenhjol.charmony.api.RunestoneLocation;
 import svenhjol.charmony.core.common.SyncedBlockEntity;
@@ -58,6 +59,10 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
         if (discovered != null) {
             tag.putString(DISCOVERED_TAG, discovered);
         }
+    }
+
+    public void prepare(ServerLevelAccessor level) {
+        Runestones.feature().handlers.prepare(level, getBlockPos());
     }
 
     public boolean isValid() {

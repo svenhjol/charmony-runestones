@@ -16,6 +16,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -210,7 +211,7 @@ public final class Handlers extends Setup<Runestones> {
         level.removeBlock(pos, false);
     }
 
-    public void prepare(Level level, BlockPos pos) {
+    public void prepare(LevelAccessor level, BlockPos pos) {
         if (level.isClientSide() || !(level.getBlockEntity(pos) instanceof RunestoneBlockEntity runestone)) {
             return;
         }

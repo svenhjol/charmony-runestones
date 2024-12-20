@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "svenhjol.charmony.runestones.common.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "${refmap_file}",
+  "plugin": "svenhjol.charmony.runestones.common.mixins.CommonMixinConfig",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "structure_runestones.SinglePoolElementMixin",
+    "structure_runestones.StrongholdPiecesMixin",
+    "structure_runestones.StructureTemplateMixin"
+  ]
+}

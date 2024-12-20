@@ -12,6 +12,9 @@
   "icon": "assets/charmony-runestones/textures/gui/sprites/icon.png",
   "license": "MIT",
   "environment": "*",
+  "mixins": [
+    "charmony-runestones.common.mixins.json"
+  ],
   "accessWidener": "charmony-runestones.accesswidener",
 
   "entrypoints": {
