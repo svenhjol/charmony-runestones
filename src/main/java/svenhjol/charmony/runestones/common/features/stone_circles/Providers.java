@@ -59,9 +59,9 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
     @Override
     public List<RunestoneDefinition> getRunestoneDefinitions() {
         return List.of(
-            stoneRunestoneCircles(),
-            blackstoneRunestoneCircles(),
-            obsidianRunestoneCircles()
+            stoneCircleRunestoneDefinition(),
+            blackstoneCircleRunestoneDefinition(),
+            obsidianCircleRunestoneDefinition()
         );
     }
 
@@ -224,7 +224,7 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
         };
     }
 
-    private RunestoneDefinition stoneRunestoneCircles() {
+    private RunestoneDefinition stoneCircleRunestoneDefinition() {
         return new RunestoneDefinition() {
             @Override
             public Supplier<? extends Block> runestoneBlock() {
@@ -251,7 +251,7 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
         };
     }
 
-    private RunestoneDefinition blackstoneRunestoneCircles() {
+    private RunestoneDefinition blackstoneCircleRunestoneDefinition() {
         return new RunestoneDefinition() {
             @Override
             public Supplier<? extends Block> runestoneBlock() {
@@ -278,7 +278,7 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
         };
     }
 
-    private RunestoneDefinition obsidianRunestoneCircles() {
+    private RunestoneDefinition obsidianCircleRunestoneDefinition() {
         return new RunestoneDefinition() {
             @Override
             public Supplier<? extends Block> runestoneBlock() {
