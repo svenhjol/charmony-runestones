@@ -9,7 +9,7 @@ import svenhjol.charmony.runestones.RunestonesMod;
 
 import java.util.function.Supplier;
 
-@FeatureDefinition(side = Side.Client)
+@FeatureDefinition(side = Side.Client, canBeDisabled = false)
 public final class Runestones extends SidedFeature {
     public final Supplier<Common> common;
     public final Registers registers;
