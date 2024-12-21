@@ -25,8 +25,8 @@ public final class StructureRunestones extends SidedFeature {
     @Configurable(
         name = "Stronghold chance",
         description = """
-            Chance (out of 1.0) of a runestone being added instead of a stone brick block.
-            This only applies to the vertical center of a cross-shaped room section.""",
+            Chance (out of 1.0) of a runestone being added instead of a stone brick block
+            within a stronghold room crossing section. Only blocks at a height of 2 are modified.""",
         requireRestart = false
     )
     private static double strongholdChance = 0.25d;

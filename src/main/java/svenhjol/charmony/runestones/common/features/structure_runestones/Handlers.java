@@ -22,7 +22,7 @@ public final class Handlers extends Setup<StructureRunestones> {
 
         var random = level.getRandom();
         if (boundingBox.isInside(pos)
-            && y == 3
+            && y == 2
             && random.nextDouble() < feature().strongholdChance())
         {
             level.setBlock(pos, Runestones.feature().registers.stoneBlock.get().defaultBlockState(), 2);
