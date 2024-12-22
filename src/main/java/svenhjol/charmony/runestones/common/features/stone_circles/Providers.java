@@ -52,6 +52,7 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
     public List<StoneCircleDefinition> getStoneCircleDefinitions() {
         return List.of(
             stoneCirclesForOverworld(),
+            overgrownStoneCirclesForOverworld(),
             stoneCirclesForTheNether(),
             stoneCirclesForTheEnd());
     }
@@ -88,6 +89,11 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             }
 
             @Override
+            public double decayChance() {
+                return 0.1d;
+            }
+
+            @Override
             public Pair<Integer, Integer> radius() {
                 return Pair.of(6, 14);
             }
@@ -95,6 +101,75 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             @Override
             public Pair<Integer, Integer> degrees() {
                 return Pair.of(40, 50);
+            }
+
+            @Override
+            public int circleJitter() {
+                return 1;
+            }
+
+            @Override
+            public Optional<Supplier<? extends Block>> runestoneBlock() {
+                return Optional.ofNullable(Runestones.feature().registers.stoneBlock);
+            }
+        };
+    }
+
+    private StoneCircleDefinition overgrownStoneCirclesForOverworld() {
+        return new StoneCircleDefinition() {
+            @Override
+            public String name() {
+                return "overgrown_stone";
+            }
+
+            @Override
+            public TagKey<Block> pillarBlocks() {
+                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/overgrown_stone_pillar_blocks"));
+            }
+
+            @Override
+            public Pair<Integer, Integer> pillarHeight() {
+                return Pair.of(9, 16);
+            }
+
+            @Override
+            public Pair<Integer, Integer> pillarThickness() {
+                return Pair.of(2, 3);
+            }
+
+            @Override
+            public double decayChance() {
+                return 0.37d;
+            }
+
+            @Override
+            public double runestoneChance() {
+                return 0.28d;
+            }
+
+            @Override
+            public double runestoneQuality() {
+                return 0.08d;
+            }
+
+            @Override
+            public int maxRunestonesPerPillar() {
+                return 3;
+            }
+
+            @Override
+            public int maxRunestonesPerCircle() {
+                return 12;
+            }
+
+            @Override
+            public Pair<Integer, Integer> radius() {
+                return Pair.of(12, 18);
+            }
+
+            @Override
+            public Pair<Integer, Integer> degrees() {
+                return Pair.of(35, 55);
             }
 
             @Override
@@ -137,6 +212,11 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             }
 
             @Override
+            public double decayChance() {
+                return 0.24d;
+            }
+
+            @Override
             public Pair<Integer, Integer> degrees() {
                 return Pair.of(30, 45);
             }
@@ -144,6 +224,16 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             @Override
             public int circleJitter() {
                 return 2;
+            }
+
+            @Override
+            public int maxRunestonesPerPillar() {
+                return 3;
+            }
+
+            @Override
+            public int maxRunestonesPerCircle() {
+                return 10;
             }
 
             @Override
@@ -204,12 +294,17 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
 
             @Override
             public Pair<Integer, Integer> pillarHeight() {
-                return Pair.of(4, 6);
+                return Pair.of(5, 9);
             }
 
             @Override
             public Pair<Integer, Integer> pillarThickness() {
                 return Pair.of(1, 2);
+            }
+
+            @Override
+            public double decayChance() {
+                return 0.1d;
             }
 
             @Override
@@ -228,7 +323,7 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             }
 
             @Override
-            public int maxRunestones() {
+            public int maxRunestonesPerCircle() {
                 return 10;
             }
 

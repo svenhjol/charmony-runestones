@@ -208,7 +208,7 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
     }
 
     private RunestoneDefinition blackstone() {
-        return new CustomRunestoneDefinition(0.6d, 0.9d, false) {
+        return new CustomRunestoneDefinition(0.45d, 0.9d, false) {
             @Override
             public Supplier<? extends Block> runestoneBlock() {
                 return feature().registers.blackstoneBlock;
@@ -336,10 +336,10 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
         @Override
         public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
             var qualityChance = isRare ? quality : 0;
-            if (random.nextDouble() < biomeChance + qualityChance) {
+            if (random.nextDouble() < (biomeChance + qualityChance)) {
                 return Helpers.randomBiome(level, random, TagKey.create(Registries.BIOME, RunestonesMod.id(biomeTagPath())));
             }
-            if (random.nextDouble() < structureChance + qualityChance) {
+            if (random.nextDouble() < (structureChance + qualityChance)) {
                 return Helpers.randomStructure(level, random, TagKey.create(Registries.STRUCTURE, RunestonesMod.id(structureTagPath())));
             }
 

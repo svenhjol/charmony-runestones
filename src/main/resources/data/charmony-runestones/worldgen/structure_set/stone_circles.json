@@ -2,12 +2,16 @@
   "placement": {
     "type": "minecraft:random_spread",
     "salt": 10016006,
-    "separation": 15,
-    "spacing": 30
+    "separation": 16,
+    "spacing": 32
   },
   "structures": [
     {
       "structure": "charmony-runestones:stone_circle_stone",
+      "weight": 3
+    },
+    {
+      "structure": "charmony-runestones:stone_circle_overgrown_stone",
       "weight": 1
     },
     {

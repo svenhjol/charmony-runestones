@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2
+
+- Add overgrown stone circles.
+- Simplify stone circle start generation.
+- Lots of tweaks to balance.
+
 ## 1.0.1
 
 - Runestone blocks now have random rotation.

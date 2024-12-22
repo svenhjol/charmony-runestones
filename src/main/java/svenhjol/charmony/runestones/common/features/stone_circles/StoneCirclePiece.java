@@ -48,6 +48,7 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
     public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGenerator,
                             RandomSource random, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos blockPos) {
 
+        var name = definition.name();
         var terrainHeightTolerance = definition.terrainHeightTolerance();
         var maxHeightTolerance = terrainHeightTolerance / 2; // If the surface Y value is this many blocks higher than starting Y, don't generate
         var minHeightTolerance = -(terrainHeightTolerance / 2); // If the surface Y value is this many blocks lower than starting Y, don't generate
@@ -62,10 +63,12 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
         var maxDegrees = definition.degrees().getSecond();
         var degrees = minDegrees + (random.nextInt((maxDegrees - minDegrees) + 1));
         var circleJitter = definition.circleJitter();
+        var decayChance = definition.decayChance();
         var runestoneBlock = definition.runestoneBlock().map(Supplier::get).orElse(null);
-        var generatedRunestones = 0;
+        var numberOfRunestonesAddedToCircle = 0;
         var runestoneQuality = definition.runestoneQuality();
-        var maxRunestones = definition.maxRunestones();
+        var maxRunestonesPerCircle = definition.maxRunestonesPerCircle();
+        var maxRunestonesPerPillar = definition.maxRunestonesPerPillar();
         var runestoneChance = definition.runestoneChance();
         var generatedAnything = false;
 
@@ -76,6 +79,8 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
         if (!Runestones.feature().enabled()) {
             runestoneChance = 0; // Don't generate any runestones if runestones feature is disabled.
         }
+
+        StoneCircles.feature().log().debug("Attempting to generate stone circle of type " + name + " at " + blockPos);
 
         // Avoid stone circles being placed on the roof of the dimension.
         // Delegate to the definition to reposition the stone circle.
@@ -90,13 +95,14 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
             if (360 - i < minDegrees) continue;
             var x = (int)(radius * Math.cos(i * Math.PI / 180));
             var z = (int)(radius * Math.sin(i * Math.PI / 180));
+            var numberOfRunestonesAddedToPillar = 0;
 
             for (int s = maxHeightTolerance; s > minHeightTolerance; s--) {
                 var checkPos = blockPos.offset(x, s, z);
                 var checkUpPos = checkPos.above();
                 var checkState = level.getBlockState(checkPos);
                 var checkUpState = level.getBlockState(checkUpPos);
-                var canGenerateRunestone = generatedRunestones < maxRunestones && runestoneBlock != null;
+                var canAddRunestone = runestoneBlock != null && (numberOfRunestonesAddedToCircle < maxRunestonesPerCircle);
 
                 var validSurfacePos = ((checkState.canOcclude() || checkState.getFluidState().is(Fluids.LAVA))
                     && (checkUpState.isAir() || !checkUpState.canOcclude() || level.isWaterAt(checkUpPos)));
@@ -104,6 +110,7 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
                     continue;
                 }
 
+                random.nextDouble();
                 var pillarHeight = random.nextInt(maxPillarHeight - minPillarHeight) + minPillarHeight;
 
                 for (int px = 0; px < pillarThickness; px++) {
@@ -116,7 +123,6 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
                     var pillarYPos = checkPos.above(y);
                     var isTop = y == pillarHeight - 1;
                     var hasSolidNeighbour = false;
-                    var hasGeneratedRunestone = false;
                     var inverse = random.nextBoolean();
 
                     for (int px = 0; px < pillarThickness; px++) {
@@ -127,16 +133,18 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
                             var offset = pillarYPos.north(ppz).east(ppx);
                             var isEdgeOfPillar = (ppx == 0 || ppx == pillarThickness - 1) && (ppz == 0 || ppz == pillarThickness - 1);
 
-                            if (canGenerateRunestone && !hasGeneratedRunestone && isEdgeOfPillar
+                            if (canAddRunestone && isEdgeOfPillar
                                 && random.nextDouble() < runestoneChance
                                 && random.nextDouble() < 0.0d + (isTop ? 1.0d : (0.5d * ((double) y / pillarHeight)))) {
                                 level.setBlock(offset, runestoneBlock.defaultBlockState(), 2);
                                 Runestones.feature().handlers.prepare(level, offset, runestoneQuality);
-                                canGenerateRunestone = false;
-                                hasGeneratedRunestone = true;
-                                ++generatedRunestones;
+                                ++numberOfRunestonesAddedToCircle;
+                                ++numberOfRunestonesAddedToPillar;
+
+                                canAddRunestone = numberOfRunestonesAddedToCircle < maxRunestonesPerCircle
+                                    && numberOfRunestonesAddedToPillar < maxRunestonesPerPillar;
                             } else {
-                                if (hasSolidNeighbour && random.nextDouble() < (0.4d * (isTop ? 1.0d : 0.05d))) {
+                                if (hasSolidNeighbour && random.nextDouble() < (decayChance * (isTop ? 1.0d : 0.5d))) {
                                     decay.put(offset, level.getBlockState(offset));
                                 }
                                 level.setBlock(offset, pillarYState, 2);
@@ -159,8 +167,8 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
 
         if (!generatedAnything) {
             StoneCircles.feature().log().warn("Did not generate a stone circle at " + blockPos);
-        } else if (generatedRunestones > 0) {
-            StoneCircles.feature().log().debug("Generated " + generatedRunestones + " runestones at " + blockPos);
+        } else if (numberOfRunestonesAddedToCircle > 0) {
+            StoneCircles.feature().log().debug("Generated " + numberOfRunestonesAddedToCircle + " runestones at " + blockPos);
         }
     }
 

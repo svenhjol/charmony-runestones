@@ -3,12 +3,7 @@ package svenhjol.charmony.runestones.common.features.stone_circles;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.QuartPos;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import svenhjol.charmony.api.StoneCircleDefinition;
@@ -37,35 +32,22 @@ public class StoneCircleStructure extends Structure {
 
     @Override
     protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
-        var chunkGenerator = context.chunkGenerator();
-        var height = context.heightAccessor();
-        var chunkPos = context.chunkPos();
-        var x = chunkPos.getMinBlockX();
-        var z = chunkPos.getMinBlockZ();
-        var randomSource = RandomSource.create(x + z);
-        var randomState = context.randomState();
-
-        var y = findSuitableY(chunkGenerator, height, randomSource, randomState, x, z);
-        if (y == Integer.MIN_VALUE) {
+        var opt = findStart(context);
+        if (opt.isEmpty()) {
             return Optional.empty();
         }
 
-        var holder = chunkGenerator.getBiomeSource().getNoiseBiome(
-            QuartPos.fromBlock(x), QuartPos.fromBlock(y), QuartPos.fromBlock(z), randomState.sampler());
-
-        if (!context.validBiome().test(holder)) {
-            return Optional.empty();
-        }
-
-        var startPos = new BlockPos(x, y, z);
+        var startPos = opt.get();
         return Optional.of(new GenerationStub(startPos,
             builder -> builder.addPiece(new StoneCirclePiece(definition, startPos, context.random()))));
     }
 
-    private int findSuitableY(ChunkGenerator chunkGenerator, LevelHeightAccessor levelHeight, RandomSource random, RandomState randomState, int x, int z) {
-        var min = levelHeight.getMinY() + 15;
-        var y = chunkGenerator.getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, levelHeight, randomState);
-        var column = chunkGenerator.getBaseColumn(x, z, levelHeight, randomState);
+    private Optional<BlockPos> findStart(GenerationContext context) {
+        var x = context.chunkPos().getMinBlockX();
+        var z = context.chunkPos().getMinBlockZ();
+        var min = context.heightAccessor().getMinY() + 15;
+        var y = context.chunkGenerator().getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
+        var column = context.chunkGenerator().getBaseColumn(x, z, context.heightAccessor(), context.randomState());
         var heightMap = Heightmap.Types.WORLD_SURFACE_WG;
 
         int surface;
@@ -73,11 +55,11 @@ public class StoneCircleStructure extends Structure {
             var state = column.getBlock(y);
             var above = column.getBlock(y + 1);
             if (heightMap.isOpaque().test(state) && (!heightMap.isOpaque().test(above))) {
-                return surface;
+                return Optional.of(new BlockPos(x, surface, z));
             }
         }
 
-        return Integer.MIN_VALUE;
+        return Optional.empty();
     }
 
     @Override
