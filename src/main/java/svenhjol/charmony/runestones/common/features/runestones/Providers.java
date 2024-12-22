@@ -301,7 +301,7 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
 
             @Override
             public Supplier<? extends Block> baseBlock() {
-                return () -> Blocks.CRYING_OBSIDIAN;
+                return () -> Blocks.OBSIDIAN;
             }
 
             @Override
