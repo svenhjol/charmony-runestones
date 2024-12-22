@@ -144,7 +144,7 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
                                 canAddRunestone = numberOfRunestonesAddedToCircle < maxRunestonesPerCircle
                                     && numberOfRunestonesAddedToPillar < maxRunestonesPerPillar;
                             } else {
-                                if (hasSolidNeighbour && random.nextDouble() < (decayChance * (isTop ? 1.0d : 0.5d))) {
+                                if (hasSolidNeighbour && random.nextDouble() < (decayChance * (isTop ? 1.0d : (0.5d * ((double) y / pillarHeight))))) {
                                     decay.put(offset, level.getBlockState(offset));
                                 }
                                 level.setBlock(offset, pillarYState, 2);
