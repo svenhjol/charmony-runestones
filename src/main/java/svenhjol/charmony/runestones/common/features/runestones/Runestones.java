@@ -25,6 +25,16 @@ public final class Runestones extends SidedFeature {
     )
     private static int protectionDuration = 3;
 
+    @Configurable(
+        name = "Link to stronghold",
+        description = """
+            If true, there is a rare chance for a runestone to link to a stronghold.
+            Runestones that spawn in stone circles have a 1% chance to link to a stronghold.
+            Runestones that spawn in rare structures have a greater chance to link to a stronghold.""",
+        requireRestart = false
+    )
+    private static boolean linkToStronghold = true;
+
     public Runestones(Mod mod) {
         super(mod);
         handlers = new Handlers(this);
@@ -39,5 +49,9 @@ public final class Runestones extends SidedFeature {
 
     public int protectionDuration() {
         return Mth.clamp(protectionDuration, 0, 60) * 20;
+    }
+
+    public boolean linkToStronghold() {
+        return linkToStronghold;
     }
 }

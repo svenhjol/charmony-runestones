@@ -28,7 +28,7 @@ public abstract class StructureTemplateMixin {
         if (feature == null) {
             feature = StructureRunestones.feature(); // Simple cache.
         }
-        if (state.is(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS) && feature.handlers.createBastionRunestone(level, pos)) {
+        if (state.is(Blocks.CHISELED_POLISHED_BLACKSTONE) && feature.handlers.createBastionRunestone(level, pos)) {
             return true;
         }
         if (state.is(Blocks.DIRT) && feature.handlers.createTrailRuinsRunestone(level, pos)) {

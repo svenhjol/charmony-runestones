@@ -61,8 +61,8 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    public void prepare(ServerLevelAccessor level) {
-        Runestones.feature().handlers.prepare(level, getBlockPos());
+    public void prepare(ServerLevelAccessor level, double quality) {
+        Runestones.feature().handlers.prepare(level, getBlockPos(), quality);
     }
 
     public boolean isValid() {

@@ -1,8 +1,20 @@
 {
   "template": {
     "variants": {
-      "": {
+      "facing=north": {
         "model": "charmony-runestones:block/RUNESTONE_runestone"
+      },
+      "facing=east": {
+        "model": "charmony-runestones:block/RUNESTONE_runestone",
+        "y": 90
+      },
+      "facing=south": {
+        "model": "charmony-runestones:block/RUNESTONE_runestone",
+        "y": 180
+      },
+      "facing=west": {
+        "model": "charmony-runestones:block/RUNESTONE_runestone",
+        "y": 270
       }
     }
   },

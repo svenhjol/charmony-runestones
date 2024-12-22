@@ -83,6 +83,11 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             }
 
             @Override
+            public Pair<Integer, Integer> pillarThickness() {
+                return Pair.of(1, 2);
+            }
+
+            @Override
             public Pair<Integer, Integer> radius() {
                 return Pair.of(6, 14);
             }
@@ -118,12 +123,17 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
 
             @Override
             public Pair<Integer, Integer> pillarHeight() {
-                return Pair.of(4, 6);
+                return Pair.of(5, 7);
             }
 
             @Override
             public Pair<Integer, Integer> radius() {
-                return Pair.of(5, 10);
+                return Pair.of(10, 12);
+            }
+
+            @Override
+            public Pair<Integer, Integer> pillarThickness() {
+                return Pair.of(1, 3);
             }
 
             @Override
@@ -198,8 +208,13 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             }
 
             @Override
+            public Pair<Integer, Integer> pillarThickness() {
+                return Pair.of(1, 2);
+            }
+
+            @Override
             public Pair<Integer, Integer> radius() {
-                return Pair.of(8, 16);
+                return Pair.of(10, 16);
             }
 
             @Override
@@ -237,15 +252,15 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             }
 
             @Override
-            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 if (feature().enabled() && random.nextDouble() < feature().stoneCircleRunestoneChance()) {
-                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.STRUCTURE, RunestonesMod.id("stone_circle_stone")));
+                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, RunestonesMod.id("stone_circle_stone")));
                 }
                 return Optional.empty();
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/stone/common_items");
             }
         };
@@ -264,15 +279,15 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             }
 
             @Override
-            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 if (feature().enabled() && random.nextDouble() < feature().stoneCircleRunestoneChance()) {
-                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.STRUCTURE, RunestonesMod.id("stone_circle_blackstone")));
+                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, RunestonesMod.id("stone_circle_blackstone")));
                 }
                 return Optional.empty();
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/blackstone/common_items");
             }
         };
@@ -291,15 +306,15 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             }
 
             @Override
-            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 if (feature().enabled() && random.nextDouble() < feature().stoneCircleRunestoneChance()) {
-                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.STRUCTURE, RunestonesMod.id("stone_circle_obsidian")));
+                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, RunestonesMod.id("stone_circle_obsidian")));
                 }
                 return Optional.empty();
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/obsidian/common_items");
             }
         };

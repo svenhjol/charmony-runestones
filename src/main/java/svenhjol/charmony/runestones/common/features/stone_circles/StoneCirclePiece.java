@@ -18,7 +18,9 @@ import svenhjol.charmony.api.StoneCircleDefinition;
 import svenhjol.charmony.core.helper.TagHelper;
 import svenhjol.charmony.runestones.common.features.runestones.Runestones;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class StoneCirclePiece extends ScatteredFeaturePiece {
@@ -54,6 +56,7 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
         var radius = random.nextInt(maxRadius - minRadius) + minRadius;
         var minPillarHeight = definition.pillarHeight().getFirst();
         var maxPillarHeight = definition.pillarHeight().getSecond();
+        var pillarThickness = random.nextIntBetweenInclusive(definition.pillarThickness().getFirst(), definition.pillarThickness().getSecond());
         var pillarBlocks = getPillarBlocks(level);
         var minDegrees = definition.degrees().getFirst();
         var maxDegrees = definition.degrees().getSecond();
@@ -61,6 +64,7 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
         var circleJitter = definition.circleJitter();
         var runestoneBlock = definition.runestoneBlock().map(Supplier::get).orElse(null);
         var generatedRunestones = 0;
+        var runestoneQuality = definition.runestoneQuality();
         var maxRunestones = definition.maxRunestones();
         var runestoneChance = definition.runestoneChance();
         var generatedAnything = false;
@@ -79,6 +83,8 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
             blockPos = definition.ceilingReposition(level, blockPos);
         }
 
+        Map<BlockPos, BlockState> decay = new HashMap<>();
+
         // Generate pillars in a rough circle.
         for (int i = 0; i < 360; i += degrees + (circleJitter > 0 ? random.nextInt(circleJitter + 1) - circleJitter : 0)) {
             if (360 - i < minDegrees) continue;
@@ -90,6 +96,7 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
                 var checkUpPos = checkPos.above();
                 var checkState = level.getBlockState(checkPos);
                 var checkUpState = level.getBlockState(checkUpPos);
+                var canGenerateRunestone = generatedRunestones < maxRunestones && runestoneBlock != null;
 
                 var validSurfacePos = ((checkState.canOcclude() || checkState.getFluidState().is(Fluids.LAVA))
                     && (checkUpState.isAir() || !checkUpState.canOcclude() || level.isWaterAt(checkUpPos)));
@@ -97,34 +104,63 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
                     continue;
                 }
 
-                var generatedColumn = false;
                 var pillarHeight = random.nextInt(maxPillarHeight - minPillarHeight) + minPillarHeight;
-                level.setBlock(checkPos, getRandomBlock(pillarBlocks, random), 2);
+
+                for (int px = 0; px < pillarThickness; px++) {
+                    for (int pz = 0; pz < pillarThickness; pz++) {
+                        level.setBlock(checkPos.north(pz).east(px), getRandomBlock(pillarBlocks, random), 2);
+                    }
+                }
 
                 for (int y = 1; y < pillarHeight; y++) {
-                    var currentPos = checkPos.above(y);
-                    var state = getRandomBlock(pillarBlocks, random);
+                    var pillarYPos = checkPos.above(y);
                     var isTop = y == pillarHeight - 1;
+                    var hasSolidNeighbour = false;
+                    var hasGeneratedRunestone = false;
+                    var inverse = random.nextBoolean();
 
-                    if (isTop && runestoneBlock != null && generatedRunestones < maxRunestones && random.nextDouble() < runestoneChance) {
-                        level.setBlock(currentPos, runestoneBlock.defaultBlockState(), 2);
-                        Runestones.feature().handlers.prepare(level, currentPos);
-                        ++generatedRunestones;
-                    } else {
-                        level.setBlock(currentPos, state, 2);
+                    for (int px = 0; px < pillarThickness; px++) {
+                        for (int pz = 0; pz < pillarThickness; pz++) {
+                            var pillarYState = getRandomBlock(pillarBlocks, random);
+                            var ppx = inverse ? pillarThickness - 1 - px : px;
+                            var ppz = inverse ? pillarThickness - 1 - pz : pz;
+                            var offset = pillarYPos.north(ppz).east(ppx);
+                            var isEdgeOfPillar = (ppx == 0 || ppx == pillarThickness - 1) && (ppz == 0 || ppz == pillarThickness - 1);
+
+                            if (canGenerateRunestone && !hasGeneratedRunestone && isEdgeOfPillar
+                                && random.nextDouble() < runestoneChance
+                                && random.nextDouble() < 0.0d + (isTop ? 1.0d : (0.5d * ((double) y / pillarHeight)))) {
+                                level.setBlock(offset, runestoneBlock.defaultBlockState(), 2);
+                                Runestones.feature().handlers.prepare(level, offset, runestoneQuality);
+                                canGenerateRunestone = false;
+                                hasGeneratedRunestone = true;
+                                ++generatedRunestones;
+                            } else {
+                                if (hasSolidNeighbour && random.nextDouble() < (0.4d * (isTop ? 1.0d : 0.05d))) {
+                                    decay.put(offset, level.getBlockState(offset));
+                                }
+                                level.setBlock(offset, pillarYState, 2);
+                            }
+
+                            hasSolidNeighbour = true;
+                        }
                     }
-                    generatedColumn = true;
                 }
 
-                if (generatedColumn) {
-                    generatedAnything = true;
-                    break;
+                // Apply decay.
+                for (var entry : decay.entrySet()) {
+                    level.setBlock(entry.getKey(), entry.getValue(), 2);
                 }
+
+                decay.clear();
+                generatedAnything = true;
             }
         }
 
         if (!generatedAnything) {
             StoneCircles.feature().log().warn("Did not generate a stone circle at " + blockPos);
+        } else if (generatedRunestones > 0) {
+            StoneCircles.feature().log().debug("Generated " + generatedRunestones + " runestones at " + blockPos);
         }
     }
 

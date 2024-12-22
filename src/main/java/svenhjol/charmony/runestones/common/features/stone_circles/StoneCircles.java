@@ -21,7 +21,8 @@ public final class StoneCircles extends SidedFeature {
         name = "Stone circle runestone chance",
         description = """
             Chance (out of 1.0) of a runestone linking to another stone circle.
-            This chance is calculated only if the stone circle provider is used for the runestone block position."""
+            This chance is further divided by other runestone destination calculations,
+            so the actual chance is likely to be lower."""
     )
     private static double stoneCircleRunestoneChance = 0.3d;
 

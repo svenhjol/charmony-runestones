@@ -2,6 +2,7 @@ package svenhjol.charmony.runestones.common.features.runestones;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
@@ -156,7 +157,7 @@ public final class Handlers extends Setup<Runestones> {
         var registryAccess = level.registryAccess();
 
         switch (runestone.location.type()) {
-            case BIOME -> {
+            case Biome -> {
                 var result = level.findClosestBiome3d(x -> x.is(runestone.location.id()), target, 6400, 32, 64);
                 if (result == null) {
                     log().warn("Could not locate biome for " + runestone.location.id());
@@ -165,7 +166,7 @@ public final class Handlers extends Setup<Runestones> {
 
                 runestone.target = result.getFirst();
             }
-            case STRUCTURE -> {
+            case Structure -> {
                 var structureRegistry = registryAccess.lookupOrThrow(Registries.STRUCTURE);
                 var opt = structureRegistry.get(runestone.location.id()).map(HolderSet::direct);
                 if (opt.isEmpty()) {
@@ -184,7 +185,7 @@ public final class Handlers extends Setup<Runestones> {
 
                 runestone.target = result.getFirst();
             }
-            case PLAYER -> {
+            case Player -> {
                 return true;
             }
             default -> {
@@ -211,7 +212,7 @@ public final class Handlers extends Setup<Runestones> {
         level.removeBlock(pos, false);
     }
 
-    public void prepare(LevelAccessor level, BlockPos pos) {
+    public void prepare(LevelAccessor level, BlockPos pos, double quality) {
         if (level.isClientSide() || !(level.getBlockEntity(pos) instanceof RunestoneBlockEntity runestone)) {
             return;
         }
@@ -232,17 +233,20 @@ public final class Handlers extends Setup<Runestones> {
         Collections.shuffle(blockDefinitions, new Random(random.nextLong()));
 
         for (var blockDefinition : blockDefinitions) {
-            var location = blockDefinition.location(level, pos, random);
+            var location = blockDefinition.location(level, pos, random, quality);
             random.nextInt(15335251);
 
             if (location.isPresent()) {
-                var sacrifice = blockDefinition.sacrifice(level, pos, random).get();
+                var sacrifice = blockDefinition.sacrifice(level, pos, random, quality).get();
 
                 runestone.location = location.get();
                 runestone.sacrifice = new ItemStack(sacrifice);
 
-                log().debug("Set runestone location = " + runestone.location.id() + ", sacrifice = " + runestone.sacrifice.toString() + " at pos " + pos);
+                log().debug("Set runestone location = " + runestone.location.id() + ", sacrifice = " + runestone.sacrifice.toString() + ", quality = " + quality + " at pos " + pos);
                 runestone.setChanged();
+
+                var cardinals = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
+                level.setBlock(pos, state.setValue(RunestoneBlock.FACING, cardinals.get(random.nextInt(cardinals.size()))), 2);
                 return;
             }
         }

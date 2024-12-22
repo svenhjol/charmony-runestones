@@ -39,7 +39,7 @@ public final class Helpers {
     private static final int NUM_RUNES = 26;
 
     public static final ResourceLocation SPAWN_POINT_ID = RunestonesMod.id("spawn_point");
-    public static final RunestoneLocation SPAWN_POINT = new RunestoneLocation(RunestoneLocation.Type.PLAYER, SPAWN_POINT_ID);
+    public static final RunestoneLocation SPAWN_POINT = new RunestoneLocation(RunestoneLocation.Type.Player, SPAWN_POINT_ID);
 
     /**
      * Make a random runestone biome location from a given biome tag.
@@ -47,7 +47,7 @@ public final class Helpers {
     public static Optional<RunestoneLocation> randomBiome(LevelAccessor level, RandomSource random, TagKey<Biome> tag) {
         var values = getValues(level.registryAccess(), tag);
         if (!values.isEmpty()) {
-            var location = new RunestoneLocation(RunestoneLocation.Type.BIOME, values.get(random.nextInt(values.size())));
+            var location = new RunestoneLocation(RunestoneLocation.Type.Biome, values.get(random.nextInt(values.size())));
             return Optional.of(location);
         }
 
@@ -60,7 +60,7 @@ public final class Helpers {
     public static Optional<RunestoneLocation> randomStructure(LevelAccessor level, RandomSource random, TagKey<Structure> tag) {
         var values = getValues(level.registryAccess(), tag);
         if (!values.isEmpty()) {
-            var location = new RunestoneLocation(RunestoneLocation.Type.STRUCTURE, values.get(random.nextInt(values.size())));
+            var location = new RunestoneLocation(RunestoneLocation.Type.Structure, values.get(random.nextInt(values.size())));
             return Optional.of(location);
         }
 
@@ -246,9 +246,9 @@ public final class Helpers {
         var path = location.id().getPath();
 
         return switch (location.type()) {
-            case BIOME -> "biome." + namespace + "." + path;
-            case STRUCTURE -> "structure." + namespace + "." + path;
-            case PLAYER -> "player." + namespace + "." + path;
+            case Biome -> "biome." + namespace + "." + path;
+            case Structure -> "structure." + namespace + "." + path;
+            case Player -> "player." + namespace + "." + path;
         };
     }
     

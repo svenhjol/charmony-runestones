@@ -29,16 +29,16 @@ public final class StructureRunestones extends SidedFeature {
             within a stronghold room crossing section. Only blocks at a height of 2 are modified.""",
         requireRestart = false
     )
-    private static double strongholdChance = 0.25d;
+    private static double strongholdChance = 0.15d;
 
     @Configurable(
         name = "Bastion chance",
         description = """
-            Chance (out of 1.0) of a runestone being added instead of a cracked blackstone block.
+            Chance (out of 1.0) of a runestone being added instead of a chiseled blackstone block.
             This applies to any room or section within a bastion.""",
         requireRestart = false
     )
-    private static double bastionChance = 0.02d;
+    private static double bastionChance = 0.25d;
 
     @Configurable(
         name = "Trail Ruins chance",

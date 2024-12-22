@@ -8,6 +8,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import svenhjol.charmony.api.RunestoneDefinition;
 import svenhjol.charmony.api.RunestoneDefinitionsProvider;
 import svenhjol.charmony.api.RunestoneLocation;
@@ -57,6 +58,7 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
             stoneUncommon(),
             stoneRare(),
             stoneSpawnPoint(),
+            stoneStronghold(),
             blackstone(),
             blackstoneSpawnPoint(),
             obsidian(),
@@ -65,7 +67,7 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
     }
 
     private RunestoneDefinition stoneCommon() {
-        return new CustomRunestoneDefinition(0.5d, 0.9d) {
+        return new CustomRunestoneDefinition(0.5d, 0.9d, false) {
             @Override
             public Supplier<? extends Block> runestoneBlock() {
                 return feature().registers.stoneBlock;
@@ -87,14 +89,14 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/stone/common_items");
             }
         };
     }
 
     private RunestoneDefinition stoneUncommon() {
-        return new CustomRunestoneDefinition(0.32d, 0.55d) {
+        return new CustomRunestoneDefinition(0.32d, 0.55d, false) {
             @Override
             public Supplier<? extends Block> runestoneBlock() {
                 return feature().registers.stoneBlock;
@@ -116,14 +118,14 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/stone/uncommon_items");
             }
         };
     }
 
     private RunestoneDefinition stoneRare() {
-        return new CustomRunestoneDefinition(0.2d, 0.33d) {
+        return new CustomRunestoneDefinition(0.2d, 0.33d, true) {
             @Override
             public Supplier<? extends Block> runestoneBlock() {
                 return feature().registers.stoneBlock;
@@ -145,7 +147,7 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/stone/rare_items");
             }
         };
@@ -164,7 +166,7 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
             }
 
             @Override
-            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 if (random.nextDouble() < 0.33d) {
                     return Optional.of(Helpers.SPAWN_POINT);
                 }
@@ -172,14 +174,41 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/stone/spawn_point_items");
             }
         };
     }
 
+    private RunestoneDefinition stoneStronghold() {
+        return new RunestoneDefinition() {
+            @Override
+            public Supplier<? extends Block> runestoneBlock() {
+                return feature().registers.stoneBlock;
+            }
+
+            @Override
+            public Supplier<? extends Block> baseBlock() {
+                return () -> Blocks.STONE_BRICKS;
+            }
+
+            @Override
+            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+                if (feature().linkToStronghold() && random.nextDouble() < (0.01d + quality)) {
+                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, BuiltinStructures.STRONGHOLD.location()));
+                }
+                return Optional.empty();
+            }
+
+            @Override
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+                return () -> Helpers.randomItem(level, random, "runestone/stone/rare_items");
+            }
+        };
+    }
+
     private RunestoneDefinition blackstone() {
-        return new CustomRunestoneDefinition(0.6d, 0.9d) {
+        return new CustomRunestoneDefinition(0.6d, 0.9d, false) {
             @Override
             public Supplier<? extends Block> runestoneBlock() {
                 return feature().registers.blackstoneBlock;
@@ -201,7 +230,7 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/blackstone/common_items");
             }
         };
@@ -220,7 +249,7 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
             }
 
             @Override
-            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 if (random.nextDouble() < 0.33d) {
                     return Optional.of(Helpers.SPAWN_POINT);
                 }
@@ -228,14 +257,14 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/blackstone/spawn_point_items");
             }
         };
     }
 
     private RunestoneDefinition obsidian() {
-        return new CustomRunestoneDefinition(0.5d, 0.9d) {
+        return new CustomRunestoneDefinition(0.5d, 0.9d, false) {
             @Override
             public Supplier<? extends Block> runestoneBlock() {
                 return feature().registers.obsidianBlock;
@@ -257,7 +286,7 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/obsidian/common_items");
             }
         };
@@ -276,7 +305,7 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
             }
 
             @Override
-            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 if (random.nextDouble() < 0.25d) {
                     return Optional.of(Helpers.SPAWN_POINT);
                 }
@@ -284,7 +313,7 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random) {
+            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/obsidian/spawn_point_items");
             }
         };
@@ -294,20 +323,23 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
      * A simple implementation of RunestoneDefinition with chance of a runestone to link to a biome or a structure.
      */
     private abstract static class CustomRunestoneDefinition implements RunestoneDefinition {
-        private final double biomeChance;
-        private final double structureChance;
+        private final double biomeChance; // Chance of this runestone linking to a biome.
+        private final double structureChance; // Chance of this runestone linking to a structure.
+        private final boolean isRare; // True if the runestone links to rare biomes and structures.
 
-        public CustomRunestoneDefinition(double biomeChance, double structureChance) {
+        public CustomRunestoneDefinition(double biomeChance, double structureChance, boolean isRare) {
             this.biomeChance = biomeChance;
             this.structureChance = structureChance;
+            this.isRare = isRare;
         }
 
         @Override
-        public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random) {
-            if (random.nextDouble() < biomeChance) {
+        public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            var qualityChance = isRare ? quality : 0;
+            if (random.nextDouble() < biomeChance + qualityChance) {
                 return Helpers.randomBiome(level, random, TagKey.create(Registries.BIOME, RunestonesMod.id(biomeTagPath())));
             }
-            if (random.nextDouble() < structureChance) {
+            if (random.nextDouble() < structureChance + qualityChance) {
                 return Helpers.randomStructure(level, random, TagKey.create(Registries.STRUCTURE, RunestonesMod.id(structureTagPath())));
             }
 

@@ -28,7 +28,7 @@ public final class Handlers extends Setup<StructureRunestones> {
             level.setBlock(pos, Runestones.feature().registers.stoneBlock.get().defaultBlockState(), 2);
             var blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof RunestoneBlockEntity runestone) {
-                runestone.prepare(level);
+                runestone.prepare(level, 0.5d);
                 return true;
             }
         }
@@ -44,7 +44,7 @@ public final class Handlers extends Setup<StructureRunestones> {
             level.setBlock(pos, Runestones.feature().registers.blackstoneBlock.get().defaultBlockState(), 2);
             var blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof RunestoneBlockEntity runestone) {
-                runestone.prepare(level);
+                runestone.prepare(level, 0.5d);
                 return true;
             }
         }
@@ -60,7 +60,7 @@ public final class Handlers extends Setup<StructureRunestones> {
             level.setBlock(pos, Runestones.feature().registers.stoneBlock.get().defaultBlockState(), 2);
             var blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof RunestoneBlockEntity runestone) {
-                runestone.prepare(level);
+                runestone.prepare(level, 0.2d);
                 return true;
             }
         }
