@@ -39,7 +39,7 @@ public class HudRenderer extends BaseHudRenderer {
         var feature = Runestones.feature();
         var minecraft = Minecraft.getInstance();
         var window = minecraft.getWindow();
-        var y = 64;
+        var y = 54;
         var lineHeight = 14;
 
         if (ticksFade == 0) return;
