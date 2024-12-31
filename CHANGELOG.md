@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+
+- Modmenu support.
+
 ## 1.0.2
 
 - Add overgrown stone circles.

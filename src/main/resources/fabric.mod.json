@@ -19,6 +19,9 @@
     ],
     "client": [
         "svenhjol.charmony.runestones.client.ClientInitializer"
+    ],
+    "modmenu": [
+        "svenhjol.charmony.runestones.integration.ModMenuPlugin"
     ]
   },
 
