@@ -23,7 +23,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.Vec3;
 import svenhjol.charmony.api.RunestoneLocation;
 import svenhjol.charmony.core.base.Log;
-import svenhjol.charmony.core.helper.TagHelper;
+import svenhjol.charmony.core.helpers.TagHelper;
 import svenhjol.charmony.runestones.RunestonesMod;
 
 import javax.annotation.Nullable;

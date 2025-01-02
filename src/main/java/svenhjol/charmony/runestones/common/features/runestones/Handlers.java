@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import svenhjol.charmony.api.RunestoneDefinition;
 import svenhjol.charmony.core.base.Setup;
-import svenhjol.charmony.core.helper.PlayerHelper;
+import svenhjol.charmony.core.helpers.PlayerHelper;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CDestroyRunestone;
 
 import java.util.*;

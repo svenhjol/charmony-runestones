@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.structure.ScatteredFeaturePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.material.Fluids;
 import svenhjol.charmony.api.StoneCircleDefinition;
-import svenhjol.charmony.core.helper.TagHelper;
+import svenhjol.charmony.core.helpers.TagHelper;
 import svenhjol.charmony.runestones.common.features.runestones.Runestones;
 
 import java.util.HashMap;
