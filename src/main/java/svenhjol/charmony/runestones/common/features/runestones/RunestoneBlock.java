@@ -3,7 +3,9 @@ package svenhjol.charmony.runestones.common.features.runestones;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -84,6 +86,31 @@ public class RunestoneBlock extends BaseEntityBlock {
     public static class RunestoneBlockItem extends BlockItem {
         public RunestoneBlockItem(Supplier<RunestoneBlock> block, ResourceKey<Item> key) {
             super(block.get(), new Properties().setId(key));
+        }
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        super.animateTick(state, level, pos, random);
+
+        if (!(level.getBlockEntity(pos) instanceof RunestoneBlockEntity runestone)) {
+            return;
+        }
+
+        if (!runestone.hasBeenDiscovered()) {
+            return;
+        }
+
+        if (random.nextFloat() < 0.15f) {
+            return;
+        }
+
+        var particle = ParticleTypes.ENCHANT;
+        var dist = 2.5d;
+
+        for (var i = 0; i < 5; i++) {
+            level.addParticle(particle, pos.getX() + 0.5d, pos.getY() + 1.2d, pos.getZ() + 0.5d,
+                (dist / 2) - (random.nextDouble() * dist), random.nextDouble() - 1.65d, (dist / 2) - (random.nextDouble() * dist));
         }
     }
 }
