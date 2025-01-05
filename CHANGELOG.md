@@ -3,6 +3,8 @@
 ## 1.2.0
 
 - Add runestone knowledge to track locations that a player has learned.
+- StructureRunestones feature now enabled by default.
+- Uses bricks for runestone replacement in trail ruins.
 
 ## 1.1.0
 
