@@ -42,7 +42,7 @@ public final class StructureRunestones extends SidedFeature {
     @Configurable(
         name = "Trail Ruins chance",
         description = """
-            Chance (out of 1.0) of a runestone being added instead of a terracotta block.
+            Chance (out of 1.0) of a runestone being added instead of a bricks block.
             This applies to any block within a trail ruins structure.""",
         requireRestart = false
     )
