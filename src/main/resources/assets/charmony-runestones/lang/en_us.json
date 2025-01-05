@@ -8,6 +8,7 @@
   "filled_map.charmony-runestones.stone_circle": "Stone Circle Map",
   "gui.charmony-runestones.runestone.activate_with": "Activate with:",
   "gui.charmony-runestones.runestone.discovered_by": "Discovered by %s",
+  "gui.charmony-runestones.runestone.familiar": "%s...",
   "gui.charmony-runestones.runestone.multiple_players": "multiple players",
   "gui.charmony-runestones.runestone.unknown": "???",
   "item.charmony-runestones.blackstone_runestone": "Blackstone Runestone",

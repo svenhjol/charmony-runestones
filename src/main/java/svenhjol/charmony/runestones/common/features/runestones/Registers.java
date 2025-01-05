@@ -2,14 +2,12 @@ package svenhjol.charmony.runestones.common.features.runestones;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.common.CommonRegistry;
+import svenhjol.charmony.core.enums.Side;
 import svenhjol.charmony.core.events.PlayerTickCallback;
-import svenhjol.charmony.runestones.common.features.runestones.Networking.C2SPlayerLooking;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.*;
 import svenhjol.charmony.runestones.common.features.runestones.RunestoneBlock.RunestoneBlockItem;
 
@@ -53,16 +51,17 @@ public final class Registers extends Setup<Runestones> {
         travelSound = registry.sound("runestone_travel");
 
         // Server packet senders.
-        PayloadTypeRegistry.playS2C().register(S2CTeleportedLocation.TYPE, S2CTeleportedLocation.CODEC);
-        PayloadTypeRegistry.playS2C().register(S2CActivationWarmup.TYPE, S2CActivationWarmup.CODEC);
-        PayloadTypeRegistry.playS2C().register(S2CUniqueWorldSeed.TYPE, S2CUniqueWorldSeed.CODEC);
-        PayloadTypeRegistry.playS2C().register(S2CDestroyRunestone.TYPE, S2CDestroyRunestone.CODEC);
+        registry.packetSender(Side.Common, S2CTeleportedLocation.TYPE, S2CTeleportedLocation.CODEC);
+        registry.packetSender(Side.Common, S2CActivationWarmup.TYPE, S2CActivationWarmup.CODEC);
+        registry.packetSender(Side.Common, S2CUniqueWorldSeed.TYPE, S2CUniqueWorldSeed.CODEC);
+        registry.packetSender(Side.Common, S2CDestroyRunestone.TYPE, S2CDestroyRunestone.CODEC);
+        registry.packetSender(Side.Common, S2CKnowledge.TYPE, S2CKnowledge.CODEC);
 
         // Client packet senders.
-        PayloadTypeRegistry.playC2S().register(C2SPlayerLooking.TYPE, C2SPlayerLooking.CODEC);
+        registry.packetSender(Side.Client, C2SPlayerLooking.TYPE, C2SPlayerLooking.CODEC);
 
-        // Handle packets being sent from the client
-        ServerPlayNetworking.registerGlobalReceiver(C2SPlayerLooking.TYPE, feature.handlers::handlePlayerLooking);
+        // Handle packets being sent from the client.
+        registry.packetReceiver(C2SPlayerLooking.TYPE, () -> feature.handlers::handlePlayerLooking);
     }
 
     @Override

@@ -127,6 +127,7 @@ public class HudRenderer extends BaseHudRenderer {
             }
 
             if (runestone.hasBeenDiscovered()) {
+                // Discovered runestones show the full name of the location type.
                 name = Component.translatable(Helpers.localeKey(runestone.location));
 
                 if (runestone.discovered != null) {
@@ -135,7 +136,8 @@ public class HudRenderer extends BaseHudRenderer {
                         Component.translatable(runestone.discovered));
                 }
             } else {
-                name = Component.translatable("gui.charmony-runestones.runestone.unknown");
+                // Show the name with question marks blanking out letters based on familiarity with this runestone's location type.
+                name = feature.handlers.nameWithFamiliarity(runestone);
             }
 
             return true;

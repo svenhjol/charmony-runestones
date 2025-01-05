@@ -1,28 +1,37 @@
 package svenhjol.charmony.runestones.client.features.runestones;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import svenhjol.charmony.api.RunestoneLocation;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.runestones.common.features.runestones.Helpers;
+import svenhjol.charmony.runestones.common.features.runestones.Knowledge;
 import svenhjol.charmony.runestones.common.features.runestones.Networking;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CActivationWarmup;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CTeleportedLocation;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CUniqueWorldSeed;
+import svenhjol.charmony.runestones.common.features.runestones.RunestoneBlockEntity;
 
 import java.util.Map;
 import java.util.WeakHashMap;
 
 public final class Handlers extends Setup<Runestones> {
+    private static final Character UNKNOWN_LETTER = '?';
+
     private long seed;
     private boolean hasReceivedSeed = false;
+    private Knowledge knowledge;
+    private long lastNameCache = 0;
+    private final Map<BlockPos, MutableComponent> nameCache = new WeakHashMap<>();
 
     public final Map<ResourceLocation, String> cachedRunicNames = new WeakHashMap<>();
 
@@ -30,34 +39,53 @@ public final class Handlers extends Setup<Runestones> {
         super(feature);
     }
 
-    public void handleTeleportedLocation(S2CTeleportedLocation packet, ClientPlayNetworking.Context context) {
-        context.client().execute(() -> Minecraft.getInstance()
+    public void handleTeleportedLocation(Player player, S2CTeleportedLocation payload) {
+        Minecraft.getInstance()
             .getToastManager()
-            .addToast(new TeleportedLocationToast(packet.location())));
+            .addToast(new TeleportedLocationToast(payload.location()));
     }
 
-    public void handleActivationWarmup(S2CActivationWarmup packet, ClientPlayNetworking.Context context) {
-        context.client().execute(() -> {
-            var level = Minecraft.getInstance().level;
-            if (level == null) return;
+    public void handleActivationWarmup(Player player, S2CActivationWarmup payload) {
+        var level = Minecraft.getInstance().level;
+        if (level == null) return;
 
-            var random = level.getRandom();
-            var itemParticle = ParticleTypes.SMOKE;
+        var random = level.getRandom();
+        var itemParticle = ParticleTypes.SMOKE;
 
-            var itemDist = 0.1d;
-            var itemPos = packet.itemPos();
+        var itemDist = 0.1d;
+        var itemPos = payload.itemPos();
 
-            for (var i = 0; i < 8; i++) {
-                level.addParticle(itemParticle, itemPos.x(), itemPos.y() + 0.36d, itemPos.z(),
-                    (itemDist / 2) - (random.nextDouble() * itemDist), 0, (itemDist / 2) - (random.nextDouble() * itemDist));
-            }
-        });
+        for (var i = 0; i < 8; i++) {
+            level.addParticle(itemParticle, itemPos.x(), itemPos.y() + 0.36d, itemPos.z(),
+                (itemDist / 2) - (random.nextDouble() * itemDist), 0, (itemDist / 2) - (random.nextDouble() * itemDist));
+        }
     }
 
-    public void handleUniqueWorldSeed(S2CUniqueWorldSeed packet, ClientPlayNetworking.Context context) {
-        this.seed = packet.seed();
+    public void handleUniqueWorldSeed(Player player, S2CUniqueWorldSeed payload) {
+        this.seed = payload.seed();
         this.hasReceivedSeed = true;
         feature().handlers.cachedRunicNames.clear();
+    }
+
+    public void handleDestroyRunestone(Player player, Networking.S2CDestroyRunestone payload) {
+        var pos = payload.runestonePos();
+        var level = Minecraft.getInstance().level;
+        if (level == null) return;
+
+        var x = pos.getX() + 0.5d;
+        var y = pos.getY() + 0.5d;
+        var z = pos.getZ() + 0.5d;
+
+        for (var i = 0; i < 12; i++) {
+            var d = level.random.nextGaussian() * 0.5d;
+            var e = level.random.nextGaussian() * 0.5d;
+            var f = level.random.nextGaussian() * 0.5d;
+            level.addParticle(ParticleTypes.LAVA, x, y, z, d, e, f);
+        }
+    }
+
+    public void handleKnowledge(Player player, Networking.S2CKnowledge payload) {
+        this.knowledge = payload.knowledge();
     }
 
     public void hudRender(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
@@ -91,22 +119,67 @@ public final class Handlers extends Setup<Runestones> {
         return raycast.getBlockPos();
     }
 
-    public void handleDestroyRunestone(Networking.S2CDestroyRunestone packet, ClientPlayNetworking.Context context) {
-        context.client().execute(() -> {
-            var pos = packet.runestonePos();
-            var level = Minecraft.getInstance().level;
-            if (level == null) return;
+    public int familiarity(RunestoneLocation location) {
+        var id = location.id();
+        if (knowledge == null) {
+            return 0;
+        }
+        return knowledge.locations().getOrDefault(id, 0);
+    }
 
-            var x = pos.getX() + 0.5d;
-            var y = pos.getY() + 0.5d;
-            var z = pos.getZ() + 0.5d;
+    public MutableComponent nameWithFamiliarity(RunestoneBlockEntity runestone) {
+        var minecraft = Minecraft.getInstance();
+        var location = runestone.location;
+        var pos = runestone.getBlockPos();
+        var seed = pos.asLong();
+        var familiarity = familiarity(location);
 
-            for (var i = 0; i < 12; i++) {
-                var d = level.random.nextGaussian() * 0.5;
-                var e = level.random.nextGaussian() * 0.5;
-                var f = level.random.nextGaussian() * 0.5;
-                level.addParticle(ParticleTypes.LAVA, x, y, z, d, e, f);
+        if (familiarity == 0 || !feature().showNameFamiliarity()) {
+            return Component.translatable("gui.charmony-runestones.runestone.unknown");
+        }
+
+        if (minecraft.level == null) {
+            throw new RuntimeException("Should not be called when level is not loaded");
+        }
+
+        var gameTime = minecraft.level.getGameTime();
+        if (nameCache.containsKey(pos) && gameTime < lastNameCache + 100) {
+            return nameCache.get(pos);
+        }
+
+        feature().log().debug("Rebuilding name cache");
+        var translated = Component.translatable(Helpers.localeKey(location)).getString();
+        var rand = RandomSource.create(seed);
+        var revealed = ((familiarity - 1) * 2) + 1; // This is the max number of letters that are revealed
+
+        // Build a string of ?s that matches the length of the location's translated name.
+        var out = String.valueOf(UNKNOWN_LETTER).repeat(translated.length());
+
+        var passes = 0; // Restrict to a number of passes to avoid infinite loop
+        while (revealed > 0 && passes < 4) {
+            var outLetters = out.toCharArray();
+            for (var i = outLetters.length - 1; i >= 0; i--) {
+                rand.nextInt();
+                var outLetter = out.charAt(i);
+                var actualLetter = translated.charAt(i);
+
+                // More chance to reveal inner letters, and the overall chance is increased by familiarity
+                var chance = ((i == 0 || i == outLetters.length - 1) ? 0.03d : 0.2d) + ((familiarity - 1) * 0.1d);
+
+                if (outLetter == UNKNOWN_LETTER && rand.nextDouble() < chance) {
+                    outLetters[i] = actualLetter; // Replace the ? with the actual letter.
+                    revealed--;
+                }
+                if (revealed <= 0) break;
             }
-        });
+            out = String.copyValueOf(outLetters);
+            passes++;
+        }
+
+        var name = Component.translatable("gui.charmony-runestones.runestone.familiar", out);
+        nameCache.clear();
+        nameCache.put(pos, name);
+        lastNameCache = gameTime;
+        return name;
     }
 }

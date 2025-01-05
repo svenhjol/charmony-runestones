@@ -1,6 +1,5 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderSet;
@@ -68,24 +67,23 @@ public final class Handlers extends Setup<Runestones> {
     public void entityJoin(Entity entity, Level level) {
         if (entity instanceof ServerPlayer player) {
             var serverLevel = (ServerLevel)level;
+
+            var state = KnowledgeSavedData.getServerState(serverLevel.getServer());
+            Networking.S2CKnowledge.send(player, state.getKnowledge(player));
+
             var random = RandomSource.create(serverLevel.getSeed());
             Networking.S2CUniqueWorldSeed.send(player, random.nextLong());
         }
     }
 
-    public void handlePlayerLooking(Networking.C2SPlayerLooking packet, ServerPlayNetworking.Context context) {
-        var player = context.player();
-        var server = player.server;
+    public void handlePlayerLooking(Player player, Networking.C2SPlayerLooking payload) {
+        var level = player.level();
+        var pos = payload.pos();
 
-        server.execute(() -> {
-            var level = player.level();
-            var pos = packet.pos();
-
-            // If it's a valid runestone that the player is looking at, do the advancement.
-            if (level.getBlockEntity(pos) instanceof RunestoneBlockEntity runestone && runestone.isValid()) {
-                feature().advancements.lookedAtRunestone(player);
-            }
-        });
+        // If it's a valid runestone that the player is looking at, do the advancement.
+        if (level.getBlockEntity(pos) instanceof RunestoneBlockEntity runestone && runestone.isValid()) {
+            feature().advancements.lookedAtRunestone(player);
+        }
     }
 
     public void tickRunestone(Level level, BlockPos pos, BlockState state, RunestoneBlockEntity runestone) {
@@ -264,6 +262,7 @@ public final class Handlers extends Setup<Runestones> {
         var feature = Runestones.feature();
         var pos = runestone.getBlockPos();
         var players = PlayerHelper.getPlayersInRange(level, pos, 8.0d);
+        var canAddKnowledge = false;
 
         if (!runestone.hasBeenDiscovered()) {
             var result = feature.handlers.trySetLocation(level, runestone);
@@ -283,10 +282,28 @@ public final class Handlers extends Setup<Runestones> {
             }
 
             runestone.setChanged();
+            canAddKnowledge = true;
         }
 
         for (var player : players) {
-            var teleport = new RunestoneTeleport((ServerPlayer)player, runestone);
+            var serverPlayer = (ServerPlayer)player;
+
+            // Add the knowledge to each player IF the runestone has not been discovered.
+            if (canAddKnowledge) {
+                var locationId = runestone.location.id();
+                var state = KnowledgeSavedData.getServerState(level.getServer());
+                var knowledge = state.getKnowledge(player).addLocation(locationId);
+
+                // Update server with new knowledge for this player.
+                state.updateKnowledge(knowledge);
+
+                // Update client with new knowledge for this player.
+                Networking.S2CKnowledge.send(serverPlayer, knowledge);
+                feature().log().debug("Taught " + locationId + " to " + player.getScoreboardName());
+            }
+
+            // Add a new teleport request for this player.
+            var teleport = new RunestoneTeleport(serverPlayer, runestone);
             feature.handlers.setActiveTeleport(player, teleport);
         }
     }

@@ -1,6 +1,5 @@
 package svenhjol.charmony.runestones.client.features.runestones;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -22,19 +21,17 @@ public final class Registers extends Setup<Runestones> {
 
     public Registers(Runestones feature) {
         super(feature);
+        var registry = ClientRegistry.forFeature(feature);
 
         runeFont = Style.EMPTY.withFont(ILLAGER_GLYPHS);
         hudRenderer = new HudRenderer();
 
         // Handle packets being sent from the server.
-        ClientPlayNetworking.registerGlobalReceiver(S2CTeleportedLocation.TYPE,
-            feature.handlers::handleTeleportedLocation);
-        ClientPlayNetworking.registerGlobalReceiver(S2CActivationWarmup.TYPE,
-            feature.handlers::handleActivationWarmup);
-        ClientPlayNetworking.registerGlobalReceiver(S2CUniqueWorldSeed.TYPE,
-            feature.handlers::handleUniqueWorldSeed);
-        ClientPlayNetworking.registerGlobalReceiver(S2CDestroyRunestone.TYPE,
-            feature.handlers::handleDestroyRunestone);
+        registry.packetReceiver(S2CTeleportedLocation.TYPE, () -> feature.handlers::handleTeleportedLocation);
+        registry.packetReceiver(S2CActivationWarmup.TYPE, () -> feature.handlers::handleActivationWarmup);
+        registry.packetReceiver(S2CUniqueWorldSeed.TYPE, () -> feature.handlers::handleUniqueWorldSeed);
+        registry.packetReceiver(S2CDestroyRunestone.TYPE, () -> feature.handlers::handleDestroyRunestone);
+        registry.packetReceiver(S2CKnowledge.TYPE, () -> feature.handlers::handleKnowledge);
     }
 
     @Override

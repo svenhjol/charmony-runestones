@@ -255,12 +255,18 @@ public class RunestoneTeleport {
     private void setTargetAndDimension() {
         if (Helpers.runestoneLinksToSpawnPoint(runestone)) {
             // Handle world spawn point runestone.
-            this.dimension = Level.OVERWORLD;
-            this.target = level.getSharedSpawnPos().getCenter();
+            setTargetToSpawnPoint();
         } else {
             // All standard runestones just use the same dimension and fixed target pos.
             this.dimension = level.dimension();
-            this.target = runestone.target.getCenter();
+
+            // Last check that target is sane; if not, default to shared spawn point.
+            if (runestone.target == null) {
+                feature().log().error("runestone.target is null, this should not happen: " + runestone);
+                setTargetToSpawnPoint();
+            } else {
+                this.target = runestone.target.getCenter();
+            }
         }
         
         this.teleportingInSameDimension = level.dimension() == dimension;
@@ -289,6 +295,11 @@ public class RunestoneTeleport {
     private void playTeleportSound() {
         LOGGER.debug("Playing teleport sound for player " + player);
         player.level().playSound(null, player.blockPosition(), feature().registers.travelSound.get(), SoundSource.BLOCKS);
+    }
+
+    private void setTargetToSpawnPoint() {
+        this.dimension = Level.OVERWORLD;
+        this.target = level.getSharedSpawnPos().getCenter();
     }
 
     private Runestones feature() {
