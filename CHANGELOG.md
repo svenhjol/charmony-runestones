@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+- Add animation for discovered runestones.
+
 ## 1.2.0
 
 - Add runestone knowledge to track locations that a player has learned.
