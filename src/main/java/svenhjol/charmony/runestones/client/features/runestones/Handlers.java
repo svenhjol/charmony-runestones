@@ -25,15 +25,13 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 public final class Handlers extends Setup<Runestones> {
-    private static final Character UNKNOWN_LETTER = '?';
-
     private long seed;
+    private long lastFamiliarNameCache = 0;
     private boolean hasReceivedSeed = false;
     private Knowledge knowledge;
-    private long lastNameCache = 0;
-    private final Map<BlockPos, MutableComponent> nameCache = new WeakHashMap<>();
 
-    public final Map<ResourceLocation, String> cachedRunicNames = new WeakHashMap<>();
+    private final Map<BlockPos, MutableComponent> cachedFamiliarNames = new WeakHashMap<>();
+    private final Map<ResourceLocation, String> cachedRunicNames = new WeakHashMap<>();
 
     public Handlers(Runestones feature) {
         super(feature);
@@ -143,8 +141,8 @@ public final class Handlers extends Setup<Runestones> {
         }
 
         var gameTime = minecraft.level.getGameTime();
-        if (nameCache.containsKey(pos) && gameTime < lastNameCache + 100) {
-            return nameCache.get(pos);
+        if (cachedFamiliarNames.containsKey(pos) && gameTime < lastFamiliarNameCache + 100) {
+            return cachedFamiliarNames.get(pos);
         }
 
         feature().log().debug("Rebuilding name cache");
@@ -153,7 +151,7 @@ public final class Handlers extends Setup<Runestones> {
         var revealed = ((familiarity - 1) * 2) + 1; // This is the max number of letters that are revealed
 
         // Build a string of ?s that matches the length of the location's translated name.
-        var out = String.valueOf(UNKNOWN_LETTER).repeat(translated.length());
+        var out = String.valueOf(Helpers.UNKNOWN_LETTER).repeat(translated.length());
 
         var passes = 0; // Restrict to a number of passes to avoid infinite loop
         while (revealed > 0 && passes < 4) {
@@ -166,7 +164,7 @@ public final class Handlers extends Setup<Runestones> {
                 // More chance to reveal inner letters, and the overall chance is increased by familiarity
                 var chance = ((i == 0 || i == outLetters.length - 1) ? 0.03d : 0.2d) + ((familiarity - 1) * 0.1d);
 
-                if (outLetter == UNKNOWN_LETTER && rand.nextDouble() < chance) {
+                if (outLetter == Helpers.UNKNOWN_LETTER && rand.nextDouble() < chance) {
                     outLetters[i] = actualLetter; // Replace the ? with the actual letter.
                     revealed--;
                 }
@@ -177,9 +175,9 @@ public final class Handlers extends Setup<Runestones> {
         }
 
         var name = Component.translatable("gui.charmony-runestones.runestone.familiar", out);
-        nameCache.clear();
-        nameCache.put(pos, name);
-        lastNameCache = gameTime;
+        cachedFamiliarNames.clear();
+        cachedFamiliarNames.put(pos, name);
+        lastFamiliarNameCache = gameTime;
         return name;
     }
 }

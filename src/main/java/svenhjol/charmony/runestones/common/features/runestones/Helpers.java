@@ -34,9 +34,10 @@ import java.util.Optional;
 public final class Helpers {
     private static final Log LOGGER = new Log(RunestonesMod.ID, "Helpers");
 
-    private static final char FIRST_RUNE = 'a';
-    private static final char LAST_RUNE = 'z';
-    private static final int NUM_RUNES = 26;
+    public static final char FIRST_RUNE = 'a';
+    public static final char LAST_RUNE = 'z';
+    public static final char UNKNOWN_LETTER = '?';
+    public static final int NUM_RUNES = 26;
 
     public static final ResourceLocation SPAWN_POINT_ID = RunestonesMod.id("spawn_point");
     public static final RunestoneLocation SPAWN_POINT = new RunestoneLocation(RunestoneLocation.Type.Player, SPAWN_POINT_ID);
