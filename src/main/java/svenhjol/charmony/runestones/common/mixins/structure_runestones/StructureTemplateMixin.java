@@ -31,7 +31,7 @@ public abstract class StructureTemplateMixin {
         if (state.is(Blocks.CHISELED_POLISHED_BLACKSTONE) && feature.handlers.createBastionRunestone(level, pos)) {
             return true;
         }
-        if (state.is(Blocks.DIRT) && feature.handlers.createTrailRuinsRunestone(level, pos)) {
+        if (state.is(Blocks.BRICKS) && feature.handlers.createTrailRuinsRunestone(level, pos)) {
             return true;
         }
         return level.setBlock(pos, state, i);

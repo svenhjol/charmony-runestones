@@ -13,11 +13,10 @@ import java.util.function.BooleanSupplier;
 
 @FeatureDefinition(
     side = Side.Common,
-    enabledByDefault = false,
     description = """
         Adds runestones to some vanilla structures.
         This makes some small changes to world generation that has a chance to not play well with other mods,
-        so this feature is disabled by default."""
+        so disable this feature if you run into problems."""
 )
 public final class StructureRunestones extends SidedFeature {
     public final Handlers handlers;
@@ -43,11 +42,11 @@ public final class StructureRunestones extends SidedFeature {
     @Configurable(
         name = "Trail Ruins chance",
         description = """
-            Chance (out of 1.0) of a runestone being added instead of a dirt block.
+            Chance (out of 1.0) of a runestone being added instead of a terracotta block.
             This applies to any block within a trail ruins structure.""",
         requireRestart = false
     )
-    private static double trailRuinsChance = 0.04d;
+    private static double trailRuinsChance = 0.05d;
 
     public StructureRunestones(Mod mod) {
         super(mod);
