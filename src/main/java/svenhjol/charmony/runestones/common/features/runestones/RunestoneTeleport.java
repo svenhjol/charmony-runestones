@@ -118,6 +118,9 @@ public class RunestoneTeleport {
 
         var level = player.level();
         var seaLevel = level.getSeaLevel();
+        if (seaLevel <= 0) {
+            seaLevel = 64; // This is dumb.
+        }
         var pos = new BlockPos((int)target.x, seaLevel, (int)target.z);
 
         if (!level.dimensionType().hasCeiling()) {
