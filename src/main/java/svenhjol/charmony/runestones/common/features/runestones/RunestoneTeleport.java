@@ -262,7 +262,7 @@ public class RunestoneTeleport {
 
             // Last check that target is sane; if not, default to shared spawn point.
             if (runestone.target().isEmpty()) {
-                feature().log().error("runestone.target is null, this should not happen: " + runestone);
+                feature().log().error("runestone.target is not set: " + runestone);
                 setTargetToSpawnPoint();
             } else {
                 this.target = runestone.target().get().getCenter();

@@ -83,16 +83,28 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
     }
 
     public boolean isValid() {
-        return source != null && source != BlockPos.ZERO
-            && location != null && location != RunestoneHelper.EMPTY_LOCATION
-            && sacrifice != null && sacrifice != ItemStack.EMPTY;
+        return source().isPresent()
+            && location().isPresent()
+            && sacrifice().isPresent();
     }
 
-    public boolean hasBeenDiscovered() {
-        return discovered != null && !discovered.isEmpty();
+    public boolean discovered() {
+        return !discovered.isEmpty();
+    }
+
+    public Optional<RunestoneLocation> location() {
+        return location != RunestoneHelper.EMPTY_LOCATION ? Optional.of(location) : Optional.empty();
+    }
+
+    public Optional<ItemStack> sacrifice() {
+        return !sacrifice.isEmpty() ? Optional.of(sacrifice) : Optional.empty();
+    }
+
+    public Optional<BlockPos> source() {
+        return !source.equals(BlockPos.ZERO) ? Optional.of(source) : Optional.empty();
     }
 
     public Optional<BlockPos> target() {
-        return target != null && target != BlockPos.ZERO ? Optional.of(target) : Optional.empty();
+        return !target.equals(BlockPos.ZERO) ? Optional.of(target) : Optional.empty();
     }
 }

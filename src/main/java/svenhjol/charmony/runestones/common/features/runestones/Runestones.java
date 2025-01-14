@@ -28,6 +28,17 @@ public final class Runestones extends SidedFeature {
     private static boolean harvestable = false;
 
     @Configurable(
+        name = "Familiarity multiplier",
+        description = """
+            The number of letters revealed when looking at an unknown runestone.
+            This value is a multiplier of the number of times the player has visited a specific structure or biome.
+            For example, if a player has visited 3 desert runestones and the familiarity is 2, future unknown desert runestones will reveal 6 letters.
+            Set this value high to make it easier to determine which structure or biome an unknown runestone links to.""",
+        requireRestart = false
+    )
+    private static int familiarityMultiplier = 2;
+
+    @Configurable(
         name = "Protection duration",
         description = "Duration (in seconds) of protection given to the player while they teleport via a runestone.",
         requireRestart = false
@@ -66,5 +77,9 @@ public final class Runestones extends SidedFeature {
 
     public boolean linkToStronghold() {
         return linkToStronghold;
+    }
+
+    public int familiarityMultiplier() {
+        return familiarityMultiplier;
     }
 }

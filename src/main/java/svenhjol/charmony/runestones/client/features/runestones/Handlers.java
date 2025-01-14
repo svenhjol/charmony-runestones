@@ -132,7 +132,7 @@ public final class Handlers extends Setup<Runestones> {
         var seed = pos.asLong();
         var familiarity = familiarity(location);
 
-        if (familiarity == 0 || !feature().showNameFamiliarity()) {
+        if (familiarity == 0) {
             return Component.translatable("gui.charmony-runestones.runestone.unknown");
         }
 
@@ -148,7 +148,8 @@ public final class Handlers extends Setup<Runestones> {
         feature().log().debug("Rebuilding name cache");
         var translated = Component.translatable(RunestoneHelper.localeKey(location)).getString();
         var rand = RandomSource.create(seed);
-        var revealed = ((familiarity - 1) * 2) + 1; // This is the max number of letters that are revealed
+        var multiplier = feature().common.get().feature.familiarityMultiplier();
+        var revealed = familiarity * multiplier; // This is the max number of letters that are revealed
 
         // Build a string of ?s that matches the length of the location's translated name.
         var out = String.valueOf(RunestoneHelper.UNKNOWN_LETTER).repeat(translated.length());

@@ -10,28 +10,29 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import svenhjol.charmony.core.client.BaseHudRenderer;
-import svenhjol.charmony.runestones.common.features.runestones.RunestoneHelper;
 import svenhjol.charmony.runestones.common.features.runestones.Networking;
 import svenhjol.charmony.runestones.common.features.runestones.RunestoneBlockEntity;
-
-import javax.annotation.Nullable;
+import svenhjol.charmony.runestones.common.features.runestones.RunestoneHelper;
 
 public class HudRenderer extends BaseHudRenderer {
     private final int nameColor;
     private final int runesColor;
     private final int discoveredColor;
+    private final int targetColor;
 
     private BlockPos lastLookedAt = null;
     private MutableComponent runes;
     private MutableComponent name;
     private MutableComponent discovered;
     private MutableComponent activateWith;
-    @Nullable private ItemStack sacrifice;
+    private MutableComponent target;
+    private ItemStack sacrifice;
 
     public HudRenderer() {
         runesColor = 0xbfaf9f;
         nameColor = 0xf8f8ff;
-        discoveredColor = 0xafbfcf;
+        discoveredColor = 0xf8f8ff;
+        targetColor = 0xafbfcf;
     }
 
     @Override
@@ -53,10 +54,12 @@ public class HudRenderer extends BaseHudRenderer {
         int nameStringLength;
         int runesStringLength;
         int discoveredStringLength;
+        int targetStringLength;
         int activateWithStringLength;
 
         runesStringLength = runes.getString().length() * 5;
         nameStringLength = name.getString().length() * 5;
+        targetStringLength = target.getString().length() * 5;
         discoveredStringLength = discovered.getString().length() * 5;
         activateWithStringLength = activateWith.getString().length() * 5; // reserve space for the item!
 
@@ -68,6 +71,12 @@ public class HudRenderer extends BaseHudRenderer {
             y += lineHeight;
             int lx = (int) (midX - (float) (nameStringLength / 2) - 2) + 3;
             guiGraphics.drawString(font, name, lx, y, nameColor | alpha, textShadow);
+        }
+
+        if (targetStringLength > 0) {
+            y += lineHeight;
+            int lx = (int) (midX - (float) (targetStringLength / 2) - 2);
+            guiGraphics.drawString(font, target, lx, y, targetColor | alpha, textShadow);
         }
 
         if (discoveredStringLength > 0) {
@@ -82,7 +91,7 @@ public class HudRenderer extends BaseHudRenderer {
             guiGraphics.drawString(font, runes, lx, y, runesColor | alpha, textShadow);
         }
 
-        if (activateWithStringLength > 0 && sacrifice != null) {
+        if (activateWithStringLength > 0 && !sacrifice.isEmpty()) {
             y += lineHeight;
             int lx = (int) (midX - (float) (activateWithStringLength / 2) - 2);
             guiGraphics.drawString(font, activateWith, lx, y, nameColor | alpha, textShadow);
@@ -105,7 +114,7 @@ public class HudRenderer extends BaseHudRenderer {
         if (level.getBlockEntity(lookedAt) instanceof RunestoneBlockEntity runestone) {
             discovered = Component.empty();
 
-            if (runestone.location == null) {
+            if (runestone.location().isEmpty()) {
                 return false; // invalid
             }
 
@@ -114,23 +123,30 @@ public class HudRenderer extends BaseHudRenderer {
                 lastLookedAt = lookedAt;
             }
 
+            if (runestone.target().isPresent()) {
+                var targetPos = runestone.target().get();
+                target = Component.translatable("gui.charmony-runestones.runestone.target", targetPos.getX(), targetPos.getY(), targetPos.getZ());
+            } else {
+                target = Component.literal("");
+            }
+
             sacrifice = runestone.sacrifice;
             activateWith = Component.translatable("gui.charmony-runestones.runestone.activate_with");
 
             runes = Component.literal(feature.handlers.runicName(runestone.location))
                 .withStyle(feature.registers.runeFont);
 
-            if (runestone.discovered == null && isCreative) {
+            if (!runestone.discovered() && isCreative) {
                 name = Component.translatable(RunestoneHelper.localeKey(runestone.location));
                 discovered = Component.translatable("gui.charmony-runestones.runestone.discovered_by", "Creative mode");
                 return true;
             }
 
-            if (runestone.hasBeenDiscovered()) {
+            if (runestone.discovered()) {
                 // Discovered runestones show the full name of the location type.
                 name = Component.translatable(RunestoneHelper.localeKey(runestone.location));
 
-                if (runestone.discovered != null) {
+                if (runestone.discovered()) {
                     // Show the "Discovered by" message.
                     discovered = Component.translatable("gui.charmony-runestones.runestone.discovered_by",
                         Component.translatable(runestone.discovered));

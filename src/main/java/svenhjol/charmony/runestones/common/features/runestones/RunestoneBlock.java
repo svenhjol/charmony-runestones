@@ -121,7 +121,7 @@ public class RunestoneBlock extends BaseEntityBlock {
             return;
         }
 
-        if (!runestone.hasBeenDiscovered()) {
+        if (!runestone.discovered()) {
             return;
         }
 

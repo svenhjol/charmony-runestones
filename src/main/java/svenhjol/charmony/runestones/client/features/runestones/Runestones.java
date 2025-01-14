@@ -29,13 +29,6 @@ public final class Runestones extends SidedFeature {
     )
     private static boolean hudHasShadowText = true;
 
-    @Configurable(
-        name = "Show partial location hints",
-        description = "If true, shows the partial name of the runestone if the player has previously travelled to a similar location.",
-        requireRestart = false
-    )
-    private static boolean showNameFamiliarity = true;
-
     public Runestones(Mod mod) {
         super(mod);
         common = Common::new;
@@ -53,9 +46,5 @@ public final class Runestones extends SidedFeature {
 
     public boolean hudHasShadowText() {
         return hudHasShadowText;
-    }
-
-    public boolean showNameFamiliarity() {
-        return showNameFamiliarity;
     }
 }

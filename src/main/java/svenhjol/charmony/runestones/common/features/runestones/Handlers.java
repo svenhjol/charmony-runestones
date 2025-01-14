@@ -148,7 +148,7 @@ public final class Handlers extends Setup<Runestones> {
     }
 
     public boolean trySetLocation(ServerLevel level, RunestoneBlockEntity runestone) {
-        var source = runestone.source;
+        var source = runestone.source().orElse(null);
         if (source == null) {
             return false;
         }
@@ -265,7 +265,7 @@ public final class Handlers extends Setup<Runestones> {
         var players = PlayerHelper.getPlayersInRange(level, pos, 8.0d);
         var canAddKnowledge = false;
 
-        if (!runestone.hasBeenDiscovered()) {
+        if (!runestone.discovered()) {
             var result = feature.handlers.trySetLocation(level, runestone);
 
             if (!result) {
