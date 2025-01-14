@@ -19,11 +19,11 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
     public static final String SACRIFICE_TAG = "sacrifice";
     public static final String DISCOVERED_TAG = "discovered";
 
-    public RunestoneLocation location;
-    public BlockPos source;
-    public BlockPos target;
-    public ItemStack sacrifice;
-    public String discovered;
+    public RunestoneLocation location = RunestoneHelper.EMPTY_LOCATION;
+    public BlockPos source = BlockPos.ZERO;
+    public BlockPos target = BlockPos.ZERO;
+    public ItemStack sacrifice = ItemStack.EMPTY;
+    public String discovered = "";
     public int warmup = 0;
 
     public RunestoneBlockEntity(BlockPos pos, BlockState state) {
@@ -34,42 +34,22 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider);
 
-        if (tag.contains(LOCATION_TAG)) {
-            this.location = RunestoneLocation.load(tag.getCompound(LOCATION_TAG));
-        }
-        if (tag.contains(SOURCE_TAG)) {
-            this.source = BlockPos.of(tag.getLong(SOURCE_TAG));
-        }
-        if (tag.contains(TARGET_TAG)) {
-            this.target = BlockPos.of(tag.getLong(TARGET_TAG));
-        }
-        if (tag.contains(SACRIFICE_TAG)) {
-            this.sacrifice = ItemStack.parse(provider, tag.getCompound(SACRIFICE_TAG)).orElseThrow();
-        }
-        if (tag.contains(DISCOVERED_TAG)) {
-            this.discovered = tag.getString(DISCOVERED_TAG);
-        }
+        this.location = RunestoneLocation.load(tag.getCompound(LOCATION_TAG));
+        this.source = BlockPos.of(tag.getLong(SOURCE_TAG));
+        this.target = BlockPos.of(tag.getLong(TARGET_TAG));
+        this.sacrifice = ItemStack.parse(provider, tag.getCompound(SACRIFICE_TAG)).orElseThrow();
+        this.discovered = tag.getString(DISCOVERED_TAG);
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.saveAdditional(tag, provider);
 
-        if (location != null) {
-            tag.put(LOCATION_TAG, location.save());
-        }
-        if (source != null) {
-            tag.putLong(SOURCE_TAG, source.asLong());
-        }
-
-        target().ifPresent(pos -> tag.putLong(TARGET_TAG, pos.asLong()));
-
-        if (sacrifice != null) {
-            tag.put(SACRIFICE_TAG, sacrifice.save(provider));
-        }
-        if (discovered != null) {
-            tag.putString(DISCOVERED_TAG, discovered);
-        }
+        tag.put(LOCATION_TAG, location.save());
+        tag.putLong(SOURCE_TAG, source.asLong());
+        tag.putLong(TARGET_TAG, target.asLong());
+        tag.put(SACRIFICE_TAG, sacrifice.save(provider));
+        tag.putString(DISCOVERED_TAG, discovered);
     }
 
     @Override
