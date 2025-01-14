@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.2
+
+- Add configuration for harvestable runestones.
+- Add configurable familiarity multiplier.
+- Add DataComponent for runestones to hold block entity data.
+- Target co-ords now shown on a discovered runestone.
+- More null checks.
+
 ## 1.2.1
 
 - Add animation for discovered runestones.
