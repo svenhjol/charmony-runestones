@@ -13,7 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import svenhjol.charmony.api.RunestoneLocation;
 import svenhjol.charmony.core.base.Setup;
-import svenhjol.charmony.runestones.common.features.runestones.Helpers;
+import svenhjol.charmony.runestones.common.features.runestones.RunestoneHelper;
 import svenhjol.charmony.runestones.common.features.runestones.Knowledge;
 import svenhjol.charmony.runestones.common.features.runestones.Networking;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CActivationWarmup;
@@ -103,7 +103,7 @@ public final class Handlers extends Setup<Runestones> {
 
         var id = location.id();
         if (!cachedRunicNames.containsKey(id)) {
-            cachedRunicNames.put(id, Helpers.generateRunes(location, seed, 12));
+            cachedRunicNames.put(id, RunestoneHelper.generateRunes(location, seed, 12));
         }
 
         return cachedRunicNames.get(id);
@@ -146,12 +146,12 @@ public final class Handlers extends Setup<Runestones> {
         }
 
         feature().log().debug("Rebuilding name cache");
-        var translated = Component.translatable(Helpers.localeKey(location)).getString();
+        var translated = Component.translatable(RunestoneHelper.localeKey(location)).getString();
         var rand = RandomSource.create(seed);
         var revealed = ((familiarity - 1) * 2) + 1; // This is the max number of letters that are revealed
 
         // Build a string of ?s that matches the length of the location's translated name.
-        var out = String.valueOf(Helpers.UNKNOWN_LETTER).repeat(translated.length());
+        var out = String.valueOf(RunestoneHelper.UNKNOWN_LETTER).repeat(translated.length());
 
         var passes = 0; // Restrict to a number of passes to avoid infinite loop
         while (revealed > 0 && passes < 4) {
@@ -164,7 +164,7 @@ public final class Handlers extends Setup<Runestones> {
                 // More chance to reveal inner letters, and the overall chance is increased by familiarity
                 var chance = ((i == 0 || i == outLetters.length - 1) ? 0.03d : 0.2d) + ((familiarity - 1) * 0.1d);
 
-                if (outLetter == Helpers.UNKNOWN_LETTER && rand.nextDouble() < chance) {
+                if (outLetter == RunestoneHelper.UNKNOWN_LETTER && rand.nextDouble() < chance) {
                     outLetters[i] = actualLetter; // Replace the ? with the actual letter.
                     revealed--;
                 }

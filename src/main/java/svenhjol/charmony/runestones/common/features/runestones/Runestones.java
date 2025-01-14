@@ -19,6 +19,15 @@ public final class Runestones extends SidedFeature {
     public final Advancements advancements;
 
     @Configurable(
+        name = "Harvestable runestones",
+        description = """
+            If true, runestones can be mined with a pickaxe and be picked up by the player.
+            If false, runestones will break when mined with any tool.""",
+        requireRestart = false
+    )
+    private static boolean harvestable = false;
+
+    @Configurable(
         name = "Protection duration",
         description = "Duration (in seconds) of protection given to the player while they teleport via a runestone.",
         requireRestart = false
@@ -45,6 +54,10 @@ public final class Runestones extends SidedFeature {
 
     public static Runestones feature() {
         return RunestonesMod.instance().sidedFeature(Runestones.class);
+    }
+
+    public boolean harvestable() {
+        return harvestable;
     }
 
     public int protectionDuration() {

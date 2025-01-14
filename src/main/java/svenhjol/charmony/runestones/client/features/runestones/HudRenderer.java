@@ -10,7 +10,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import svenhjol.charmony.core.client.BaseHudRenderer;
-import svenhjol.charmony.runestones.common.features.runestones.Helpers;
+import svenhjol.charmony.runestones.common.features.runestones.RunestoneHelper;
 import svenhjol.charmony.runestones.common.features.runestones.Networking;
 import svenhjol.charmony.runestones.common.features.runestones.RunestoneBlockEntity;
 
@@ -121,14 +121,14 @@ public class HudRenderer extends BaseHudRenderer {
                 .withStyle(feature.registers.runeFont);
 
             if (runestone.discovered == null && isCreative) {
-                name = Component.translatable(Helpers.localeKey(runestone.location));
+                name = Component.translatable(RunestoneHelper.localeKey(runestone.location));
                 discovered = Component.translatable("gui.charmony-runestones.runestone.discovered_by", "Creative mode");
                 return true;
             }
 
             if (runestone.hasBeenDiscovered()) {
                 // Discovered runestones show the full name of the location type.
-                name = Component.translatable(Helpers.localeKey(runestone.location));
+                name = Component.translatable(RunestoneHelper.localeKey(runestone.location));
 
                 if (runestone.discovered != null) {
                     // Show the "Discovered by" message.

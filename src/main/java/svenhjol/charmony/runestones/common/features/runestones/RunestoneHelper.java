@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-public final class Helpers {
+public final class RunestoneHelper {
     private static final Log LOGGER = new Log(RunestonesMod.ID, "Helpers");
 
     public static final char FIRST_RUNE = 'a';
@@ -40,7 +40,9 @@ public final class Helpers {
     public static final int NUM_RUNES = 26;
 
     public static final ResourceLocation SPAWN_POINT_ID = RunestonesMod.id("spawn_point");
+    public static final ResourceLocation EMPTY_ID = RunestonesMod.id("empty");
     public static final RunestoneLocation SPAWN_POINT = new RunestoneLocation(RunestoneLocation.Type.Player, SPAWN_POINT_ID);
+    public static final RunestoneLocation EMPTY_LOCATION = new RunestoneLocation(RunestoneLocation.Type.Player, EMPTY_ID);
 
     /**
      * Make a random runestone biome location from a given biome tag.

@@ -17,7 +17,7 @@ import svenhjol.charmony.api.*;
 import svenhjol.charmony.core.Api;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.runestones.RunestonesMod;
-import svenhjol.charmony.runestones.common.features.runestones.Helpers;
+import svenhjol.charmony.runestones.common.features.runestones.RunestoneHelper;
 import svenhjol.charmony.runestones.common.features.runestones.Runestones;
 
 import java.util.HashMap;
@@ -356,7 +356,7 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
 
             @Override
             public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
-                return () -> Helpers.randomItem(level, random, "runestone/stone/common_items");
+                return () -> RunestoneHelper.randomItem(level, random, "runestone/stone/common_items");
             }
         };
     }
@@ -383,7 +383,7 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
 
             @Override
             public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
-                return () -> Helpers.randomItem(level, random, "runestone/blackstone/common_items");
+                return () -> RunestoneHelper.randomItem(level, random, "runestone/blackstone/common_items");
             }
         };
     }
@@ -410,7 +410,7 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
 
             @Override
             public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
-                return () -> Helpers.randomItem(level, random, "runestone/obsidian/common_items");
+                return () -> RunestoneHelper.randomItem(level, random, "runestone/obsidian/common_items");
             }
         };
     }

@@ -1,7 +1,6 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
@@ -149,9 +148,13 @@ public final class Handlers extends Setup<Runestones> {
     }
 
     public boolean trySetLocation(ServerLevel level, RunestoneBlockEntity runestone) {
-        var pos = runestone.getBlockPos();
-        var random = RandomSource.create(pos.asLong());
-        var target = Helpers.addRandomOffset(level, pos, random, 1000, 2000);
+        var source = runestone.source;
+        if (source == null) {
+            return false;
+        }
+
+        var random = RandomSource.create(source.asLong());
+        var target = RunestoneHelper.addRandomOffset(level, source, random, 1000, 2000);
         var registryAccess = level.registryAccess();
 
         switch (runestone.location.type()) {
@@ -187,7 +190,7 @@ public final class Handlers extends Setup<Runestones> {
                 return true;
             }
             default -> {
-                log().warn("Not a valid destination type for runestone at " + pos);
+                log().warn("Not a valid destination type for runestone with source " + source);
                 return false;
             }
         }
@@ -237,14 +240,12 @@ public final class Handlers extends Setup<Runestones> {
             if (location.isPresent()) {
                 var sacrifice = blockDefinition.sacrifice(level, pos, random, quality).get();
 
+                runestone.source = pos;
                 runestone.location = location.get();
                 runestone.sacrifice = new ItemStack(sacrifice);
 
                 log().debug("Set runestone location = " + runestone.location.id() + ", sacrifice = " + runestone.sacrifice.toString() + ", quality = " + quality + " at pos " + pos);
                 runestone.setChanged();
-
-                var cardinals = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
-                level.setBlock(pos, state.setValue(RunestoneBlock.FACING, cardinals.get(random.nextInt(cardinals.size()))), 2);
                 return;
             }
         }

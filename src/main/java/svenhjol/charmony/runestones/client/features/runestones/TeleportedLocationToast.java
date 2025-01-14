@@ -4,7 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import svenhjol.charmony.api.RunestoneLocation;
 import svenhjol.charmony.core.client.BaseToast;
-import svenhjol.charmony.runestones.common.features.runestones.Helpers;
+import svenhjol.charmony.runestones.common.features.runestones.RunestoneHelper;
 
 public class TeleportedLocationToast extends BaseToast {
     public static final Component TITLE = 
@@ -15,7 +15,7 @@ public class TeleportedLocationToast extends BaseToast {
     public TeleportedLocationToast(RunestoneLocation location) {
         description = Component.translatable(
             "toast.charmony-runestones.teleported_location.description",
-            Component.translatable(Helpers.localeKey(location)));
+            Component.translatable(RunestoneHelper.localeKey(location)));
     }
     
     @Override
