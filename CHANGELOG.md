@@ -5,8 +5,9 @@
 - Add configuration for harvestable runestones.
 - Add configurable familiarity multiplier.
 - Add DataComponent for runestones to hold block entity data.
-- Target co-ords now shown on a discovered runestone.
-- More null checks.
+- Add tooltips for harvested runestones.
+- Fix platform creation bug (sealevel in the End is zero)
+- Show target coordinates on a discovered runestone.
 
 ## 1.2.1
 
