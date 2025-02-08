@@ -31,7 +31,6 @@ public final class Registers extends Setup<Runestones> {
         registry.packetReceiver(S2CActivationWarmup.TYPE, () -> feature.handlers::handleActivationWarmup);
         registry.packetReceiver(S2CUniqueWorldSeed.TYPE, () -> feature.handlers::handleUniqueWorldSeed);
         registry.packetReceiver(S2CDestroyRunestone.TYPE, () -> feature.handlers::handleDestroyRunestone);
-        registry.packetReceiver(S2CKnowledge.TYPE, () -> feature.handlers::handleKnowledge);
     }
 
     @Override

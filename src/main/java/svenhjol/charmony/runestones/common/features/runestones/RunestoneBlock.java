@@ -1,20 +1,17 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -49,7 +46,7 @@ public class RunestoneBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState state2, boolean bl) {
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean bl) {
         if (feature().harvestable()) {
             var block = state.getBlock();
             var stack = new ItemStack(block);
@@ -62,22 +59,7 @@ public class RunestoneBlock extends BaseEntityBlock {
                 level.addFreshEntity(itemEntity);
             }
         }
-        super.onRemove(state, level, pos, state2, bl);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
-        var data = stack.get(feature().registers.runestoneData.get());
-        if (data != null) {
-            if (!data.discovered().isEmpty()) {
-                list.add(Component.translatable(RunestoneHelper.localeKey(data.location())).withStyle(ChatFormatting.GOLD));
-                list.add(Component.translatable("gui.charmony-runestones.runestone.discovered_by", data.discovered()).withStyle(ChatFormatting.GRAY));
-            }
-            if (!data.sacrifice().isEmpty()) {
-                var hoverName = ((MutableComponent)data.sacrifice().getHoverName()).withStyle(ChatFormatting.BLUE);
-                list.add(Component.translatable("gui.charmony-runestones.runestone.activate_with_item_name", hoverName));
-            }
-        }
+        super.affectNeighborsAfterRemoval(state, level, pos, bl);
     }
 
     @Override

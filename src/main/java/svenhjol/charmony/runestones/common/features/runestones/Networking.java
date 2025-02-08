@@ -140,31 +140,4 @@ public final class Networking extends Setup<Runestones> {
             return new S2CUniqueWorldSeed(buf.readLong());
         }
     }
-
-    public record S2CKnowledge(Knowledge knowledge) implements CustomPacketPayload {
-        public static Type<S2CKnowledge> TYPE = new Type<>(RunestonesMod.id("runestones_knowledge"));
-        public static StreamCodec<FriendlyByteBuf, S2CKnowledge> CODEC =
-            StreamCodec.of(S2CKnowledge::encode, S2CKnowledge::decode);
-
-        public static void send(ServerPlayer player, Knowledge knowledge) {
-            ServerPlayNetworking.send(player, new S2CKnowledge(knowledge));
-        }
-
-        @Override
-        public Type<? extends CustomPacketPayload> type() {
-            return TYPE;
-        }
-
-        private static void encode(FriendlyByteBuf buf, S2CKnowledge self) {
-            buf.writeNbt(self.knowledge.save());
-        }
-
-        private static S2CKnowledge decode(FriendlyByteBuf buf) {
-            var nbt = buf.readNbt();
-            if (nbt != null) {
-                return new S2CKnowledge(Knowledge.load(nbt));
-            }
-            throw new RuntimeException("Missing knowledge nbt data");
-        }
-    }
 }

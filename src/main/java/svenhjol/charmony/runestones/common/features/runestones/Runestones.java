@@ -6,7 +6,6 @@ import svenhjol.charmony.core.annotations.FeatureDefinition;
 import svenhjol.charmony.core.base.Mod;
 import svenhjol.charmony.core.base.SidedFeature;
 import svenhjol.charmony.core.enums.Side;
-import svenhjol.charmony.runestones.RunestonesMod;
 
 @FeatureDefinition(side = Side.Common, canBeDisabled = false, description = """
     Runestones are blocks that teleport nearby players to interesting structures and biomes.
@@ -26,17 +25,6 @@ public final class Runestones extends SidedFeature {
         requireRestart = false
     )
     private static boolean harvestable = false;
-
-    @Configurable(
-        name = "Familiarity multiplier",
-        description = """
-            The number of letters revealed when looking at an unknown runestone.
-            This value is a multiplier of the number of times the player has visited a specific structure or biome.
-            For example, if a player has visited 3 desert runestones and the familiarity is 2, future unknown desert runestones will reveal 6 letters.
-            Set this value high to make it easier to determine which structure or biome an unknown runestone links to.""",
-        requireRestart = false
-    )
-    private static int familiarityMultiplier = 2;
 
     @Configurable(
         name = "Protection duration",
@@ -64,7 +52,7 @@ public final class Runestones extends SidedFeature {
     }
 
     public static Runestones feature() {
-        return RunestonesMod.instance().sidedFeature(Runestones.class);
+        return Mod.getSidedFeature(Runestones.class);
     }
 
     public boolean harvestable() {
@@ -77,9 +65,5 @@ public final class Runestones extends SidedFeature {
 
     public boolean linkToStronghold() {
         return linkToStronghold;
-    }
-
-    public int familiarityMultiplier() {
-        return familiarityMultiplier;
     }
 }

@@ -151,9 +151,6 @@ public class HudRenderer extends BaseHudRenderer {
                     discovered = Component.translatable("gui.charmony-runestones.runestone.discovered_by",
                         Component.translatable(runestone.discovered));
                 }
-            } else {
-                // Show the name with question marks blanking out letters based on familiarity with this runestone's location type.
-                name = feature.handlers.nameWithFamiliarity(runestone);
             }
 
             return true;
