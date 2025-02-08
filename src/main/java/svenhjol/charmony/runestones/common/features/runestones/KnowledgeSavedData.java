@@ -1,5 +1,7 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -17,13 +19,21 @@ import java.util.UUID;
 public class KnowledgeSavedData extends SavedData {
     public static final String KNOWLEDGE_TAG = "knowledge";
 
+    public static final Codec<KnowledgeSavedData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+
+    ).apply(instance, KnowledgeSavedData::new));
+
     private static final Factory<KnowledgeSavedData> FACTORY = new Factory<>(
         KnowledgeSavedData::new,
         KnowledgeSavedData::create,
         null
     );
 
-    private final Map<UUID, Knowledge> knowledge = new HashMap<>();
+    private final List<UUID, Knowledge> knowledge = new HashMap<>();
+
+    private KnowledgeSavedData() {
+
+    }
 
     private static KnowledgeSavedData create(CompoundTag tag, HolderLookup.Provider provider) {
         var state = new KnowledgeSavedData();
