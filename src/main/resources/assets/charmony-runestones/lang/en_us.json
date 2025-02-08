@@ -9,7 +9,7 @@
   "gui.charmony-runestones.runestone.activate_with": "Activate with:",
   "gui.charmony-runestones.runestone.activate_with_item_name": "Activate with: %s",
   "gui.charmony-runestones.runestone.discovered_by": "Discovered by %s",
-  "gui.charmony-runestones.runestone.familiar": "%s...",
+  "gui.charmony-runestones.runestone.familiar": "%s?",
   "gui.charmony-runestones.runestone.multiple_players": "multiple players",
   "gui.charmony-runestones.runestone.target": "%s %s %s",
   "gui.charmony-runestones.runestone.unknown": "???",

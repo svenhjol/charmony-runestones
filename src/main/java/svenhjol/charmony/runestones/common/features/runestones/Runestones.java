@@ -27,6 +27,15 @@ public final class Runestones extends SidedFeature {
     private static boolean harvestable = false;
 
     @Configurable(
+        name = "Familiarity",
+        description = """
+            If true, the player remembers the location type when travelling via a runestone.
+            Future runestones of the same location type will be revealed when looking at a runestone.""",
+        requireRestart = false
+    )
+    private static boolean familiarity = true;
+
+    @Configurable(
         name = "Protection duration",
         description = "Duration (in seconds) of protection given to the player while they teleport via a runestone.",
         requireRestart = false
@@ -65,5 +74,9 @@ public final class Runestones extends SidedFeature {
 
     public boolean linkToStronghold() {
         return linkToStronghold;
+    }
+
+    public boolean familiarity() {
+        return familiarity;
     }
 }

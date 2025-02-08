@@ -5,11 +5,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import svenhjol.charmony.api.RunestoneLocation;
 import svenhjol.charmony.core.base.Setup;
+import svenhjol.charmony.runestones.common.features.runestones.Knowledge;
 import svenhjol.charmony.runestones.common.features.runestones.Networking;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CActivationWarmup;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CTeleportedLocation;
@@ -22,8 +25,11 @@ import java.util.WeakHashMap;
 @SuppressWarnings("unused")
 public final class Handlers extends Setup<Runestones> {
     private long seed;
+    private long lastFamiliarNameCache = 0;
     private boolean hasReceivedSeed = false;
+    private Knowledge knowledge;
 
+    private final Map<BlockPos, MutableComponent> cachedFamiliarNames = new WeakHashMap<>();
     private final Map<ResourceLocation, String> cachedRunicNames = new WeakHashMap<>();
 
     public Handlers(Runestones feature) {
@@ -104,5 +110,45 @@ public final class Handlers extends Setup<Runestones> {
         var vec3d = cameraPosVec.add(rotationVec.x * 6, rotationVec.y * 6, rotationVec.z * 6);
         var raycast = player.level().clip(new ClipContext(cameraPosVec, vec3d, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
         return raycast.getBlockPos();
+    }
+
+    public boolean isFamiliar(RunestoneLocation location) {
+        if (!feature().common.get().feature.familiarity()) {
+            return false; // Disabled in config.
+        }
+        if (knowledge == null) {
+            return false; // Hasn't been synced with the server.
+        }
+
+        return knowledge.locations().contains(location.id());
+    }
+
+    public MutableComponent revealedName(RunestoneBlockEntity runestone) {
+        var minecraft = Minecraft.getInstance();
+        var location = runestone.location;
+        var pos = runestone.getBlockPos();
+        var familiarity = isFamiliar(location);
+
+        if (!familiarity) {
+            return Component.translatable("gui.charmony-runestones.runestone.unknown");
+        }
+
+        if (minecraft.level == null) {
+            throw new RuntimeException("Should not be called when level is not loaded");
+        }
+
+        var gameTime = minecraft.level.getGameTime();
+        if (cachedFamiliarNames.containsKey(pos) && gameTime < lastFamiliarNameCache + 100) {
+            return cachedFamiliarNames.get(pos);
+        }
+
+        feature().log().debug("Rebuilding name cache");
+        var translated = Component.translatable(RunestoneHelper.localeKey(location)).getString();
+
+        var name = Component.translatable("gui.charmony-runestones.runestone.familiar", translated);
+        cachedFamiliarNames.clear();
+        cachedFamiliarNames.put(pos, name);
+        lastFamiliarNameCache = gameTime;
+        return name;
     }
 }
