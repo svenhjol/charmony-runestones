@@ -5,7 +5,6 @@ import svenhjol.charmony.core.annotations.FeatureDefinition;
 import svenhjol.charmony.core.base.Mod;
 import svenhjol.charmony.core.base.SidedFeature;
 import svenhjol.charmony.core.enums.Side;
-import svenhjol.charmony.runestones.RunestonesMod;
 
 import java.util.function.Supplier;
 
@@ -37,7 +36,7 @@ public final class Runestones extends SidedFeature {
     }
 
     public static Runestones feature() {
-        return RunestonesMod.instance().sidedFeature(Runestones.class);
+        return Mod.getSidedFeature(Runestones.class);
     }
 
     public boolean hudHasBackground() {

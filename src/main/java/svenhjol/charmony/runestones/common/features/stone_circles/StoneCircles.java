@@ -6,7 +6,6 @@ import svenhjol.charmony.core.annotations.FeatureDefinition;
 import svenhjol.charmony.core.base.Mod;
 import svenhjol.charmony.core.base.SidedFeature;
 import svenhjol.charmony.core.enums.Side;
-import svenhjol.charmony.runestones.RunestonesMod;
 
 @FeatureDefinition(side = Side.Common, description = """
     Adds small pillars of stone in all three dimensions.
@@ -34,7 +33,7 @@ public final class StoneCircles extends SidedFeature {
     }
 
     public static StoneCircles feature() {
-        return RunestonesMod.instance().sidedFeature(StoneCircles.class);
+        return Mod.getSidedFeature(StoneCircles.class);
     }
 
     public double stoneCircleRunestoneChance() {

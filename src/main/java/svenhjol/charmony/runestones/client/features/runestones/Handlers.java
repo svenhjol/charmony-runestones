@@ -8,7 +8,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import svenhjol.charmony.api.RunestoneLocation;
@@ -117,22 +116,24 @@ public final class Handlers extends Setup<Runestones> {
         return raycast.getBlockPos();
     }
 
-    public int familiarity(RunestoneLocation location) {
-        var id = location.id();
-        if (knowledge == null) {
-            return 0;
+    public boolean isFamiliar(RunestoneLocation location) {
+        if (!feature().common.get().feature.familiarity()) {
+            return false; // Disabled in config.
         }
-        return knowledge.locations().getOrDefault(id, 0);
+        if (knowledge == null) {
+            return false; // Hasn't been synced with the server.
+        }
+
+        return knowledge.locations().contains(location.id());
     }
 
-    public MutableComponent nameWithFamiliarity(RunestoneBlockEntity runestone) {
+    public MutableComponent revealedName(RunestoneBlockEntity runestone) {
         var minecraft = Minecraft.getInstance();
         var location = runestone.location;
         var pos = runestone.getBlockPos();
-        var seed = pos.asLong();
-        var familiarity = familiarity(location);
+        var familiarity = isFamiliar(location);
 
-        if (familiarity == 0) {
+        if (!familiarity) {
             return Component.translatable("gui.charmony-runestones.runestone.unknown");
         }
 
@@ -147,35 +148,8 @@ public final class Handlers extends Setup<Runestones> {
 
         feature().log().debug("Rebuilding name cache");
         var translated = Component.translatable(RunestoneHelper.localeKey(location)).getString();
-        var rand = RandomSource.create(seed);
-        var multiplier = feature().common.get().feature.familiarityMultiplier();
-        var revealed = familiarity * multiplier; // This is the max number of letters that are revealed
 
-        // Build a string of ?s that matches the length of the location's translated name.
-        var out = String.valueOf(RunestoneHelper.UNKNOWN_LETTER).repeat(translated.length());
-
-        var passes = 0; // Restrict to a number of passes to avoid infinite loop
-        while (revealed > 0 && passes < 4) {
-            var outLetters = out.toCharArray();
-            for (var i = outLetters.length - 1; i >= 0; i--) {
-                rand.nextInt();
-                var outLetter = out.charAt(i);
-                var actualLetter = translated.charAt(i);
-
-                // More chance to reveal inner letters, and the overall chance is increased by familiarity
-                var chance = ((i == 0 || i == outLetters.length - 1) ? 0.03d : 0.2d) + ((familiarity - 1) * 0.1d);
-
-                if (outLetter == RunestoneHelper.UNKNOWN_LETTER && rand.nextDouble() < chance) {
-                    outLetters[i] = actualLetter; // Replace the ? with the actual letter.
-                    revealed--;
-                }
-                if (revealed <= 0) break;
-            }
-            out = String.copyValueOf(outLetters);
-            passes++;
-        }
-
-        var name = Component.translatable("gui.charmony-runestones.runestone.familiar", out);
+        var name = Component.translatable("gui.charmony-runestones.runestone.familiar", translated);
         cachedFamiliarNames.clear();
         cachedFamiliarNames.put(pos, name);
         lastFamiliarNameCache = gameTime;

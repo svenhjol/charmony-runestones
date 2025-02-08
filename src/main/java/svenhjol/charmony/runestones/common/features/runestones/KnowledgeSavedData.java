@@ -10,6 +10,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import svenhjol.charmony.runestones.RunestonesMod;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -60,7 +61,7 @@ public class KnowledgeSavedData extends SavedData {
     public Knowledge getKnowledge(Player player) {
         var uuid = player.getUUID();
         var name = player.getScoreboardName();
-        return knowledge.computeIfAbsent(uuid, k -> new Knowledge(uuid, name, Map.of()));
+        return knowledge.computeIfAbsent(uuid, k -> new Knowledge(uuid, name, List.of()));
     }
 
     public static KnowledgeSavedData getServerState(MinecraftServer server) {
