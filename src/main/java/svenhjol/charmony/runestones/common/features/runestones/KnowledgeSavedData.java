@@ -74,7 +74,7 @@ public class KnowledgeSavedData extends SavedData {
             throw new RuntimeException("Level not available");
         }
         var storage = level.getDataStorage();
-        var state = storage.computeIfAbsent(FACTORY, RunestonesMod.ID);
+        var state = storage.computeIfAbsent(FACTORY, RunestonesMod.ID + "-knowledge");
         state.setDirty();
         return state;
     }
