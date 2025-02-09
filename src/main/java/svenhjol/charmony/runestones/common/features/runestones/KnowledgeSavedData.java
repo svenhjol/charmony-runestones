@@ -2,76 +2,57 @@ package svenhjol.charmony.runestones.common.features.runestones;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 import svenhjol.charmony.runestones.RunestonesMod;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public class KnowledgeSavedData extends SavedData {
-    public static final String KNOWLEDGE_TAG = "knowledge";
-
     public static final Codec<KnowledgeSavedData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-
+        Knowledge.CODEC.listOf().fieldOf("knowledge").forGetter(data -> data.knowledge)
     ).apply(instance, KnowledgeSavedData::new));
 
-    private static final Factory<KnowledgeSavedData> FACTORY = new Factory<>(
+    public static final SavedDataType<KnowledgeSavedData> TYPE = new SavedDataType<>(
+        RunestonesMod.ID + "-knowledge",
         KnowledgeSavedData::new,
-        KnowledgeSavedData::create,
+        CODEC,
         null
     );
 
-    private final List<UUID, Knowledge> knowledge = new HashMap<>();
+    private List<Knowledge> knowledge = new ArrayList<>();
 
-    private KnowledgeSavedData() {
-
+    public KnowledgeSavedData() {
+        setDirty();
     }
 
-    private static KnowledgeSavedData create(CompoundTag tag, HolderLookup.Provider provider) {
-        var state = new KnowledgeSavedData();
-
-        var list = tag.getList(KNOWLEDGE_TAG, 10).stream()
-            .map(t -> (CompoundTag)t)
-            .toList();
-
-        for (var entry : list) {
-            var knowledge = Knowledge.load(entry);
-            state.updateKnowledge(knowledge);
-        }
-
-        return state;
-    }
-
-    @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
-        var list = new ListTag();
-
-        for (var knowledge : knowledge.values()) {
-            list.add(knowledge.save());
-        }
-
-        tag.put(KNOWLEDGE_TAG, list);
-        return tag;
+    private KnowledgeSavedData(List<Knowledge> knowledge) {
+        this.knowledge = knowledge;
     }
 
     public void updateKnowledge(Knowledge updated) {
-        var uuid = updated.uuid();
-        knowledge.put(uuid, updated);
+        var existing = getKnowledgeByUUID(updated.uuid());
+        existing.ifPresent(knowledge::remove);
+
+        knowledge.add(updated);
         setDirty();
     }
 
     public Knowledge getKnowledge(Player player) {
         var uuid = player.getUUID();
         var name = player.getScoreboardName();
-        return knowledge.computeIfAbsent(uuid, k -> new Knowledge(uuid, name, List.of()));
+        var existing = getKnowledgeByUUID(uuid);
+        return existing.orElseGet(() -> new Knowledge(uuid, name, List.of()));
+    }
+
+    public Optional<Knowledge> getKnowledgeByUUID(UUID uuid) {
+        return knowledge.stream().filter(k -> k.uuid().equals(uuid)).findFirst();
     }
 
     public static KnowledgeSavedData getServerState(MinecraftServer server) {
@@ -80,7 +61,7 @@ public class KnowledgeSavedData extends SavedData {
             throw new RuntimeException("Level not available");
         }
         var storage = level.getDataStorage();
-        var state = storage.computeIfAbsent(FACTORY, RunestonesMod.ID);
+        var state = storage.computeIfAbsent(TYPE);
         state.setDirty();
         return state;
     }

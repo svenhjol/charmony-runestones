@@ -68,6 +68,9 @@ public final class Handlers extends Setup<Runestones> {
         if (entity instanceof ServerPlayer player) {
             var serverLevel = (ServerLevel)level;
 
+            var state = KnowledgeSavedData.getServerState(serverLevel.getServer());
+            Networking.S2CKnowledge.send(player, state.getKnowledge(player));
+
             var random = RandomSource.create(serverLevel.getSeed());
             Networking.S2CUniqueWorldSeed.send(player, random.nextLong());
         }
@@ -261,6 +264,7 @@ public final class Handlers extends Setup<Runestones> {
         var feature = Runestones.feature();
         var pos = runestone.getBlockPos();
         var players = PlayerHelper.getPlayersInRange(level, pos, 8.0d);
+        var canAddKnowledge = false;
 
         if (!runestone.discovered()) {
             var result = feature.handlers.trySetLocation(level, runestone);
@@ -280,10 +284,25 @@ public final class Handlers extends Setup<Runestones> {
             }
 
             runestone.setChanged();
+            canAddKnowledge = true;
         }
 
         for (var player : players) {
             var serverPlayer = (ServerPlayer)player;
+
+            // Add the knowledge to each player IF the runestone has not been discovered.
+            if (canAddKnowledge) {
+                var locationId = runestone.location.id();
+                var state = KnowledgeSavedData.getServerState(level.getServer());
+                var knowledge = state.getKnowledge(player).addLocation(locationId);
+
+                // Update server with new knowledge for this player.
+                state.updateKnowledge(knowledge);
+
+                // Update client with new knowledge for this player.
+                Networking.S2CKnowledge.send(serverPlayer, knowledge);
+                feature().log().debug("Taught " + locationId + " to " + player.getScoreboardName());
+            }
 
             // Add a new teleport request for this player.
             var teleport = new RunestoneTeleport(serverPlayer, runestone);

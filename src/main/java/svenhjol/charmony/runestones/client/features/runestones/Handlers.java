@@ -82,6 +82,10 @@ public final class Handlers extends Setup<Runestones> {
         }
     }
 
+    public void handleKnowledge(Player player, Networking.S2CKnowledge payload) {
+        this.knowledge = payload.knowledge();
+    }
+
     public void hudRender(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
         feature().registers.hudRenderer.render(guiGraphics, deltaTracker);
     }

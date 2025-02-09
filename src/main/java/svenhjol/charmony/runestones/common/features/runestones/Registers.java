@@ -68,6 +68,7 @@ public final class Registers extends Setup<Runestones> {
         registry.packetSender(Side.Common, S2CActivationWarmup.TYPE, S2CActivationWarmup.CODEC);
         registry.packetSender(Side.Common, S2CUniqueWorldSeed.TYPE, S2CUniqueWorldSeed.CODEC);
         registry.packetSender(Side.Common, S2CDestroyRunestone.TYPE, S2CDestroyRunestone.CODEC);
+        registry.packetSender(Side.Common, S2CKnowledge.TYPE, S2CKnowledge.CODEC);
 
         // Client packet senders.
         registry.packetSender(Side.Client, C2SPlayerLooking.TYPE, C2SPlayerLooking.CODEC);
