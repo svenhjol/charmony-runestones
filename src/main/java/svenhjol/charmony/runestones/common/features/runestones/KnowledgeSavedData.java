@@ -9,10 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import svenhjol.charmony.runestones.RunestonesMod;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class KnowledgeSavedData extends SavedData {
     public static final String KNOWLEDGE_TAG = "knowledge";
@@ -23,7 +20,7 @@ public class KnowledgeSavedData extends SavedData {
         null
     );
 
-    private final Map<UUID, Knowledge> knowledge = new HashMap<>();
+    private final List<Knowledge> knowledge = new ArrayList<>();
 
     private static KnowledgeSavedData create(CompoundTag tag, HolderLookup.Provider provider) {
         var state = new KnowledgeSavedData();
@@ -44,7 +41,7 @@ public class KnowledgeSavedData extends SavedData {
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
         var list = new ListTag();
 
-        for (var knowledge : knowledge.values()) {
+        for (var knowledge : knowledge) {
             list.add(knowledge.save());
         }
 
@@ -53,15 +50,22 @@ public class KnowledgeSavedData extends SavedData {
     }
 
     public void updateKnowledge(Knowledge updated) {
-        var uuid = updated.uuid();
-        knowledge.put(uuid, updated);
+        var existing = getKnowledgeByUUID(updated.uuid());
+        existing.ifPresent(knowledge::remove);
+
+        knowledge.add(updated);
         setDirty();
     }
 
     public Knowledge getKnowledge(Player player) {
         var uuid = player.getUUID();
         var name = player.getScoreboardName();
-        return knowledge.computeIfAbsent(uuid, k -> new Knowledge(uuid, name, List.of()));
+        var existing = getKnowledgeByUUID(uuid);
+        return existing.orElseGet(() -> new Knowledge(uuid, name, List.of()));
+    }
+
+    public Optional<Knowledge> getKnowledgeByUUID(UUID uuid) {
+        return knowledge.stream().filter(k -> k.uuid().equals(uuid)).findFirst();
     }
 
     public static KnowledgeSavedData getServerState(MinecraftServer server) {
