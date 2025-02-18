@@ -38,14 +38,14 @@ public record Knowledge(UUID uuid, String name, List<ResourceLocation> locations
         for (var entry : locations) {
             locationsList.add(StringTag.valueOf(entry.toString()));
         }
-        tag.putUUID(UUID_TAG, uuid());
+        tag.store(UUID_TAG, UUIDUtil.CODEC, uuid());
         tag.putString(NAME_TAG, name());
         tag.put(LOCATIONS_TAG, locationsList);
         return tag;
     }
 
     public static Knowledge load(CompoundTag tag) {
-        var uuid = tag.getUUID(UUID_TAG);
+        var uuid = tag.read(UUID_TAG, UUIDUtil.CODEC).orElse(null);
         var name = tag.getString(NAME_TAG);
         var locationStrings = tag.getList(LOCATIONS_TAG, 8).stream()
             .map(Tag::getAsString)

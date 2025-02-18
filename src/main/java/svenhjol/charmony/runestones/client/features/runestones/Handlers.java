@@ -1,5 +1,7 @@
 package svenhjol.charmony.runestones.client.features.runestones;
 
+import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
+import net.fabricmc.fabric.api.client.rendering.v1.LayeredDrawerWrapper;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -86,8 +88,11 @@ public final class Handlers extends Setup<Runestones> {
         this.knowledge = payload.knowledge();
     }
 
-    public void hudRender(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
-        feature().registers.hudRenderer.render(guiGraphics, deltaTracker);
+    public void hudRender(LayeredDrawerWrapper drawers) {
+        drawers.attachLayerAfter(
+            IdentifiedLayer.MISC_OVERLAYS,
+            Runestones.feature().id("runestone_overlay"),
+            ((guiGraphics, deltaTracker) -> feature().registers.hudRenderer.render(guiGraphics, deltaTracker)));
     }
 
     public void playerTick(Player player) {
