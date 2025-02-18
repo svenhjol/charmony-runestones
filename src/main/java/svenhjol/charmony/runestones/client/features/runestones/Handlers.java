@@ -91,7 +91,7 @@ public final class Handlers extends Setup<Runestones> {
     public void hudRender(LayeredDrawerWrapper drawers) {
         drawers.attachLayerAfter(
             IdentifiedLayer.MISC_OVERLAYS,
-            Runestones.feature().id("runestone_overlay"),
+            Runestones.feature().id("runestone"),
             ((guiGraphics, deltaTracker) -> feature().registers.hudRenderer.render(guiGraphics, deltaTracker)));
     }
 
