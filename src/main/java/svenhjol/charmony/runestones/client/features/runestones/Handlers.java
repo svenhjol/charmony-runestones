@@ -2,9 +2,7 @@ package svenhjol.charmony.runestones.client.features.runestones;
 
 import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.fabricmc.fabric.api.client.rendering.v1.LayeredDrawerWrapper;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -14,6 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import svenhjol.charmony.api.RunestoneLocation;
 import svenhjol.charmony.core.base.Setup;
+import svenhjol.charmony.runestones.RunestonesMod;
 import svenhjol.charmony.runestones.common.features.runestones.Knowledge;
 import svenhjol.charmony.runestones.common.features.runestones.Networking;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CActivationWarmup;
@@ -91,7 +90,7 @@ public final class Handlers extends Setup<Runestones> {
     public void hudRender(LayeredDrawerWrapper drawers) {
         drawers.attachLayerAfter(
             IdentifiedLayer.MISC_OVERLAYS,
-            Runestones.feature().id("runestone"),
+            RunestonesMod.id("runestone"),
             ((guiGraphics, deltaTracker) -> feature().registers.hudRenderer.render(guiGraphics, deltaTracker)));
     }
 
