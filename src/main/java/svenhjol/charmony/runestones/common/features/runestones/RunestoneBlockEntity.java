@@ -6,6 +6,7 @@ import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import svenhjol.charmony.api.RunestoneLocation;
@@ -35,11 +36,12 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider);
 
-        this.location = RunestoneLocation.load(tag.getCompound(LOCATION_TAG));
-        this.source = BlockPos.of(tag.getLong(SOURCE_TAG));
-        this.target = BlockPos.of(tag.getLong(TARGET_TAG));
-        this.sacrifice = ItemStack.parse(provider, tag.getCompound(SACRIFICE_TAG)).orElseThrow();
-        this.discovered = tag.getString(DISCOVERED_TAG);
+        tag.getCompound(LOCATION_TAG).ifPresent(t -> this.location = RunestoneLocation.load(t));
+        tag.getLong(SOURCE_TAG).ifPresent(t -> this.source = BlockPos.of(t));
+        tag.getLong(TARGET_TAG).ifPresent(t -> this.target = BlockPos.of(t));
+        tag.getCompound(SACRIFICE_TAG).ifPresent(t -> this.sacrifice = ItemStack.parse(provider, t)
+            .orElse(new ItemStack(Items.ROTTEN_FLESH))); // TODO: probably need to default to something other than rotten flesh...
+        tag.getString(DISCOVERED_TAG).ifPresent(t -> this.discovered = t);
     }
 
     @Override

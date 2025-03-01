@@ -46,9 +46,10 @@ public record Knowledge(UUID uuid, String name, List<ResourceLocation> locations
 
     public static Knowledge load(CompoundTag tag) {
         var uuid = tag.read(UUID_TAG, UUIDUtil.CODEC).orElse(null);
-        var name = tag.getString(NAME_TAG);
-        var locationStrings = tag.getList(LOCATIONS_TAG, 8).stream()
-            .map(Tag::getAsString)
+        var name = tag.getString(NAME_TAG).orElse("");
+        var locationStrings = tag.getList(LOCATIONS_TAG).stream()
+            .map(Tag::asString)
+            .map(s -> s.orElse(""))
             .toList();
 
         List<ResourceLocation> locations = new ArrayList<>();
