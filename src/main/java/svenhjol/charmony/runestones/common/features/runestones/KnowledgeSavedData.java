@@ -33,13 +33,18 @@ public class KnowledgeSavedData extends SavedData {
     }
 
     private KnowledgeSavedData(List<Knowledge> knowledge) {
-        this.knowledge = knowledge;
+        this.knowledge = new ArrayList<>(knowledge);
     }
 
     public void updateKnowledge(Knowledge updated) {
         var existing = getKnowledgeByUUID(updated.uuid());
-        existing.ifPresent(knowledge::remove);
 
+        if (!(knowledge instanceof ArrayList<Knowledge>)) {
+            // Stupid hack, look at how vanilla uses listOf() to make a mutable list.
+            knowledge = new ArrayList<>(knowledge);
+        }
+
+        existing.ifPresent(knowledge::remove);
         knowledge.add(updated);
         setDirty();
     }
