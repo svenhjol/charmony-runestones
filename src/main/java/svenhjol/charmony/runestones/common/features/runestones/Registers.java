@@ -46,6 +46,8 @@ public final class Registers extends Setup<Runestones> {
                 .persistent(RunestoneData.CODEC)
                 .networkSynchronized(RunestoneData.STREAM_CODEC));
 
+        registry.dataComponentTooltipProvider(runestoneData);
+
         blockEntity = registry.blockEntity("runestone", () -> RunestoneBlockEntity::new);
 
         stoneBlock = registry.block(STONE_ID,
