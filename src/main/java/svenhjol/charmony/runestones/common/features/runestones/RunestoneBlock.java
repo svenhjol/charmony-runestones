@@ -5,10 +5,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -46,7 +46,7 @@ public class RunestoneBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean bl) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (feature().harvestable()) {
             var block = state.getBlock();
             var stack = new ItemStack(block);
@@ -59,7 +59,7 @@ public class RunestoneBlock extends BaseEntityBlock {
                 level.addFreshEntity(itemEntity);
             }
         }
-        super.affectNeighborsAfterRemoval(state, level, pos, bl);
+        return super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override

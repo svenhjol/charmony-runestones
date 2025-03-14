@@ -8,6 +8,7 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "runestones.ItemStackMixin",
     "structure_runestones.SinglePoolElementMixin",
     "structure_runestones.StrongholdPiecesMixin",
     "structure_runestones.StructureTemplateMixin"
