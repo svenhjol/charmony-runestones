@@ -84,7 +84,7 @@ public final class Registers extends Setup<Runestones> {
         return () -> {
             PlayerTickCallback.EVENT.register(feature().handlers::playerTick);
             ServerEntityEvents.ENTITY_LOAD.register(feature().handlers::entityJoin);
-            ServerLifecycleEvents.SERVER_STARTED.register(feature().handlers::serverStart);
+            ServerLifecycleEvents.SERVER_STARTING.register(feature().handlers::serverStart);
         };
     }
 }
