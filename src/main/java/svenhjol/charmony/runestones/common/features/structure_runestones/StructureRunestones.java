@@ -27,7 +27,7 @@ public final class StructureRunestones extends SidedFeature {
             within a stronghold room crossing section. Only blocks at a height of 2 are modified.""",
         requireRestart = false
     )
-    private static double strongholdChance = 0.15d;
+    private static double strongholdChance = 0.2d;
 
     @Configurable(
         name = "Bastion chance",
