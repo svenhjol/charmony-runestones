@@ -1,5 +1,6 @@
 package svenhjol.charmony.runestones.client.features.runestones;
 
+import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -37,7 +38,7 @@ public final class Registers extends Setup<Runestones> {
     @Override
     public Runnable boot() {
         return () -> {
-            HudRenderCallback.EVENT.register(feature().handlers::hudRender);
+            HudLayerRegistrationCallback.EVENT.register(feature().handlers::hudRender);
             PlayerTickCallback.EVENT.register(feature().handlers::playerTick);
 
             var registry = ClientRegistry.forFeature(feature());

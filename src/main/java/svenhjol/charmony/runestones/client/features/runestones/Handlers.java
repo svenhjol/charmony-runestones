@@ -1,8 +1,8 @@
 package svenhjol.charmony.runestones.client.features.runestones;
 
-import net.minecraft.client.DeltaTracker;
+import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
+import net.fabricmc.fabric.api.client.rendering.v1.LayeredDrawerWrapper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import svenhjol.charmony.api.RunestoneLocation;
 import svenhjol.charmony.core.base.Setup;
+import svenhjol.charmony.runestones.RunestonesMod;
 import svenhjol.charmony.runestones.common.features.runestones.Knowledge;
 import svenhjol.charmony.runestones.common.features.runestones.Networking;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CActivationWarmup;
@@ -23,6 +24,7 @@ import svenhjol.charmony.runestones.common.features.runestones.RunestoneHelper;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+@SuppressWarnings("unused")
 public final class Handlers extends Setup<Runestones> {
     private long seed;
     private long lastFamiliarNameCache = 0;
@@ -85,8 +87,11 @@ public final class Handlers extends Setup<Runestones> {
         this.knowledge = payload.knowledge();
     }
 
-    public void hudRender(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
-        feature().registers.hudRenderer.render(guiGraphics, deltaTracker);
+    public void hudRender(LayeredDrawerWrapper drawers) {
+        drawers.attachLayerAfter(
+            IdentifiedLayer.MISC_OVERLAYS,
+            RunestonesMod.id("runestone"),
+            ((guiGraphics, deltaTracker) -> feature().registers.hudRenderer.render(guiGraphics, deltaTracker)));
     }
 
     public void playerTick(Player player) {

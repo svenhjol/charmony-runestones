@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.0
+
+- Update for Minecraft 1.21.5.
+- Bump stronghold runestone chance to 20%.
+
+## 1.4.1
+
+- Support 1.21.5-rc1.
+- Fix runestones not getting definition data early enough; definitions now loaded at SERVER_STARTING. 
+
 ## 1.2.2
 
 - Add configuration for harvestable runestones.

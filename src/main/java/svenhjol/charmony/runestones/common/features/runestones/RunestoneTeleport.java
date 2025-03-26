@@ -86,7 +86,7 @@ public class RunestoneTeleport {
         // Add protection effects to the teleporting player.
         var effects = new ArrayList<>(Arrays.asList(
             new MobEffectInstance(MobEffects.FIRE_RESISTANCE, protectionTicks, 1),
-            new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, protectionTicks, 1),
+            new MobEffectInstance(MobEffects.RESISTANCE, protectionTicks, 1),
             new MobEffectInstance(MobEffects.REGENERATION, protectionTicks, 1)
         ));
         effects.forEach(player::addEffect);
@@ -210,7 +210,7 @@ public class RunestoneTeleport {
      * Move the player into position after making the location safe.
      */
     private void move(BlockPos pos) {
-        player.moveTo(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d);
+        player.snapTo(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d);
         player.teleportTo(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d);
 
         if (!player.getAbilities().instabuild) {

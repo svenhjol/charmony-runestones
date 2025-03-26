@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 
 public class StoneCirclePiece extends ScatteredFeaturePiece {
     private static final String DEFINITION_TAG = "stone_circle_definition";
-    private final StoneCircleDefinition definition;
+    private StoneCircleDefinition definition;
 
     public StoneCirclePiece(StoneCircleDefinition definition, BlockPos startPos, RandomSource random) {
         super(StoneCircles.feature().registers.structurePiece.get(), startPos.getX(), startPos.getY(), startPos.getZ(), 16, 8, 16,
@@ -35,7 +35,7 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
 
     public StoneCirclePiece(StructurePieceSerializationContext context, CompoundTag tag) {
         super(StoneCircles.feature().registers.structurePiece.get(), tag);
-        this.definition = StoneCircles.feature().providers.definitions.get(tag.getString(DEFINITION_TAG));
+        tag.getString(DEFINITION_TAG).ifPresent(t -> this.definition = StoneCircles.feature().providers.definitions.get(t));
     }
 
     @Override

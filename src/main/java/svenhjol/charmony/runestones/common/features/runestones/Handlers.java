@@ -27,6 +27,7 @@ import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CDes
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public final class Handlers extends Setup<Runestones> {
     public static final String MULTIPLE_PLAYERS_KEY = "gui.charmony-runestones.runestone.multiple_players";
     public static final int MAX_WARMUP_TICKS = 8;
@@ -113,8 +114,8 @@ public final class Handlers extends Setup<Runestones> {
                 PlayerHelper.getPlayersInRange(level, pos, 8.0d)
                     .forEach(player -> {
                         // Adds dizziness effect to nearby players.
-                        if (!player.hasEffect(MobEffects.CONFUSION)) {
-                            player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, MAX_WARMUP_TICKS * 20, 20));
+                        if (!player.hasEffect(MobEffects.NAUSEA)) {
+                            player.addEffect(new MobEffectInstance(MobEffects.NAUSEA, MAX_WARMUP_TICKS * 20, 20));
                         }
                         Networking.S2CActivationWarmup.send((ServerPlayer)player, pos, itemPos);
                     });

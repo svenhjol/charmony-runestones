@@ -141,6 +141,7 @@ public final class Networking extends Setup<Runestones> {
         }
     }
 
+
     public record S2CKnowledge(Knowledge knowledge) implements CustomPacketPayload {
         public static Type<S2CKnowledge> TYPE = new Type<>(RunestonesMod.id("runestones_knowledge"));
         public static StreamCodec<FriendlyByteBuf, S2CKnowledge> CODEC =
