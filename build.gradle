@@ -8,3 +8,7 @@ def buildFile = new File("${javaDir}/build.gradle")
 def buildUrl = "https://charmony.dev/files/main/build.gradle"
 
 apply from: buildFile.exists() ? buildFile : buildUrl
+
+dependencies {
+    embedMod "charmony-rune-dictionary", "rune_dictionary"
+}
