@@ -100,7 +100,7 @@ public class RunestoneTeleport {
             var server = level.getServer();
             var newDimension = server.getLevel(dimension);
             if (newDimension != null) {
-                RunestoneHelper.changeDimension(player, newDimension, target);
+                Helpers.changeDimension(player, newDimension, target);
                 valid = true;
             }
             return;
@@ -138,7 +138,7 @@ public class RunestoneTeleport {
                 LOGGER.debug("Unable to place player on surface because state=" + stateBelow + ", falling back to checks");
             }
         } else {
-            var surface = RunestoneHelper.getSurfacePos(level, pos, Math.min(seaLevel + 40, level.getHeight() - 20));
+            var surface = Helpers.getSurfacePos(level, pos, Math.min(seaLevel + 40, level.getHeight() - 20));
 
             if (surface != null) {
                 move(surface);
@@ -256,7 +256,7 @@ public class RunestoneTeleport {
     }
 
     private void setTargetAndDimension() {
-        if (RunestoneHelper.runestoneLinksToSpawnPoint(runestone)) {
+        if (Helpers.runestoneLinksToSpawnPoint(runestone)) {
             // Handle world spawn point runestone.
             setTargetToSpawnPoint();
         } else {
@@ -285,7 +285,7 @@ public class RunestoneTeleport {
 
         // Do advancements.
         feature().advancements.travelledViaRunestone(player);
-        if (RunestoneHelper.runestoneLinksToSpawnPoint(runestone)) {
+        if (Helpers.runestoneLinksToSpawnPoint(runestone)) {
             feature().advancements.travelledHomeViaRunestone(player);
         }
 

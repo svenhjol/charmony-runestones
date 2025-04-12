@@ -155,7 +155,7 @@ public final class Handlers extends Setup<Runestones> {
         }
 
         var random = RandomSource.create(source.asLong());
-        var target = RunestoneHelper.addRandomOffset(level, source, random, 1000, 2000);
+        var target = Helpers.addRandomOffset(level, source, random, 1000, 2000);
         var registryAccess = level.registryAccess();
 
         switch (runestone.location.type()) {

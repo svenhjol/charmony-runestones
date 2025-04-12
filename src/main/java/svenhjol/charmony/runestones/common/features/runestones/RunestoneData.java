@@ -55,7 +55,7 @@ public record RunestoneData(
             -> new RunestoneData(RunestoneLocation.load(tag), source, target, sacrifice, discovered));
 
     public static final RunestoneData EMPTY = new RunestoneData(
-        RunestoneHelper.EMPTY_LOCATION,
+        Helpers.EMPTY_LOCATION,
         BlockPos.ZERO,
         BlockPos.ZERO,
         ItemStack.EMPTY,
@@ -65,7 +65,7 @@ public record RunestoneData(
     @Override
     public void addToTooltip(Item.TooltipContext tooltipContext, Consumer<Component> consumer, TooltipFlag tooltipFlag, DataComponentGetter dataComponentGetter) {
         if (!this.discovered().isEmpty()) {
-            consumer.accept(Component.translatable(RunestoneHelper.localeKey(this.location())).withStyle(ChatFormatting.GOLD));
+            consumer.accept(Component.translatable(Helpers.localeKey(this.location())).withStyle(ChatFormatting.GOLD));
             consumer.accept(Component.translatable("gui.charmony-runestones.runestone.discovered_by", this.discovered()).withStyle(ChatFormatting.GRAY));
         }
         if (!this.sacrifice().isEmpty()) {

@@ -19,7 +19,7 @@ import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CAct
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CTeleportedLocation;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CUniqueWorldSeed;
 import svenhjol.charmony.runestones.common.features.runestones.RunestoneBlockEntity;
-import svenhjol.charmony.runestones.common.features.runestones.RunestoneHelper;
+import svenhjol.charmony.runestones.common.features.runestones.Helpers;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -107,7 +107,7 @@ public final class Handlers extends Setup<Runestones> {
 
         var id = location.id();
         if (!cachedRunicNames.containsKey(id)) {
-            cachedRunicNames.put(id, RunestoneHelper.generateRunes(location, seed, 12));
+            cachedRunicNames.put(id, Helpers.generateRunes(location, seed, 12));
         }
 
         return cachedRunicNames.get(id);
@@ -152,7 +152,7 @@ public final class Handlers extends Setup<Runestones> {
         }
 
         feature().log().debug("Rebuilding name cache");
-        var translated = Component.translatable(RunestoneHelper.localeKey(location)).getString();
+        var translated = Component.translatable(Helpers.localeKey(location)).getString();
 
         var name = Component.translatable("gui.charmony-runestones.runestone.familiar", translated);
         cachedFamiliarNames.clear();

@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-public final class RunestoneHelper {
+public final class Helpers {
     private static final Log LOGGER = new Log(RunestonesMod.ID, "Helpers");
 
     public static final char FIRST_RUNE = 'a';

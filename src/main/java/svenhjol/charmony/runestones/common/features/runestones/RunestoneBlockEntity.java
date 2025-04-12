@@ -21,7 +21,7 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
     public static final String SACRIFICE_TAG = "sacrifice";
     public static final String DISCOVERED_TAG = "discovered";
 
-    public RunestoneLocation location = RunestoneHelper.EMPTY_LOCATION;
+    public RunestoneLocation location = Helpers.EMPTY_LOCATION;
     public BlockPos source = BlockPos.ZERO;
     public BlockPos target = BlockPos.ZERO;
     public ItemStack sacrifice = ItemStack.EMPTY;
@@ -97,7 +97,7 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
     }
 
     public Optional<RunestoneLocation> location() {
-        return location != RunestoneHelper.EMPTY_LOCATION ? Optional.of(location) : Optional.empty();
+        return location != Helpers.EMPTY_LOCATION ? Optional.of(location) : Optional.empty();
     }
 
     public Optional<ItemStack> sacrifice() {
