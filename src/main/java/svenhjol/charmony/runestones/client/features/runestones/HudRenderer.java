@@ -153,7 +153,7 @@ public class HudRenderer extends BaseHudRenderer {
                 }
             } else {
                 // Show the name with question marks blanking out letters based on familiarity with this runestone's location type.
-                name = feature.handlers.revealedName(runestone);
+                name = feature.handlers.revealName(runestone, player);
             }
 
             return true;

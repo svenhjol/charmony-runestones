@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.1
+
+- Update to use rune dictionary library.
+
 ## 1.6.0
 
 - Refactor "RunestoneHelper" to "Helpers".

@@ -23,10 +23,14 @@ import net.minecraft.world.phys.AABB;
 import svenhjol.charmony.api.RunestoneDefinition;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.helpers.PlayerHelper;
+import svenhjol.charmony.rune_dictionary.common.features.rune_dictionary.RuneDictionary;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CDestroyRunestone;
 
 import java.util.*;
 
+/**
+ * TODO: Move this to Charmony
+ */
 @SuppressWarnings("unused")
 public final class Handlers extends Setup<Runestones> {
     public static final String MULTIPLE_PLAYERS_KEY = "gui.charmony-runestones.runestone.multiple_players";
@@ -46,7 +50,8 @@ public final class Handlers extends Setup<Runestones> {
     public void serverStart(MinecraftServer server) {
         definitions.clear();
         for (var definition : feature().providers.definitions) {
-            this.definitions.computeIfAbsent(definition.runestoneBlock().get(), a -> new ArrayList<>()).add(definition);
+            definitions.computeIfAbsent(definition.runestoneBlock().get(),
+                a -> new ArrayList<>()).add(definition);
         }
     }
 
@@ -61,18 +66,6 @@ public final class Handlers extends Setup<Runestones> {
                 log().debug("Removing completed teleport for " + uuid);
                 activeTeleports.remove(uuid);
             }
-        }
-    }
-
-    public void entityJoin(Entity entity, Level level) {
-        if (entity instanceof ServerPlayer player) {
-            var serverLevel = (ServerLevel)level;
-
-            var state = KnowledgeSavedData.getServerState(serverLevel.getServer());
-            Networking.S2CKnowledge.send(player, state.getKnowledge(player));
-
-            var random = RandomSource.create(serverLevel.getSeed());
-            Networking.S2CUniqueWorldSeed.send(player, random.nextLong());
         }
     }
 
@@ -293,15 +286,7 @@ public final class Handlers extends Setup<Runestones> {
             // Add the knowledge to each player IF the runestone has not been discovered.
             if (canAddKnowledge) {
                 var locationId = runestone.location.id();
-                var state = KnowledgeSavedData.getServerState(level.getServer());
-                var knowledge = state.getKnowledge(player).addLocation(locationId);
-
-                // Update server with new knowledge for this player.
-                state.updateKnowledge(knowledge);
-
-                // Update client with new knowledge for this player.
-                Networking.S2CKnowledge.send(serverPlayer, knowledge);
-                feature().log().debug("Taught " + locationId + " to " + player.getScoreboardName());
+                RuneDictionary.feature().handlers.learnWord(serverPlayer, locationId);
             }
 
             // Add a new teleport request for this player.

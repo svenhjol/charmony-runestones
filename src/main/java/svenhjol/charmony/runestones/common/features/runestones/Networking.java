@@ -92,7 +92,6 @@ public final class Networking extends Setup<Runestones> {
         }
     }
 
-
     // Server-to-client packet that informs the client that a runestone should be destroyed.
     public record S2CDestroyRunestone(BlockPos runestonePos) implements CustomPacketPayload {
         public static Type<S2CDestroyRunestone> TYPE = new Type<>(RunestonesMod.id("runestones_destroy_runestone"));
@@ -114,58 +113,6 @@ public final class Networking extends Setup<Runestones> {
 
         private static S2CDestroyRunestone decode(FriendlyByteBuf buf) {
             return new S2CDestroyRunestone(buf.readBlockPos());
-        }
-    }
-
-    // Server-to-client packet that contains a unique seed for the world.
-    public record S2CUniqueWorldSeed(long seed) implements CustomPacketPayload {
-        public static Type<S2CUniqueWorldSeed> TYPE = new Type<>(RunestonesMod.id("runestones_unique_world_seed"));
-        public static StreamCodec<FriendlyByteBuf, S2CUniqueWorldSeed> CODEC =
-            StreamCodec.of(S2CUniqueWorldSeed::encode, S2CUniqueWorldSeed::decode);
-
-        public static void send(ServerPlayer player, long seed) {
-            ServerPlayNetworking.send(player, new S2CUniqueWorldSeed(seed));
-        }
-
-        @Override
-        public Type<? extends CustomPacketPayload> type() {
-            return TYPE;
-        }
-
-        private static void encode(FriendlyByteBuf buf, S2CUniqueWorldSeed self) {
-            buf.writeLong(self.seed());
-        }
-
-        private static S2CUniqueWorldSeed decode(FriendlyByteBuf buf) {
-            return new S2CUniqueWorldSeed(buf.readLong());
-        }
-    }
-
-
-    public record S2CKnowledge(Knowledge knowledge) implements CustomPacketPayload {
-        public static Type<S2CKnowledge> TYPE = new Type<>(RunestonesMod.id("runestones_knowledge"));
-        public static StreamCodec<FriendlyByteBuf, S2CKnowledge> CODEC =
-            StreamCodec.of(S2CKnowledge::encode, S2CKnowledge::decode);
-
-        public static void send(ServerPlayer player, Knowledge knowledge) {
-            ServerPlayNetworking.send(player, new S2CKnowledge(knowledge));
-        }
-
-        @Override
-        public Type<? extends CustomPacketPayload> type() {
-            return TYPE;
-        }
-
-        private static void encode(FriendlyByteBuf buf, S2CKnowledge self) {
-            buf.writeNbt(self.knowledge.save());
-        }
-
-        private static S2CKnowledge decode(FriendlyByteBuf buf) {
-            var nbt = buf.readNbt();
-            if (nbt != null) {
-                return new S2CKnowledge(Knowledge.load(nbt));
-            }
-            throw new RuntimeException("Missing knowledge nbt data");
         }
     }
 }

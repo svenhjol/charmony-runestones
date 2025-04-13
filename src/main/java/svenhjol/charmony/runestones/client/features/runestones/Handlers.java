@@ -10,14 +10,14 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import svenhjol.charmony.api.RunestoneLocation;
 import svenhjol.charmony.core.base.Setup;
+import svenhjol.charmony.rune_dictionary.client.features.RuneDictionary;
 import svenhjol.charmony.runestones.RunestonesMod;
-import svenhjol.charmony.runestones.common.features.runestones.Knowledge;
 import svenhjol.charmony.runestones.common.features.runestones.Networking;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CActivationWarmup;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CTeleportedLocation;
-import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CUniqueWorldSeed;
 import svenhjol.charmony.runestones.common.features.runestones.RunestoneBlockEntity;
 import svenhjol.charmony.runestones.common.features.runestones.Helpers;
 
@@ -26,10 +26,8 @@ import java.util.WeakHashMap;
 
 @SuppressWarnings("unused")
 public final class Handlers extends Setup<Runestones> {
-    private long seed;
     private long lastFamiliarNameCache = 0;
-    private boolean hasReceivedSeed = false;
-    private Knowledge knowledge;
+    private long lastRunicNameCache = 0;
 
     private final Map<BlockPos, MutableComponent> cachedFamiliarNames = new WeakHashMap<>();
     private final Map<ResourceLocation, String> cachedRunicNames = new WeakHashMap<>();
@@ -60,12 +58,6 @@ public final class Handlers extends Setup<Runestones> {
         }
     }
 
-    public void handleUniqueWorldSeed(Player player, S2CUniqueWorldSeed payload) {
-        this.seed = payload.seed();
-        this.hasReceivedSeed = true;
-        feature().handlers.cachedRunicNames.clear();
-    }
-
     public void handleDestroyRunestone(Player player, Networking.S2CDestroyRunestone payload) {
         var pos = payload.runestonePos();
         var level = Minecraft.getInstance().level;
@@ -83,10 +75,6 @@ public final class Handlers extends Setup<Runestones> {
         }
     }
 
-    public void handleKnowledge(Player player, Networking.S2CKnowledge payload) {
-        this.knowledge = payload.knowledge();
-    }
-
     public void hudRender(LayeredDrawerWrapper drawers) {
         drawers.attachLayerAfter(
             IdentifiedLayer.MISC_OVERLAYS,
@@ -97,20 +85,21 @@ public final class Handlers extends Setup<Runestones> {
     public void playerTick(Player player) {
         if (player.level().isClientSide()) {
             feature().registers.hudRenderer.tick(player);
+
+            // Clear the runic name cache periodically.
+            checkRunicNameCache(player.level());
         }
     }
 
     public String runicName(RunestoneLocation location) {
-        if (!hasReceivedSeed) {
-            throw new RuntimeException("Client has not received the unique world seed");
+        var locationId = location.id();
+        if (!cachedRunicNames.containsKey(locationId)) {
+            RuneDictionary.feature().handlers
+                .getRuneWord(locationId)
+                .ifPresent(word -> cachedRunicNames.put(locationId, word));
         }
 
-        var id = location.id();
-        if (!cachedRunicNames.containsKey(id)) {
-            cachedRunicNames.put(id, Helpers.generateRunes(location, seed, 12));
-        }
-
-        return cachedRunicNames.get(id);
+        return cachedRunicNames.getOrDefault(locationId, "");
     }
 
     public BlockPos lookingAtBlock(Player player) {
@@ -121,22 +110,18 @@ public final class Handlers extends Setup<Runestones> {
         return raycast.getBlockPos();
     }
 
-    public boolean isFamiliar(RunestoneLocation location) {
+    public boolean isFamiliar(RunestoneLocation location, Player player) {
         if (!feature().common.get().feature.familiarity()) {
             return false; // Disabled in config.
         }
-        if (knowledge == null) {
-            return false; // Hasn't been synced with the server.
-        }
-
-        return knowledge.locations().contains(location.id());
+        return RuneDictionary.feature().handlers.knowsWord(player, location.id());
     }
 
-    public MutableComponent revealedName(RunestoneBlockEntity runestone) {
+    public MutableComponent revealName(RunestoneBlockEntity runestone, Player player) {
         var minecraft = Minecraft.getInstance();
         var location = runestone.location;
         var pos = runestone.getBlockPos();
-        var familiarity = isFamiliar(location);
+        var familiarity = isFamiliar(location, player);
 
         if (!familiarity) {
             return Component.translatable("gui.charmony-runestones.runestone.unknown");
@@ -159,5 +144,13 @@ public final class Handlers extends Setup<Runestones> {
         cachedFamiliarNames.put(pos, name);
         lastFamiliarNameCache = gameTime;
         return name;
+    }
+
+    private void checkRunicNameCache(Level level) {
+        var gameTime = level.getGameTime();
+        if (gameTime > lastRunicNameCache + 500) {
+            cachedRunicNames.clear();
+            lastRunicNameCache = gameTime;
+        }
     }
 }

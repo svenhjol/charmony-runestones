@@ -34,11 +34,6 @@ import java.util.Optional;
 public final class Helpers {
     private static final Log LOGGER = new Log(RunestonesMod.ID, "Helpers");
 
-    public static final char FIRST_RUNE = 'a';
-    public static final char LAST_RUNE = 'z';
-    public static final char UNKNOWN_LETTER = '?';
-    public static final int NUM_RUNES = 26;
-
     public static final ResourceLocation SPAWN_POINT_ID = RunestonesMod.id("spawn_point");
     public static final ResourceLocation EMPTY_ID = RunestonesMod.id("empty");
     public static final RunestoneLocation SPAWN_POINT = new RunestoneLocation(RunestoneLocation.Type.Player, SPAWN_POINT_ID);
@@ -183,65 +178,6 @@ public final class Helpers {
         }
 
         return new BlockPos(pos.getX(), surface, pos.getZ());
-    }
-    
-    public static String generateRunes(RunestoneLocation location, long seed, int length) {
-        var input = location.id().toString().replaceAll("[^a-zA-Z0-9]", "");
-        var mutable = seed;
-        for (int i = 0; i < input.length(); i++) {
-            char c = input.charAt(i);
-            mutable = seed < 0 ? mutable + c : mutable - c;
-        }
-        var random = RandomSource.create(mutable);
-        return generateRunes(input, random, length);
-    }
-
-    /**
-     * Generate runes for a given input string. The string is filtered to make it alphanumeric.
-     * Each character of the string is shifted through the alphabet randomly.
-     */
-    public static String generateRunes(String input, RandomSource random, int length) {
-        int alphaStart = FIRST_RUNE;
-        int alphaEnd = LAST_RUNE;
-
-        String filtered = input.replaceAll("[^a-zA-Z0-9]", "");
-        StringBuilder in = new StringBuilder(filtered);
-        StringBuilder out = new StringBuilder();
-
-        for (int tries = 0; tries < 9; tries++) {
-            if (in.length() >= length) {
-                random.nextInt();
-                char[] chars = in.toString().toLowerCase(Locale.ROOT).toCharArray();
-
-                // Work over the string backwards by character.
-                for (int i = Math.min(chars.length, length) - 1; i >= 0; --i) {
-                    int chr = chars[i];
-
-                    if (chr >= alphaStart && chr <= alphaEnd) {
-                        // Shift the char with a random number of the total runes, wrapping around if it goes out of bounds.
-                        int ri = chr + random.nextInt(NUM_RUNES);
-                        if (ri > alphaEnd) {
-                            chr = Mth.clamp(alphaStart + (ri - alphaEnd), alphaStart + 1, alphaEnd);
-                        }
-
-                        // Shift the char again with a random number of half the total runes, wrapping again as necessary.
-                        ri += random.nextInt(NUM_RUNES / 2);
-                        if (ri > alphaEnd) {
-                            chr = Mth.clamp(alphaStart + (ri - alphaEnd), alphaStart + 1, alphaEnd);
-                        }
-
-                        out.append((char)chr);
-                    }
-                }
-
-                return out.reverse().toString();
-            }
-
-            // Keep adding the input string to the end of the builder to bring the length up.
-            in.append(filtered);
-        }
-
-        throw new RuntimeException("Maximum loops reached when checking string length");
     }
 
     public static String localeKey(RunestoneLocation location) {

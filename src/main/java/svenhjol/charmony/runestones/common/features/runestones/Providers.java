@@ -1,7 +1,9 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ItemLike;
@@ -9,6 +11,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
+import svenhjol.charmony.api.RuneWordProvider;
 import svenhjol.charmony.api.RunestoneDefinition;
 import svenhjol.charmony.api.RunestoneDefinitionsProvider;
 import svenhjol.charmony.api.RunestoneLocation;
@@ -22,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public final class Providers extends Setup<Runestones> implements RunestoneDefinitionsProvider {
+public final class Providers extends Setup<Runestones> implements RunestoneDefinitionsProvider, RuneWordProvider {
     public final List<RunestoneDefinition> definitions = new ArrayList<>();
 
     public Providers(Runestones feature) {
@@ -317,6 +320,12 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
                 return () -> Helpers.randomItem(level, random, "runestone/obsidian/spawn_point_items");
             }
         };
+    }
+
+    @Override
+    public List<ResourceLocation> getRuneWords(RegistryAccess registryAccess) {
+        // Add custom locations to the rune dictionary.
+        return List.of(Helpers.SPAWN_POINT_ID);
     }
 
     /**
