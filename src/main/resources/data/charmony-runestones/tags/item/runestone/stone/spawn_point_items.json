@@ -1,11 +1,9 @@
 {
   "values": [
-    "minecraft:cobblestone",
+    "minecraft:bone",
     "minecraft:flint",
-    "minecraft:stick",
     "minecraft:raw_copper",
-    "minecraft:string",
     "minecraft:rotten_flesh",
-    "minecraft:bone"
+    "minecraft:string"
   ]
 }

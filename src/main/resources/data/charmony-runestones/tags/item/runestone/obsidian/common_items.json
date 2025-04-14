@@ -1,8 +1,14 @@
 {
   "values": [
+    "minecraft:chorus_fruit",
+    "minecraft:chorus_plant",
+    "minecraft:diamond",
     "minecraft:ender_pearl",
     "minecraft:ender_eye",
-    "minecraft:diamond",
+    "minecraft:gold_ingot",
+    "minecraft:gold_block",
+    "minecraft:iron_ingot",
+    "minecraft:iron_block",
     "minecraft:obsidian"
   ]
 }

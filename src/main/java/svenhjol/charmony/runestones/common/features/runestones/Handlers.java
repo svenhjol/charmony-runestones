@@ -1,6 +1,7 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
@@ -10,7 +11,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -22,26 +22,38 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import svenhjol.charmony.api.RunestoneDefinition;
 import svenhjol.charmony.core.base.Setup;
+import svenhjol.charmony.core.common.features.teleport.Teleport;
 import svenhjol.charmony.core.helpers.PlayerHelper;
 import svenhjol.charmony.rune_dictionary.common.features.rune_dictionary.RuneDictionary;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CDestroyRunestone;
 
 import java.util.*;
 
-/**
- * TODO: Move this to Charmony
- */
 @SuppressWarnings("unused")
-public final class Handlers extends Setup<Runestones> {
+public class Handlers extends Setup<Runestones> {
     public static final String MULTIPLE_PLAYERS_KEY = "gui.charmony-runestones.runestone.multiple_players";
     public static final int MAX_WARMUP_TICKS = 8;
     public static final int WARMUP_CHECK = 10;
 
     public final Map<Block, List<RunestoneDefinition>> definitions = new HashMap<>();
-    private final Map<UUID, RunestoneTeleport> activeTeleports = new HashMap<>();
 
     public Handlers(Runestones feature) {
         super(feature);
+    }
+
+    /**
+     * Generates a unique seed from block position coordinates.
+     *
+     * @return A unique long seed value
+     */
+    public long seedFromBlockPos(BlockPos pos) {
+        var x = pos.getX();
+        var y = pos.getY();
+        var z = pos.getZ();
+
+        return ((long)x & 0x3FFFFFFL) << 38
+            | ((long)(y + 64) & 0x3FFL) << 28
+            | ((long)z & 0x3FFFFFFL);
     }
 
     /**
@@ -49,23 +61,9 @@ public final class Handlers extends Setup<Runestones> {
      */
     public void serverStart(MinecraftServer server) {
         definitions.clear();
-        for (var definition : feature().providers.definitions) {
+        for (var definition : feature().registers.definitions) {
             definitions.computeIfAbsent(definition.runestoneBlock().get(),
                 a -> new ArrayList<>()).add(definition);
-        }
-    }
-
-    public void playerTick(Player player) {
-        var uuid = player.getUUID();
-
-        if (activeTeleports.containsKey(uuid)) {
-            var teleport = activeTeleports.get(uuid);
-            if (teleport.isValid()) {
-                teleport.tick();
-            } else {
-                log().debug("Removing completed teleport for " + uuid);
-                activeTeleports.remove(uuid);
-            }
         }
     }
 
@@ -131,14 +129,6 @@ public final class Handlers extends Setup<Runestones> {
 
             runestone.setChanged();
         }
-    }
-
-    /**
-     * When a runestone has been activated, all players within range should have an active teleport set.
-     */
-    public void setActiveTeleport(Player player, RunestoneTeleport teleport) {
-        if (player.level().isClientSide()) return;
-        activeTeleports.put(player.getUUID(), teleport);
     }
 
     public boolean trySetLocation(ServerLevel level, RunestoneBlockEntity runestone) {
@@ -223,7 +213,12 @@ public final class Handlers extends Setup<Runestones> {
             return;
         }
 
-        var random = RandomSource.create(pos.asLong());
+        var seed = seedFromBlockPos(pos);
+        var random = RandomSource.create(seed);
+
+        var cardinals = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
+        level.setBlock(pos, state.setValue(RunestoneBlock.FACING, cardinals.get(random.nextInt(cardinals.size()))), 2);
+
         var blockDefinitions = new ArrayList<>(definitions.get(block));
         Collections.shuffle(blockDefinitions, new Random(random.nextLong()));
 
@@ -290,8 +285,8 @@ public final class Handlers extends Setup<Runestones> {
             }
 
             // Add a new teleport request for this player.
-            var teleport = new RunestoneTeleport(serverPlayer, runestone);
-            feature.handlers.setActiveTeleport(player, teleport);
+            var teleport = new RunestoneTeleporter(serverPlayer, runestone);
+            Teleport.feature().handlers.addTeleport(player, teleport);
         }
     }
 }

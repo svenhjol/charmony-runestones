@@ -1,9 +1,7 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ItemLike;
@@ -11,47 +9,21 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
-import svenhjol.charmony.api.RuneWordProvider;
 import svenhjol.charmony.api.RunestoneDefinition;
-import svenhjol.charmony.api.RunestoneDefinitionsProvider;
+import svenhjol.charmony.api.RunestoneDefinitionProvider;
 import svenhjol.charmony.api.RunestoneLocation;
 import svenhjol.charmony.core.Api;
 import svenhjol.charmony.core.base.Setup;
-import svenhjol.charmony.core.common.CommonRegistry;
 import svenhjol.charmony.runestones.RunestonesMod;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public final class Providers extends Setup<Runestones> implements RunestoneDefinitionsProvider, RuneWordProvider {
-    public final List<RunestoneDefinition> definitions = new ArrayList<>();
-
-    public Providers(Runestones feature) {
+public class RunestoneDefinitions extends Setup<Runestones> implements RunestoneDefinitionProvider {
+    public RunestoneDefinitions(Runestones feature) {
         super(feature);
-    }
-
-    @Override
-    public Runnable boot() {
-        return () -> {
-            var registry = CommonRegistry.forFeature(feature());
-
-            // This class is a provider of runestone definitions.
-            Api.registerProvider(this);
-
-            // This class is also a consumer of definitions.
-            Api.consume(RunestoneDefinitionsProvider.class, providers -> {
-                for (var definition : providers.getRunestoneDefinitions()) {
-                    // Add the block to the runestone block entity.
-                    var blockSupplier = definition.runestoneBlock();
-                    registry.blocksForBlockEntity(feature().registers.blockEntity, List.of(blockSupplier));
-
-                    // Add the definition to the full set for mapping later.
-                    definitions.add(definition);
-                }
-            });
-        };
+        Api.registerProvider(this);
     }
 
     @Override
@@ -320,12 +292,6 @@ public final class Providers extends Setup<Runestones> implements RunestoneDefin
                 return () -> Helpers.randomItem(level, random, "runestone/obsidian/spawn_point_items");
             }
         };
-    }
-
-    @Override
-    public List<ResourceLocation> getRuneWords(RegistryAccess registryAccess) {
-        // Add custom locations to the rune dictionary.
-        return List.of(Helpers.SPAWN_POINT_ID);
     }
 
     /**

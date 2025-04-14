@@ -1,15 +1,26 @@
 {
   "values": [
-    "minecraft:emerald",
+    "minecraft:armadillo_scute",
+    "minecraft:closed_eyeblossom",
+    "minecraft:crying_obsidian",
     "minecraft:diamond",
-    "minecraft:prismarine_shard",
-    "minecraft:golden_apple",
-    "minecraft:phantom_membrane",
-    "minecraft:heart_of_the_sea",
-    "minecraft:nautilus_shell",
-    "minecraft:goat_horn",
     "minecraft:echo_shard",
-    "minecraft:turtle_scute",
-    "minecraft:armadillo_scute"
+    "minecraft:ghast_tear",
+    "minecraft:glistering_melon_slice",
+    "minecraft:glowstone_dust",
+    "minecraft:goat_horn",
+    "minecraft:gold_block",
+    "minecraft:golden_apple",
+    "minecraft:golden_carrot",
+    "minecraft:heart_of_the_sea",
+    "minecraft:open_eyeblossom",
+    "minecraft:nautilus_shell",
+    "minecraft:nether_wart",
+    "minecraft:phantom_membrane",
+    "minecraft:pitcher_pod",
+    "minecraft:prismarine_shard",
+    "minecraft:rabbit_hide",
+    "minecraft:torchflower_seeds",
+    "minecraft:turtle_scute"
   ]
 }

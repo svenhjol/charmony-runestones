@@ -10,7 +10,7 @@ import svenhjol.charmony.runestones.common.features.runestones.Runestones;
 
 import javax.annotation.Nullable;
 
-public final class Handlers extends Setup<StructureRunestones> {
+public class Handlers extends Setup<StructureRunestones> {
     public @Nullable ResourceLocation jigsawTemplate;
 
     public Handlers(StructureRunestones feature) {

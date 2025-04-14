@@ -1,11 +1,11 @@
 {
-  "parent": "charmony:runestones",
+  "parent": "charmony-runestones:root",
   "display": {
     "title": {
-      "translate": "advancements.charmony.located_stone_circle.title"
+      "translate": "advancements.charmony-runestones.located_stone_circle.title"
     },
     "description": {
-      "translate": "advancements.charmony.located_stone_circle.description"
+      "translate": "advancements.charmony-runestones.located_stone_circle.description"
     },
     "icon": {
       "id": "minecraft:cracked_stone_bricks"

@@ -1,24 +1,29 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import svenhjol.charmony.api.RunestoneDefinition;
+import svenhjol.charmony.api.RunestoneDefinitionProvider;
+import svenhjol.charmony.core.Api;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.common.CommonRegistry;
 import svenhjol.charmony.core.enums.Side;
-import svenhjol.charmony.core.events.PlayerTickCallback;
-import svenhjol.charmony.runestones.common.features.runestones.Networking.*;
+import svenhjol.charmony.runestones.common.features.runestones.Networking.C2SPlayerLooking;
+import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CActivationWarmup;
+import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CDestroyRunestone;
+import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CTeleportedLocation;
 import svenhjol.charmony.runestones.common.features.runestones.RunestoneBlock.RunestoneBlockItem;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public final class Registers extends Setup<Runestones> {
+public class Registers extends Setup<Runestones> {
     public static final String STONE_ID = "stone_runestone";
     public static final String BLACKSTONE_ID = "blackstone_runestone";
     public static final String OBSIDIAN_ID = "obsidian_runestone";
@@ -36,6 +41,8 @@ public final class Registers extends Setup<Runestones> {
     public final Supplier<SoundEvent> fizzleItemSound;
     public final Supplier<SoundEvent> powerUpSound;
     public final Supplier<SoundEvent> travelSound;
+
+    public final List<RunestoneDefinition> definitions = new ArrayList<>();
 
     public Registers(Runestones feature) {
         super(feature);
@@ -80,7 +87,20 @@ public final class Registers extends Setup<Runestones> {
     @Override
     public Runnable boot() {
         return () -> {
-            PlayerTickCallback.EVENT.register(feature().handlers::playerTick);
+            var registry = CommonRegistry.forFeature(feature());
+
+            // Consume all RunestoneDefinitions.
+            Api.consume(RunestoneDefinitionProvider.class, providers -> {
+                for (var definition : providers.getRunestoneDefinitions()) {
+                    // Add the block to the runestone block entity.
+                    var blockSupplier = definition.runestoneBlock();
+                    registry.blocksForBlockEntity(feature().registers.blockEntity, List.of(blockSupplier));
+
+                    // Add the definition to the full set for mapping later.
+                    definitions.add(definition);
+                }
+            });
+
             ServerLifecycleEvents.SERVER_STARTING.register(feature().handlers::serverStart);
         };
     }

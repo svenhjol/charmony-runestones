@@ -14,7 +14,7 @@ import svenhjol.charmony.runestones.RunestonesMod;
 
 import java.util.Objects;
 
-public final class Networking extends Setup<Runestones> {
+public class Networking extends Setup<Runestones> {
     public Networking(Runestones feature) {
         super(feature);
     }

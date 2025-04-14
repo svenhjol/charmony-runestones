@@ -14,8 +14,9 @@ import svenhjol.charmony.core.enums.Side;
 public final class Runestones extends SidedFeature {
     public final Registers registers;
     public final Handlers handlers;
-    public final Providers providers;
     public final Advancements advancements;
+    public final RunestoneDefinitions runestoneDefinitions;
+    public final RuneWords runeWords;
 
     @Configurable(
         name = "Harvestable runestones",
@@ -56,8 +57,9 @@ public final class Runestones extends SidedFeature {
         super(mod);
         handlers = new Handlers(this);
         registers = new Registers(this);
-        providers = new Providers(this);
         advancements = new Advancements(this);
+        runestoneDefinitions = new RunestoneDefinitions(this);
+        runeWords = new RuneWords(this);
     }
 
     public static Runestones feature() {

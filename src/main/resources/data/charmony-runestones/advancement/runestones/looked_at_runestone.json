@@ -1,31 +1,31 @@
 {
-  "parent": "charmony:root",
+  "parent": "charmony-runestones:root",
   "display": {
     "icon": {
       "id": "charmony-runestones:stone_runestone"
     },
     "title": {
-      "translate": "advancements.charmony.runestones.title"
+      "translate": "advancements.charmony-runestones.looked_at_runestone.title"
     },
     "description": {
-      "translate": "advancements.charmony.runestones.description"
+      "translate": "advancements.charmony-runestones.looked_at_runestone.description"
     },
     "frame": "task",
-    "show_toast": false,
+    "show_toast": true,
     "announce_to_chat": false,
     "hidden": false
   },
   "criteria": {
-    "player_joined": {
+    "looked_at_runestone": {
       "trigger": "charmony_action_performed",
       "conditions": {
-        "action": "charmony:player_joined"
+        "action": "charmony:looked_at_runestone"
       }
     }
   },
   "requirements": [
     [
-      "player_joined"
+      "looked_at_runestone"
     ]
   ]
 }

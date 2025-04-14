@@ -70,7 +70,7 @@ public class RunestoneBlock extends BaseEntityBlock {
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         var cardinals = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
-        var random = RandomSource.create(context.getClickedPos().asLong());
+        var random = RandomSource.create(feature().handlers.seedFromBlockPos(context.getClickedPos()));
         return defaultBlockState().setValue(FACING, cardinals.get(random.nextInt(cardinals.size())));
     }
 

@@ -1,13 +1,27 @@
 {
   "values": [
-    "minecraft:raw_copper",
-    "minecraft:raw_iron",
-    "minecraft:spider_eye",
-    "minecraft:string",
-    "minecraft:rotten_flesh",
+    "minecraft:beef",
     "minecraft:bone",
+    "minecraft:carrot",
+    "minecraft:charcoal",
+    "minecraft:chicken",
     "minecraft:clay_ball",
     "minecraft:coal",
-    "minecraft:paper"
+    "minecraft:cod",
+    "minecraft:flint",
+    "minecraft:iron_nugget",
+    "minecraft:mutton",
+    "minecraft:paper",
+    "minecraft:polished_andesite",
+    "minecraft:polished_diorite",
+    "minecraft:polished_granite",
+    "minecraft:porkchop",
+    "minecraft:potato",
+    "minecraft:raw_copper",
+    "minecraft:raw_iron",
+    "minecraft:rotten_flesh",
+    "minecraft:salmon",
+    "minecraft:spider_eye",
+    "minecraft:string"
   ]
 }

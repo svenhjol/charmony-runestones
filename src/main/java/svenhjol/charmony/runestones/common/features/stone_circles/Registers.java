@@ -1,20 +1,29 @@
 package svenhjol.charmony.runestones.common.features.stone_circles;
 
+import com.mojang.serialization.Codec;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
+import svenhjol.charmony.api.StoneCircleDefinition;
+import svenhjol.charmony.api.StoneCircleDefinitionProvider;
+import svenhjol.charmony.core.Api;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.common.CommonRegistry;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
-public final class Registers extends Setup<StoneCircles> {
+public class Registers extends Setup<StoneCircles> {
     private static final String PIECE_ID = "stone_circle_piece";
 
     public final Supplier<StructureType<StoneCircleStructure>> structureType;
     public final Supplier<StructurePieceType> structurePiece;
+    public Codec<StoneCircleDefinition> codec;
+    public final Map<String, StoneCircleDefinition> definitions = new HashMap<>();
 
     public Registers(StoneCircles feature) {
         super(feature);
@@ -22,6 +31,16 @@ public final class Registers extends Setup<StoneCircles> {
 
         structureType = registry.structure(StoneCircles.STRUCTURE_ID, () -> StoneCircleStructure.CODEC);
         structurePiece = registry.structurePiece(PIECE_ID, () -> StoneCirclePiece::new);
+
+        // Consumer of StoneCircleDefinitions.
+        Api.consume(StoneCircleDefinitionProvider.class, provider -> {
+            for (var definition : provider.getStoneCircleDefinitions()) {
+                this.definitions.put(definition.name(), definition);
+            }
+
+            codec = StringRepresentable.fromValues(
+                () -> definitions.values().toArray(new StoneCircleDefinition[0]));
+        });
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.util.Optional;
 public class StoneCircleStructure extends Structure {
     public static final MapCodec<StoneCircleStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         StoneCircleStructure.settingsCodec(instance),
-        StoneCircles.feature().providers.codec.fieldOf("stone_circle_definition")
+        StoneCircles.feature().registers.codec.fieldOf("stone_circle_definition")
             .forGetter(structure -> structure.definition))
             .apply(instance, StoneCircleStructure::new));
 
@@ -22,12 +22,12 @@ public class StoneCircleStructure extends Structure {
     protected StoneCircleStructure(StructureSettings settings, StoneCircleDefinition definition) {
         super(settings);
 
-        var defaultDefinition = StoneCircles.feature().providers.definitions.get(Providers.DEFAULT);
+        var defaultDefinition = StoneCircles.feature().registers.definitions.get(StoneCircleDefinitions.DEFAULT);
         if (defaultDefinition == null) {
             throw new RuntimeException("Missing default stone circle definition");
         }
 
-        this.definition = StoneCircles.feature().providers.definitions.getOrDefault(definition.getSerializedName(), defaultDefinition);
+        this.definition = StoneCircles.feature().registers.definitions.getOrDefault(definition.getSerializedName(), defaultDefinition);
     }
 
     @Override

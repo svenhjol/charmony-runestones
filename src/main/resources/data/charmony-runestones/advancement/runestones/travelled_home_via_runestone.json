@@ -1,14 +1,14 @@
 {
-  "parent": "charmony:runestones/travelled_via_runestone",
+  "parent": "charmony-runestones:runestones/travelled_via_runestone",
   "display": {
     "icon": {
       "id": "minecraft:white_bed"
     },
     "title": {
-      "translate": "advancements.charmony.travelled_home_via_runestone.title"
+      "translate": "advancements.charmony-runestones.travelled_home_via_runestone.title"
     },
     "description": {
-      "translate": "advancements.charmony.travelled_home_via_runestone.description"
+      "translate": "advancements.charmony-runestones.travelled_home_via_runestone.description"
     },
     "frame": "challenge",
     "show_toast": true,

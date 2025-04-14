@@ -1,51 +1,31 @@
 package svenhjol.charmony.runestones.common.features.stone_circles;
 
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
-import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
-import svenhjol.charmony.api.*;
+import net.minecraft.world.level.storage.loot.LootTable;
+import svenhjol.charmony.api.StoneCircleDefinition;
+import svenhjol.charmony.api.StoneCircleDefinitionProvider;
 import svenhjol.charmony.core.Api;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.runestones.RunestonesMod;
-import svenhjol.charmony.runestones.common.features.runestones.Helpers;
 import svenhjol.charmony.runestones.common.features.runestones.Runestones;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public final class Providers extends Setup<StoneCircles> implements StoneCircleDefinitionsProvider, RunestoneDefinitionsProvider {
+public class StoneCircleDefinitions extends Setup<StoneCircles> implements StoneCircleDefinitionProvider {
     public static final String DEFAULT = "stone";
 
-    public Codec<StoneCircleDefinition> codec;
-    public final Map<String, StoneCircleDefinition> definitions = new HashMap<>();
-
-    public Providers(StoneCircles feature) {
+    public StoneCircleDefinitions(StoneCircles feature) {
         super(feature);
-
         Api.registerProvider(this);
-
-        // This class is a consumer of StoneCircleDefinitions.
-        Api.consume(StoneCircleDefinitionsProvider.class, provider -> {
-            for (var definition : provider.getStoneCircleDefinitions()) {
-                this.definitions.put(definition.name(), definition);
-            }
-
-            codec = StringRepresentable.fromValues(
-                () -> definitions.values().toArray(new StoneCircleDefinition[0]));
-        });
     }
 
     @Override
@@ -57,15 +37,13 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             stoneCirclesForTheEnd());
     }
 
-    @Override
-    public List<RunestoneDefinition> getRunestoneDefinitions() {
-        return List.of(
-            stoneCircleRunestoneDefinition(),
-            blackstoneCircleRunestoneDefinition(),
-            obsidianCircleRunestoneDefinition()
-        );
-    }
-
+    /**
+     * Definition for stone circles that generate throughout the Overworld, generally in flat biomes.
+     * The pillars are made from blocks defined in the `stone_pillar_blocks` block tag file.
+     * The biomes that these circles may generate in are defined in the `stone_circle_stone` biomes tag file.
+     *
+     * @return Stone circle definition.
+     */
     private StoneCircleDefinition stoneCirclesForOverworld() {
         return new StoneCircleDefinition() {
             @Override
@@ -112,9 +90,26 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             public Optional<Supplier<? extends Block>> runestoneBlock() {
                 return Optional.ofNullable(Runestones.feature().registers.stoneBlock);
             }
+
+            @Override
+            public double debrisChance() {
+                return feature().handlers.getDebrisChance(StoneCircleDefinition.super.debrisChance());
+            }
+
+            @Override
+            public List<ResourceKey<LootTable>> archaeologyLootTables() {
+                return feature().handlers.getOverworldArchaeologyLoot(StoneCircleDefinition.super.archaeologyLootTables());
+            }
         };
     }
 
+    /**
+     * Definition for stone circles that generate in forested biomes in the Overworld.
+     * The pillars are made from blocks defined in the `overgrown_stone_pillar_blocks` block tag file.
+     * The biomes that these circles may generate in are defined in the `stone_circle_overgrown_stone` biomes tag file.
+     *
+     * @return Stone circle definition.
+     */
     private StoneCircleDefinition overgrownStoneCirclesForOverworld() {
         return new StoneCircleDefinition() {
             @Override
@@ -181,9 +176,25 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             public Optional<Supplier<? extends Block>> runestoneBlock() {
                 return Optional.ofNullable(Runestones.feature().registers.stoneBlock);
             }
+
+            @Override
+            public double debrisChance() {
+                return feature().handlers.getDebrisChance(StoneCircleDefinition.super.debrisChance());
+            }
+
+            @Override
+            public List<ResourceKey<LootTable>> archaeologyLootTables() {
+                return feature().handlers.getOverworldArchaeologyLoot(StoneCircleDefinition.super.archaeologyLootTables());
+            }
         };
     }
 
+    /**
+     * Definition for stone circles that generate throughout the Nether.
+     * The pillars are made from blocks defined in the `blackstone_pillar_blocks` block tag file.
+     *
+     * @return Stone circle definition.
+     */
     private StoneCircleDefinition stoneCirclesForTheNether() {
         return new StoneCircleDefinition() {
             @Override
@@ -277,9 +288,25 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             public Optional<Supplier<? extends Block>> runestoneBlock() {
                 return Optional.ofNullable(Runestones.feature().registers.blackstoneBlock);
             }
+
+            @Override
+            public double debrisChance() {
+                return feature().handlers.getDebrisChance(StoneCircleDefinition.super.debrisChance());
+            }
+
+            @Override
+            public List<ResourceKey<LootTable>> archaeologyLootTables() {
+                return List.of(); // Nether doesn't have any archaeology.
+            }
         };
     }
 
+    /**
+     * Definition for stone circles that generate throughout the End dimension.
+     * The pillars are made from blocks defined in the `obsidian_pillar_blocks` block tag file.
+     *
+     * @return Stone circle definition.
+     */
     private StoneCircleDefinition stoneCirclesForTheEnd() {
         return new StoneCircleDefinition() {
             @Override
@@ -331,86 +358,15 @@ public final class Providers extends Setup<StoneCircles> implements StoneCircleD
             public Optional<Supplier<? extends Block>> runestoneBlock() {
                 return Optional.ofNullable(Runestones.feature().registers.obsidianBlock);
             }
-        };
-    }
 
-    private RunestoneDefinition stoneCircleRunestoneDefinition() {
-        return new RunestoneDefinition() {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return Runestones.feature().registers.stoneBlock;
+            public double debrisChance() {
+                return feature().handlers.getDebrisChance(StoneCircleDefinition.super.debrisChance());
             }
 
             @Override
-            public Supplier<? extends Block> baseBlock() {
-                return () -> Blocks.CRACKED_STONE_BRICKS;
-            }
-
-            @Override
-            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
-                if (feature().enabled() && random.nextDouble() < feature().stoneCircleRunestoneChance()) {
-                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, RunestonesMod.id("stone_circle_stone")));
-                }
-                return Optional.empty();
-            }
-
-            @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
-                return () -> Helpers.randomItem(level, random, "runestone/stone/common_items");
-            }
-        };
-    }
-
-    private RunestoneDefinition blackstoneCircleRunestoneDefinition() {
-        return new RunestoneDefinition() {
-            @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return Runestones.feature().registers.blackstoneBlock;
-            }
-
-            @Override
-            public Supplier<? extends Block> baseBlock() {
-                return () -> Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS;
-            }
-
-            @Override
-            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
-                if (feature().enabled() && random.nextDouble() < feature().stoneCircleRunestoneChance()) {
-                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, RunestonesMod.id("stone_circle_blackstone")));
-                }
-                return Optional.empty();
-            }
-
-            @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
-                return () -> Helpers.randomItem(level, random, "runestone/blackstone/common_items");
-            }
-        };
-    }
-
-    private RunestoneDefinition obsidianCircleRunestoneDefinition() {
-        return new RunestoneDefinition() {
-            @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return Runestones.feature().registers.obsidianBlock;
-            }
-
-            @Override
-            public Supplier<? extends Block> baseBlock() {
-                return () -> Blocks.CRYING_OBSIDIAN;
-            }
-
-            @Override
-            public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
-                if (feature().enabled() && random.nextDouble() < feature().stoneCircleRunestoneChance()) {
-                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, RunestonesMod.id("stone_circle_obsidian")));
-                }
-                return Optional.empty();
-            }
-
-            @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
-                return () -> Helpers.randomItem(level, random, "runestone/obsidian/common_items");
+            public List<ResourceKey<LootTable>> archaeologyLootTables() {
+                return List.of(); // The End doesn't have any archaeology.
             }
         };
     }

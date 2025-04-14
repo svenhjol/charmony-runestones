@@ -8,6 +8,8 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BrushableBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -35,7 +37,7 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
 
     public StoneCirclePiece(StructurePieceSerializationContext context, CompoundTag tag) {
         super(StoneCircles.feature().registers.structurePiece.get(), tag);
-        tag.getString(DEFINITION_TAG).ifPresent(t -> this.definition = StoneCircles.feature().providers.definitions.get(t));
+        tag.getString(DEFINITION_TAG).ifPresent(t -> this.definition = StoneCircles.feature().registers.definitions.get(t));
     }
 
     @Override
@@ -119,7 +121,37 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
                     }
                 }
 
-                for (int y = 1; y < pillarHeight; y++) {
+                // Generate debris around the pillar's base.
+                for (int debrisRolls = 0; debrisRolls < definition.debrisRolls(); debrisRolls++) {
+                    for (int dy = -minPillarHeight; dy <= 1; dy++) {
+                        if (random.nextDouble() > definition.debrisChance()) continue;
+                        var range = definition.debrisRange();
+
+                        var dx = random.nextIntBetweenInclusive(-range, range) / 2;
+                        var dz = random.nextIntBetweenInclusive(-range, range) / 2;
+
+                        var gravelPos = checkPos.offset(dx, dy, dz);
+                        var gravelUpPos = gravelPos.above();
+                        var gravelState = level.getBlockState(gravelPos);
+                        var gravelUpState = level.getBlockState(gravelUpPos);
+
+                        var validGravelPos = ((gravelState.canOcclude() || gravelState.getFluidState().is(Fluids.LAVA))
+                            && (gravelUpState.canOcclude() || !level.isWaterAt(gravelUpPos)));
+                        if (!validGravelPos) {
+                            continue;
+                        }
+
+                        if (random.nextDouble() < 0.8f) {
+                            tryReplaceFloorBlock(level, gravelPos, random);
+                        } else {
+                            var state = getRandomBlock(pillarBlocks, random);
+                            level.setBlock(gravelPos, state, 3);
+                        }
+                    }
+                }
+
+                // Generate the pillar.
+                for (int y = -minPillarHeight; y < pillarHeight; y++) {
                     var pillarYPos = checkPos.above(y);
                     var isTop = y == pillarHeight - 1;
                     var hasSolidNeighbour = false;
@@ -184,5 +216,28 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
 
     private BlockState getRandomBlock(List<Block> blocks, RandomSource random) {
         return blocks.get(random.nextInt(blocks.size())).defaultBlockState();
+    }
+
+    private void tryReplaceFloorBlock(WorldGenLevel level, BlockPos pos, RandomSource random) {
+        var replacements = definition.floorReplacements();
+        var state = level.getBlockState(pos);
+        var original = state.getBlock();
+
+        if (replacements.containsKey(original)) {
+            var blocks = replacements.get(original);
+            var block = blocks.get(random.nextInt(blocks.size()));
+
+            level.setBlock(pos, block.defaultBlockState(), 3);
+
+            if (block instanceof BrushableBlock) {
+                var lootTables = definition.archaeologyLootTables();
+
+                if (!lootTables.isEmpty()) {
+                    var lootTable = lootTables.get(random.nextInt(lootTables.size()));
+                    level.getBlockEntity(pos, BlockEntityType.BRUSHABLE_BLOCK)
+                        .ifPresent(brushable -> brushable.setLootTable(lootTable, pos.asLong()));
+                }
+            }
+        }
     }
 }

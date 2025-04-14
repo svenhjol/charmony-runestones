@@ -1,8 +1,3 @@
 accessWidener v1 named
 
 accessible class net/minecraft/world/level/levelgen/structure/structures/StrongholdPieces$StrongholdPiece
-accessible method net/minecraft/world/entity/Entity unsetRemoved ()V
-accessible field net/minecraft/server/level/ServerPlayer isChangingDimension Z
-accessible field net/minecraft/server/level/ServerPlayer lastSentExp I
-accessible field net/minecraft/server/level/ServerPlayer lastSentHealth F
-accessible field net/minecraft/server/level/ServerPlayer lastSentFood I

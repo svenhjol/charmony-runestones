@@ -4,7 +4,7 @@ import net.minecraft.world.entity.player.Player;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.helpers.AdvancementHelper;
 
-public final class Advancements extends Setup<Runestones> {
+public class Advancements extends Setup<Runestones> {
     public Advancements(Runestones feature) {
         super(feature);
     }

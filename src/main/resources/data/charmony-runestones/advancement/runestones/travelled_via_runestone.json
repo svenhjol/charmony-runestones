@@ -1,14 +1,14 @@
 {
-  "parent": "charmony:runestones/looked_at_runestone",
+  "parent": "charmony-runestones:runestones/looked_at_runestone",
   "display": {
     "icon": {
       "id": "minecraft:compass"
     },
     "title": {
-      "translate": "advancements.charmony.travelled_via_runestone.title"
+      "translate": "advancements.charmony-runestones.travelled_via_runestone.title"
     },
     "description": {
-      "translate": "advancements.charmony.travelled_via_runestone.description"
+      "translate": "advancements.charmony-runestones.travelled_via_runestone.description"
     },
     "frame": "goal",
     "show_toast": true,

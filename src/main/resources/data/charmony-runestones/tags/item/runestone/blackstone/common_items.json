@@ -1,11 +1,27 @@
 {
   "values": [
-    "minecraft:iron_ingot",
-    "minecraft:gold_ingot",
-    "minecraft:ender_pearl",
-    "minecraft:crying_obsidian",
-    "minecraft:gold_block",
+    "#minecraft:warped_stems",
+    "#minecraft:wart_blocks",
+    "minecraft:blaze_powder",
     "minecraft:blaze_rod",
-    "minecraft:glowstone_dust"
+    "minecraft:bone",
+    "minecraft:bone_block",
+    "minecraft:coal",
+    "minecraft:crying_obsidian",
+    "minecraft:ender_pearl",
+    "minecraft:flint",
+    "minecraft:glowstone",
+    "minecraft:glowstone_dust",
+    "minecraft:gold_block",
+    "minecraft:gold_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:magma_cream",
+    "minecraft:nether_brick",
+    "minecraft:nether_wart",
+    "minecraft:obsidian",
+    "minecraft:polished_blackstone",
+    "minecraft:quartz",
+    "minecraft:rotten_flesh",
+    "minecraft:string"
   ]
 }

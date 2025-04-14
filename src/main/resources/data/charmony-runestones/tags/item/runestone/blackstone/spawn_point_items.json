@@ -1,7 +1,10 @@
 {
   "values": [
-    "minecraft:nether_brick",
+    "minecraft:flint",
     "minecraft:gold_ingot",
+    "minecraft:magma_block",
+    "minecraft:nether_brick",
+    "minecraft:nether_wart",
     "minecraft:quartz"
   ]
 }
