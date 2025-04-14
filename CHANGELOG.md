@@ -11,6 +11,7 @@
 - Move runestones and stone circle definitions into their own init classes.
 - Move API consumer code into the register classes.
 - Move advancement language strings into the correct asset folder.
+- Custom loot table for stone circle debris in overworld.
 
 ## 1.6.1
 

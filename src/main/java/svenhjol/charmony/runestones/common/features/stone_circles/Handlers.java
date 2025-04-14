@@ -24,12 +24,13 @@ public class Handlers extends Setup<StoneCircles> {
      * @return List of loot tables for brushable blocks.
      */
     public List<ResourceKey<LootTable>> getOverworldArchaeologyLoot(List<ResourceKey<LootTable>> original) {
-        var tables = new ArrayList<>(original);
+        var stoneCircleOverworld = ResourceKey.create(Registries.LOOT_TABLE, RunestonesMod.id("archaeology/stone_circle_overworld"));
+        List<ResourceKey<LootTable>> tables = new ArrayList<>(List.of(stoneCircleOverworld));
 
         // If runestones are enabled and the excavate config is enabled then add a chance of unearthing a runestone.
         if (Mod.getSidedFeature(Runestones.class).enabled() && feature().excavateRunestonesFromDebris()) {
-            var key = ResourceKey.create(Registries.LOOT_TABLE, RunestonesMod.id("archaeology/stone_circle_stone_runestone"));
-            tables.add(key);
+            var stoneCircleRunestone = ResourceKey.create(Registries.LOOT_TABLE, RunestonesMod.id("archaeology/stone_circle_stone_runestone"));
+            tables.add(stoneCircleRunestone);
         }
 
         return tables;
