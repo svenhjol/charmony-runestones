@@ -5,14 +5,21 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.LootTable;
 import svenhjol.charmony.api.StoneCircleDefinition;
 import svenhjol.charmony.api.StoneCircleDefinitionProvider;
 import svenhjol.charmony.core.Api;
 import svenhjol.charmony.core.base.Setup;
+import svenhjol.charmony.core.helpers.WorldHelper;
 import svenhjol.charmony.runestones.RunestonesMod;
 import svenhjol.charmony.runestones.common.features.runestones.Runestones;
 
@@ -100,6 +107,11 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
             public List<ResourceKey<LootTable>> archaeologyLootTables() {
                 return feature().handlers.getOverworldArchaeologyLoot(StoneCircleDefinition.super.archaeologyLootTables());
             }
+
+            @Override
+            public Runnable addAtCenter(WorldGenLevel level, BlockPos pos) {
+                return generateOverworldCenter(level, pos);
+            }
         };
     }
 
@@ -185,6 +197,11 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
             @Override
             public List<ResourceKey<LootTable>> archaeologyLootTables() {
                 return feature().handlers.getOverworldArchaeologyLoot(StoneCircleDefinition.super.archaeologyLootTables());
+            }
+
+            @Override
+            public Runnable addAtCenter(WorldGenLevel level, BlockPos pos) {
+                return generateOverworldCenter(level, pos);
             }
         };
     }
@@ -367,6 +384,50 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
             @Override
             public List<ResourceKey<LootTable>> archaeologyLootTables() {
                 return List.of(); // The End doesn't have any archaeology.
+            }
+        };
+    }
+
+    private Runnable generateOverworldCenter(WorldGenLevel level, BlockPos pos) {
+        return () -> {
+            var log = feature().log();
+            var seed = WorldHelper.seedFromBlockPos(pos);
+            var random = RandomSource.create(seed);
+            var hay = Blocks.HAY_BLOCK.defaultBlockState();
+            var chestLoot = ResourceKey.create(Registries.LOOT_TABLE, LootTables.STONE_CIRCLE_OVERWORLD_CHEST);
+
+            if (random.nextDouble() < 0.5d) {
+                var state = Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, random.nextDouble() < 0.75d);
+                level.setBlock(pos, state, 3);
+
+                if (random.nextBoolean()) {
+                    level.setBlock(pos.below(), hay, 3);
+                }
+                log.debug("Generated campfire at " + pos);
+            } else if (random.nextDouble() < 0.12d) {
+                var state = Blocks.SOUL_CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, random.nextDouble() < 0.75d);
+                level.setBlock(pos, state, 3);
+
+                if (random.nextBoolean()) {
+                    level.setBlock(pos.below(), hay, 3);
+                }
+                log.debug("Generated soul campfire at " + pos);
+            } else if (random.nextDouble() < 0.5d) {
+                var state = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, WorldHelper.randomCardinal(random));
+                level.setBlock(pos, state, 3);
+                level.getBlockEntity(pos, BlockEntityType.CHEST)
+                    .ifPresent(chest -> chest.setLootTable(chestLoot, seed));
+
+                log.debug("Generated chest at " + pos);
+            } else if (random.nextDouble() < 0.05d) {
+                var state = Blocks.SPAWNER.defaultBlockState();
+                var mob = random.nextBoolean() ? EntityType.ZOMBIE : EntityType.SKELETON;
+
+                level.setBlock(pos, state, 3);
+                level.getBlockEntity(pos, BlockEntityType.MOB_SPAWNER)
+                    .ifPresent(spawner -> spawner.setEntityId(mob, random));
+
+                log.debug("Generated spawner at " + pos);
             }
         };
     }

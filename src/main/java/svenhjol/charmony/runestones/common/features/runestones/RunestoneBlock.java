@@ -23,8 +23,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.jetbrains.annotations.Nullable;
+import svenhjol.charmony.core.helpers.WorldHelper;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 public class RunestoneBlock extends BaseEntityBlock {
@@ -69,9 +69,8 @@ public class RunestoneBlock extends BaseEntityBlock {
 
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
-        var cardinals = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
-        var random = RandomSource.create(feature().handlers.seedFromBlockPos(context.getClickedPos()));
-        return defaultBlockState().setValue(FACING, cardinals.get(random.nextInt(cardinals.size())));
+        var random = RandomSource.create(WorldHelper.seedFromBlockPos(context.getClickedPos()));
+        return defaultBlockState().setValue(FACING, WorldHelper.randomCardinal(random));
     }
 
     @Override

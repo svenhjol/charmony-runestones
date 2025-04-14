@@ -92,6 +92,22 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
 
         Map<BlockPos, BlockState> decay = new HashMap<>();
 
+        // Generate item in center of circle.
+        for (int cy = maxHeightTolerance; cy > minHeightTolerance; cy--) {
+            var centerPos = blockPos.offset(0, cy, 0);
+            var centerUpPos = centerPos.above();
+            var centerState = level.getBlockState(centerPos);
+            var centerUpState = level.getBlockState(centerUpPos);
+
+            var validCenterPos = centerState.canOcclude() && centerUpState.isAir();
+            if (!validCenterPos) {
+                continue;
+            }
+
+            definition.addAtCenter(level, centerUpPos).run();
+            break;
+        }
+
         // Generate pillars in a rough circle.
         for (int i = 0; i < 360; i += degrees + (circleJitter > 0 ? random.nextInt(circleJitter + 1) - circleJitter : 0)) {
             if (360 - i < minDegrees) continue;

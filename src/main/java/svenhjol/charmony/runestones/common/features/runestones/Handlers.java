@@ -24,6 +24,7 @@ import svenhjol.charmony.api.RunestoneDefinition;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.common.features.teleport.Teleport;
 import svenhjol.charmony.core.helpers.PlayerHelper;
+import svenhjol.charmony.core.helpers.WorldHelper;
 import svenhjol.charmony.rune_dictionary.common.features.rune_dictionary.RuneDictionary;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CDestroyRunestone;
 
@@ -39,21 +40,6 @@ public class Handlers extends Setup<Runestones> {
 
     public Handlers(Runestones feature) {
         super(feature);
-    }
-
-    /**
-     * Generates a unique seed from block position coordinates.
-     *
-     * @return A unique long seed value
-     */
-    public long seedFromBlockPos(BlockPos pos) {
-        var x = pos.getX();
-        var y = pos.getY();
-        var z = pos.getZ();
-
-        return ((long)x & 0x3FFFFFFL) << 38
-            | ((long)(y + 64) & 0x3FFL) << 28
-            | ((long)z & 0x3FFFFFFL);
     }
 
     /**
@@ -213,7 +199,7 @@ public class Handlers extends Setup<Runestones> {
             return;
         }
 
-        var seed = seedFromBlockPos(pos);
+        var seed = WorldHelper.seedFromBlockPos(pos);
         var random = RandomSource.create(seed);
 
         var cardinals = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
