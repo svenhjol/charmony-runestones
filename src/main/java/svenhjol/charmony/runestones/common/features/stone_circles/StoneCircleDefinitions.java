@@ -415,32 +415,19 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
         var log = feature().log();
         var seed = WorldHelper.seedFromBlockPos(pos);
         var random = RandomSource.create(seed);
-        var hay = Blocks.HAY_BLOCK.defaultBlockState();
         var chestLoot = LootTables.STONE_CIRCLE_OVERWORLD_CHEST;
 
         if (random.nextDouble() < 0.5d) {
             var state = Blocks.CAMPFIRE.defaultBlockState()
                 .setValue(CampfireBlock.LIT, random.nextDouble() < 0.75d);
 
-            if (random.nextBoolean()) {
-                level.setBlock(pos.below(), hay, 3);
-                state.setValue(CampfireBlock.SIGNAL_FIRE, true);
-            }
-
             level.setBlock(pos, state, 3);
-
             log.debug("Generated campfire at " + pos);
         } else if (random.nextDouble() < 0.12d) {
             var state = Blocks.SOUL_CAMPFIRE.defaultBlockState()
                 .setValue(CampfireBlock.LIT, random.nextDouble() < 0.75d);
 
-            if (random.nextBoolean()) {
-                level.setBlock(pos.below(), hay, 3);
-                state.setValue(CampfireBlock.SIGNAL_FIRE, true);
-            }
-
             level.setBlock(pos, state, 3);
-
             log.debug("Generated soul campfire at " + pos);
         } else if (random.nextDouble() < 0.5d) {
             var state = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, WorldHelper.randomCardinal(random));
@@ -483,14 +470,12 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
                 .setValue(CampfireBlock.LIT, true);
 
             level.setBlock(pos, state, 3);
-
             log.debug("Generated campfire at " + pos);
         } else if (random.nextDouble() < 0.45d) {
             var state = Blocks.SOUL_CAMPFIRE.defaultBlockState()
                 .setValue(CampfireBlock.LIT, true);
 
             level.setBlock(pos, state, 3);
-
             log.debug("Generated soul campfire at " + pos);
         } else if (random.nextDouble() < 0.25d) {
             var state = Blocks.RESPAWN_ANCHOR.defaultBlockState()
