@@ -1,6 +1,5 @@
 package svenhjol.charmony.runestones.common.features.stone_circles;
 
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootTable;
 import svenhjol.charmony.core.base.Mod;
@@ -23,13 +22,11 @@ public class Handlers extends Setup<StoneCircles> {
      * @return List of loot tables for brushable blocks.
      */
     public List<ResourceKey<LootTable>> getOverworldArchaeologyLoot(List<ResourceKey<LootTable>> original) {
-        var stoneCircleOverworld = ResourceKey.create(Registries.LOOT_TABLE, LootTables.STONE_CIRCLE_OVERWORLD_ARCHAEOLOGY);
-        List<ResourceKey<LootTable>> tables = new ArrayList<>(List.of(stoneCircleOverworld));
+        List<ResourceKey<LootTable>> tables = new ArrayList<>(List.of(LootTables.STONE_CIRCLE_OVERWORLD_ARCHAEOLOGY));
 
         // If runestones are enabled and the excavate config is enabled then add a chance of unearthing a runestone.
         if (Mod.getSidedFeature(Runestones.class).enabled() && feature().excavateRunestonesFromDebris()) {
-            var stoneCircleRunestone = ResourceKey.create(Registries.LOOT_TABLE, LootTables.STONE_CIRCLE_STONE_RUNESTONE_ARCHAEOLOGY);
-            tables.add(stoneCircleRunestone);
+            tables.add(LootTables.STONE_CIRCLE_STONE_RUNESTONE_ARCHAEOLOGY);
         }
 
         return tables;

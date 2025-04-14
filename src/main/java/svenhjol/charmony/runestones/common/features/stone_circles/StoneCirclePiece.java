@@ -7,8 +7,10 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BrushableBlock;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -20,9 +22,7 @@ import svenhjol.charmony.api.StoneCircleDefinition;
 import svenhjol.charmony.core.helpers.TagHelper;
 import svenhjol.charmony.runestones.common.features.runestones.Runestones;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class StoneCirclePiece extends ScatteredFeaturePiece {
@@ -104,7 +104,7 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
                 continue;
             }
 
-            definition.addAtCenter(level, centerUpPos).run();
+            definition.addAtCenter(level, centerUpPos);
             break;
         }
 
@@ -235,23 +235,54 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
     }
 
     private void tryReplaceFloorBlock(WorldGenLevel level, BlockPos pos, RandomSource random) {
-        var replacements = definition.floorReplacements();
+        var replacements = definition.debrisReplacements();
         var state = level.getBlockState(pos);
         var original = state.getBlock();
+        var seed = pos.asLong();
 
         if (replacements.containsKey(original)) {
-            var blocks = replacements.get(original);
-            var block = blocks.get(random.nextInt(blocks.size()));
+            var pairs = new ArrayList<>(replacements.get(original));
+            Collections.shuffle(pairs);
 
-            level.setBlock(pos, block.defaultBlockState(), 3);
+            for (var pair : pairs) {
+                var block = pair.getFirst();
+                var chance = pair.getSecond();
 
-            if (block instanceof BrushableBlock) {
-                var lootTables = definition.archaeologyLootTables();
+                if (random.nextDouble() > chance) {
+                    continue;
+                }
 
-                if (!lootTables.isEmpty()) {
-                    var lootTable = lootTables.get(random.nextInt(lootTables.size()));
-                    level.getBlockEntity(pos, BlockEntityType.BRUSHABLE_BLOCK)
-                        .ifPresent(brushable -> brushable.setLootTable(lootTable, pos.asLong()));
+                level.setBlock(pos, block.defaultBlockState(), 3);
+
+                switch (block) {
+                    case BrushableBlock brushableBlock -> {
+                        var lootTables = definition.archaeologyLootTables();
+
+                        if (!lootTables.isEmpty()) {
+                            var lootTable = lootTables.get(random.nextInt(lootTables.size()));
+                            level.getBlockEntity(pos, BlockEntityType.BRUSHABLE_BLOCK)
+                                .ifPresent(brushable -> brushable.setLootTable(lootTable, seed));
+                        }
+                    }
+                    case ChestBlock chestBlock -> {
+                        var lootTables = definition.chestLootTables();
+
+                        if (!lootTables.isEmpty()) {
+                            var lootTable = lootTables.get(random.nextInt(lootTables.size()));
+                            level.getBlockEntity(pos, BlockEntityType.CHEST)
+                                .ifPresent(chest -> chest.setLootTable(lootTable, seed));
+                        }
+                    }
+                    case BarrelBlock barrelBlock -> {
+                        var lootTables = definition.barrelLootTables();
+
+                        if (!lootTables.isEmpty()) {
+                            var lootTable = lootTables.get(random.nextInt(lootTables.size()));
+                            level.getBlockEntity(pos, BlockEntityType.BARREL)
+                                .ifPresent(barrel -> barrel.setLootTable(lootTable, seed));
+                        }
+                    }
+                    default -> {}
                 }
             }
         }
