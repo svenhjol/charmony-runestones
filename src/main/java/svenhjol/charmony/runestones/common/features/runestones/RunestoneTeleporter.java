@@ -44,7 +44,7 @@ public class RunestoneTeleporter extends Teleporter {
     }
 
     @Override
-    protected int protectionTicks() {
+    protected int protectionDurationTicks() {
         return feature().protectionDuration();
     }
 

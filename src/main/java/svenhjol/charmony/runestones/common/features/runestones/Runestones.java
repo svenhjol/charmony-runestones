@@ -41,7 +41,7 @@ public final class Runestones extends SidedFeature {
         description = "Duration (in seconds) of protection given to the player while they teleport via a runestone.",
         requireRestart = false
     )
-    private static int protectionDuration = 3;
+    private static int protectionDuration = 10;
 
     @Configurable(
         name = "Link to stronghold",

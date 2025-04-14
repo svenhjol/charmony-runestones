@@ -6,6 +6,7 @@
 - Add new seed calculation based on runestones position to avoid duplication on the Y axis.
 - Add configuration for stone circle debris and to add runestone excavation to debris.
 - Add many more sacrifice items for each type of runestone.
+- Update protection duration to match Charmony default.
 - Rebase teleportation on the the Charmony teleporter class.
 - Move runestones and stone circle definitions into their own init classes.
 - Move API consumer code into the register classes.
