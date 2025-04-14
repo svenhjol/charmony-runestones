@@ -235,6 +235,7 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
     }
 
     private void tryReplaceFloorBlock(WorldGenLevel level, BlockPos pos, RandomSource random) {
+        var log = StoneCircles.feature().log();
         var replacements = definition.debrisReplacements();
         var state = level.getBlockState(pos);
         var original = state.getBlock();
@@ -262,6 +263,8 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
                             var lootTable = lootTables.get(random.nextInt(lootTables.size()));
                             level.getBlockEntity(pos, BlockEntityType.BRUSHABLE_BLOCK)
                                 .ifPresent(brushable -> brushable.setLootTable(lootTable, seed));
+                        } else {
+                            log.warn("Did not generate any loot for the brushable block at pos " + pos);
                         }
                     }
                     case ChestBlock chestBlock -> {
@@ -271,6 +274,8 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
                             var lootTable = lootTables.get(random.nextInt(lootTables.size()));
                             level.getBlockEntity(pos, BlockEntityType.CHEST)
                                 .ifPresent(chest -> chest.setLootTable(lootTable, seed));
+                        } else {
+                            log.warn("Did not generate any loot for the chest block at pos " + pos);
                         }
                     }
                     case BarrelBlock barrelBlock -> {
@@ -280,10 +285,13 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
                             var lootTable = lootTables.get(random.nextInt(lootTables.size()));
                             level.getBlockEntity(pos, BlockEntityType.BARREL)
                                 .ifPresent(barrel -> barrel.setLootTable(lootTable, seed));
+                        } else {
+                            log.warn("Did not generate any loot for the barrel block at pos " + pos);
                         }
                     }
                     default -> {}
                 }
+                break;
             }
         }
     }
