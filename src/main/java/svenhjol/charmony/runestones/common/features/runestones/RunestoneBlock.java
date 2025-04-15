@@ -138,7 +138,7 @@ public class RunestoneBlock extends BaseEntityBlock {
     }
 
     public static class RunestoneBlockItem extends BlockItem {
-        public RunestoneBlockItem(Supplier<RunestoneBlock> block, ResourceKey<Item> key) {
+        public RunestoneBlockItem(ResourceKey<Item> key, Supplier<RunestoneBlock> block) {
             super(block.get(), new Properties().setId(key));
         }
     }

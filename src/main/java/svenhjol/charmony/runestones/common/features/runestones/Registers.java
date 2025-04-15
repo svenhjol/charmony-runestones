@@ -64,9 +64,9 @@ public class Registers extends Setup<Runestones> {
         obsidianBlock = registry.block(OBSIDIAN_ID,
             key -> new RunestoneBlock(key, BlockBehaviour.Properties.ofFullCopy(Blocks.OBSIDIAN)));
 
-        blockItems.add(registry.item(STONE_ID, key -> new RunestoneBlockItem(stoneBlock, key)));
-        blockItems.add(registry.item(BLACKSTONE_ID, key -> new RunestoneBlockItem(blackstoneBlock, key)));
-        blockItems.add(registry.item(OBSIDIAN_ID, key -> new RunestoneBlockItem(obsidianBlock, key)));
+        blockItems.add(registry.item(STONE_ID, key -> new RunestoneBlockItem(key, stoneBlock)));
+        blockItems.add(registry.item(BLACKSTONE_ID, key -> new RunestoneBlockItem(key, blackstoneBlock)));
+        blockItems.add(registry.item(OBSIDIAN_ID, key -> new RunestoneBlockItem(key, obsidianBlock)));
 
         fizzleItemSound = registry.sound("runestone_fizzle_item");
         powerUpSound = registry.sound("runestone_power_up");
