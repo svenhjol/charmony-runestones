@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.2
+
+- Bump for new version of rune dictionary.
+
 ## 1.7.1
 
 - Advancement for travelling to spawn point is now a "goal" rather than a "challenge".
