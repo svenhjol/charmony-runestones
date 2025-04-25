@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.1
+
+- Advancement for travelling to spawn point is now a "goal" rather than a "challenge".
+- Added three new advancements for learning a number of unique runestone words.
+
 ## 1.7.0
 
 - Fix runestones facing the same way when placed by the game.

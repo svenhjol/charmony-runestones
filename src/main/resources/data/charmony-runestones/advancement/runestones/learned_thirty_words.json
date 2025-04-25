@@ -1,0 +1,31 @@
+{
+  "parent": "charmony-runestones:runestones/learned_fifteen_words",
+  "display": {
+    "icon": {
+      "id": "minecraft:knowledge_book"
+    },
+    "title": {
+      "translate": "advancements.charmony-runestones.learned_thirty_words.title"
+    },
+    "description": {
+      "translate": "advancements.charmony-runestones.learned_thirty_words.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "learned_thirty_words": {
+      "trigger": "charmony_action_performed",
+      "conditions": {
+        "action": "charmony:learned_thirty_words"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "learned_thirty_words"
+    ]
+  ]
+}

@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import svenhjol.charmony.core.common.features.teleport.Teleporter;
+import svenhjol.charmony.rune_dictionary.common.features.rune_dictionary.RuneDictionary;
 
 public class RunestoneTeleporter extends Teleporter {
     private final RunestoneBlockEntity runestone;
@@ -59,6 +60,17 @@ public class RunestoneTeleporter extends Teleporter {
         feature().advancements.travelledViaRunestone(player);
         if (Helpers.runestoneLinksToSpawnPoint(runestone)) {
             feature().advancements.travelledHomeViaRunestone(player);
+        }
+
+        var countWords = RuneDictionary.feature().handlers.knownWords(player).size();
+        if (countWords >= 5) {
+            feature().advancements.learnedFiveWords(player);
+        }
+        if (countWords >= 15) {
+            feature().advancements.learnedFifteenWords(player);
+        }
+        if (countWords >= 30) {
+            feature().advancements.learnedThirtyWords(player);
         }
 
         // Tell the client the location of where the player travelled to.
