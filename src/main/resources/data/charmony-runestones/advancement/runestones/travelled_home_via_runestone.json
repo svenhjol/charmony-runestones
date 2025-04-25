@@ -10,7 +10,7 @@
     "description": {
       "translate": "advancements.charmony-runestones.travelled_home_via_runestone.description"
     },
-    "frame": "challenge",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false
