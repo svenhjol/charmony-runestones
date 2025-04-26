@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.0
+
+- Update for API 1.18
+
 ## 1.7.2
 
 - Bump for new version of rune dictionary.
