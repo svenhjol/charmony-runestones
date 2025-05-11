@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
-import svenhjol.charmony.api.StoneCircleDefinition;
+import svenhjol.charmony.api.stone_circles.StoneCircleDefinition;
 
 import java.util.Optional;
 

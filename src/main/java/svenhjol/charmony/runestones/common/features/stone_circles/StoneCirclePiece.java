@@ -18,7 +18,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.ScatteredFeaturePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.material.Fluids;
-import svenhjol.charmony.api.StoneCircleDefinition;
+import svenhjol.charmony.api.stone_circles.StoneCircleDefinition;
 import svenhjol.charmony.core.helpers.TagHelper;
 import svenhjol.charmony.runestones.common.features.runestones.Runestones;
 
@@ -35,6 +35,7 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
         this.definition = definition;
     }
 
+    @SuppressWarnings("unused")
     public StoneCirclePiece(StructurePieceSerializationContext context, CompoundTag tag) {
         super(StoneCircles.feature().registers.structurePiece.get(), tag);
         tag.getString(DEFINITION_TAG).ifPresent(t -> this.definition = StoneCircles.feature().registers.definitions.get(t));
@@ -234,6 +235,7 @@ public class StoneCirclePiece extends ScatteredFeaturePiece {
         return blocks.get(random.nextInt(blocks.size())).defaultBlockState();
     }
 
+    @SuppressWarnings("unused")
     private void tryReplaceFloorBlock(WorldGenLevel level, BlockPos pos, RandomSource random) {
         var log = StoneCircles.feature().log();
         var replacements = definition.debrisReplacements();

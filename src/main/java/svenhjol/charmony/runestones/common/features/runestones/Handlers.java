@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import svenhjol.charmony.api.RunestoneDefinition;
+import svenhjol.charmony.api.runestones.RunestoneDefinition;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.common.features.teleport.Teleport;
 import svenhjol.charmony.core.helpers.PlayerHelper;

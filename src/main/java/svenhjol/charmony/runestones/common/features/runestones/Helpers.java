@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import svenhjol.charmony.api.RunestoneLocation;
+import svenhjol.charmony.api.runestones.RunestoneLocation;
 import svenhjol.charmony.core.helpers.TagHelper;
 import svenhjol.charmony.runestones.RunestonesMod;
 

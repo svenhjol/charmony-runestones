@@ -3,7 +3,7 @@ package svenhjol.charmony.runestones.common.features.runestones;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import svenhjol.charmony.api.Api;
-import svenhjol.charmony.api.RuneWordProvider;
+import svenhjol.charmony.api.rune_dictionary.RuneWordProvider;
 import svenhjol.charmony.core.base.Setup;
 
 import java.util.List;

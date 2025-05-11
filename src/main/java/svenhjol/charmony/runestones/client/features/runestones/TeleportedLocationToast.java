@@ -2,7 +2,7 @@ package svenhjol.charmony.runestones.client.features.runestones;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import svenhjol.charmony.api.RunestoneLocation;
+import svenhjol.charmony.api.runestones.RunestoneLocation;
 import svenhjol.charmony.core.client.BaseToast;
 import svenhjol.charmony.runestones.common.features.runestones.Helpers;
 

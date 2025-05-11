@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import svenhjol.charmony.api.RunestoneLocation;
+import svenhjol.charmony.api.runestones.RunestoneLocation;
 import svenhjol.charmony.core.common.SyncedBlockEntity;
 
 import java.util.Optional;

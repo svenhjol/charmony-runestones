@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.0
+
+- Update for API 1.20
+
 ## 1.8.0
 
 - Update for API 1.18

@@ -15,7 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipProvider;
-import svenhjol.charmony.api.RunestoneLocation;
+import svenhjol.charmony.api.runestones.RunestoneLocation;
 
 import java.util.function.Consumer;
 

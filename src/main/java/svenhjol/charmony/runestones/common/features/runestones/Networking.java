@@ -8,7 +8,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
-import svenhjol.charmony.api.RunestoneLocation;
+import svenhjol.charmony.api.runestones.RunestoneLocation;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.runestones.RunestonesMod;
 

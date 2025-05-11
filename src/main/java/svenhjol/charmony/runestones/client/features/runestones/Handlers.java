@@ -11,15 +11,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import svenhjol.charmony.api.RunestoneLocation;
+import svenhjol.charmony.api.runestones.RunestoneLocation;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.rune_dictionary.client.features.RuneDictionary;
 import svenhjol.charmony.runestones.RunestonesMod;
+import svenhjol.charmony.runestones.common.features.runestones.Helpers;
 import svenhjol.charmony.runestones.common.features.runestones.Networking;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CActivationWarmup;
 import svenhjol.charmony.runestones.common.features.runestones.Networking.S2CTeleportedLocation;
 import svenhjol.charmony.runestones.common.features.runestones.RunestoneBlockEntity;
-import svenhjol.charmony.runestones.common.features.runestones.Helpers;
 
 import java.util.Map;
 import java.util.WeakHashMap;
