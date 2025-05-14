@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.10.2
+
+- Refactor loot and tag names for consistency.
+
 ## 1.10.1
 
 - Use the charmony item lookup helper.

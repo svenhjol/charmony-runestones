@@ -44,7 +44,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
     /**
      * Definition for stone circles that generate throughout the Overworld, generally in flat biomes.
-     * The pillars are made from blocks defined in the `stone_pillar_blocks` block tag file.
+     * The pillars are made from blocks defined in the `stone_pillar` block tag file.
      * The biomes that these circles may generate in are defined in the `stone_circle_stone` biomes tag file.
      *
      * @return Stone circle definition.
@@ -58,7 +58,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
             @Override
             public TagKey<Block> pillarBlocks() {
-                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/stone_pillar_blocks"));
+                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/stone_pillar"));
             }
 
             @Override
@@ -108,12 +108,12 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
             @Override
             public List<ResourceKey<LootTable>> chestLootTables() {
-                return List.of(LootTables.STONE_CIRCLE_OVERWORLD_CHEST);
+                return List.of(Tags.STONE_CIRCLE_OVERWORLD_CHEST);
             }
 
             @Override
             public List<ResourceKey<LootTable>> barrelLootTables() {
-                return List.of(LootTables.STONE_CIRCLE_OVERWORLD_CHEST);
+                return List.of(Tags.STONE_CIRCLE_OVERWORLD_CHEST);
             }
 
             @Override
@@ -125,7 +125,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
     /**
      * Definition for stone circles that generate in forested biomes in the Overworld.
-     * The pillars are made from blocks defined in the `overgrown_stone_pillar_blocks` block tag file.
+     * The pillars are made from blocks defined in the `overgrown_stone_pillar` block tag file.
      * The biomes that these circles may generate in are defined in the `stone_circle_overgrown_stone` biomes tag file.
      *
      * @return Stone circle definition.
@@ -139,7 +139,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
             @Override
             public TagKey<Block> pillarBlocks() {
-                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/overgrown_stone_pillar_blocks"));
+                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/overgrown_stone_pillar"));
             }
 
             @Override
@@ -209,12 +209,12 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
             @Override
             public List<ResourceKey<LootTable>> chestLootTables() {
-                return List.of(LootTables.STONE_CIRCLE_OVERWORLD_CHEST);
+                return List.of(Tags.STONE_CIRCLE_OVERWORLD_CHEST);
             }
 
             @Override
             public List<ResourceKey<LootTable>> barrelLootTables() {
-                return List.of(LootTables.STONE_CIRCLE_OVERWORLD_CHEST);
+                return List.of(Tags.STONE_CIRCLE_OVERWORLD_CHEST);
             }
 
             @Override
@@ -226,7 +226,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
     /**
      * Definition for stone circles that generate throughout the Nether.
-     * The pillars are made from blocks defined in the `blackstone_pillar_blocks` block tag file.
+     * The pillars are made from blocks defined in the `blackstone_pillar` block tag file.
      *
      * @return Stone circle definition.
      */
@@ -239,7 +239,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
             @Override
             public TagKey<Block> pillarBlocks() {
-                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/blackstone_pillar_blocks"));
+                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/blackstone_pillar"));
             }
 
             @Override
@@ -343,7 +343,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
     /**
      * Definition for stone circles that generate throughout the End dimension.
-     * The pillars are made from blocks defined in the `obsidian_pillar_blocks` block tag file.
+     * The pillars are made from blocks defined in the `obsidian_pillar` block tag file.
      *
      * @return Stone circle definition.
      */
@@ -356,7 +356,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
             @Override
             public TagKey<Block> pillarBlocks() {
-                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/obsidian_pillar_blocks"));
+                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/obsidian_pillar"));
             }
 
             @Override
@@ -415,7 +415,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
         var log = feature().log();
         var seed = WorldHelper.seedFromBlockPos(pos);
         var random = RandomSource.create(seed);
-        var chestLoot = LootTables.STONE_CIRCLE_OVERWORLD_CHEST;
+        var chestLoot = Tags.STONE_CIRCLE_OVERWORLD_CHEST;
 
         if (random.nextDouble() < 0.5d) {
             var state = Blocks.CAMPFIRE.defaultBlockState()
