@@ -1,6 +1,5 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -8,7 +7,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -56,37 +54,6 @@ public final class Helpers {
 
     public static Item randomItem(LevelAccessor level, RandomSource random, String res) {
         return ItemStackHelper.randomItem(level, random, TagKey.create(Registries.ITEM, RunestonesMod.id(res)), Items.ROTTEN_FLESH);
-    }
-
-    public static BlockPos addRandomOffset(Level level, BlockPos pos, RandomSource random, int min, int max) {
-        var n = random.nextInt(max - min) + min;
-        var e = random.nextInt(max - min) + min;
-        var s = random.nextInt(max - min) + min;
-        var w = random.nextInt(max - min) + min;
-
-        pos = pos.north(random.nextBoolean() ? n : -n);
-        pos = pos.east(random.nextBoolean() ? e : -e);
-        pos = pos.south(random.nextBoolean() ? s : -s);
-        pos = pos.west(random.nextBoolean() ? w : -w);
-
-        // World border checking
-        var border = level.getWorldBorder();
-        var x = pos.getX();
-        var y = pos.getY();
-        var z = pos.getZ();
-
-        if (x < border.getMinX()) {
-            pos = new BlockPos((int)border.getMinX(), y, z);
-        } else if (x > border.getMaxX()) {
-            pos = new BlockPos((int)border.getMaxX(), y, z);
-        }
-        if (z < border.getMinZ()) {
-            pos = new BlockPos(x, y, (int)border.getMinZ());
-        } else if (z > border.getMaxZ()) {
-            pos = new BlockPos(x, y, (int)border.getMaxZ());
-        }
-
-        return pos;
     }
 
     /**

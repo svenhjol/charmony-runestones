@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.10.3
+
+- Use the charmony random offset helper.
+
 ## 1.10.2
 
 - Refactor loot and tag names for consistency.
