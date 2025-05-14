@@ -13,11 +13,13 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import svenhjol.charmony.api.runestones.RunestoneLocation;
+import svenhjol.charmony.api.runestones.RunestoneType;
 import svenhjol.charmony.core.helpers.TagHelper;
 import svenhjol.charmony.runestones.RunestonesMod;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public final class Helpers {
     public static final ResourceLocation SPAWN_POINT_ID = RunestonesMod.id("spawn_point");
@@ -114,6 +116,16 @@ public final class Helpers {
             case Biome -> "biome." + namespace + "." + path;
             case Structure -> "structure." + namespace + "." + path;
             case Player -> "player." + namespace + "." + path;
+        };
+    }
+
+    public static Supplier<RunestoneBlock> getBlocksForType(RunestoneType type) {
+        var registers = Runestones.feature().registers;
+
+        return switch (type) {
+            case Stone -> registers.stoneBlock;
+            case Blackstone -> registers.blackstoneBlock;
+            case Obsidian -> registers.obsidianBlock;
         };
     }
     

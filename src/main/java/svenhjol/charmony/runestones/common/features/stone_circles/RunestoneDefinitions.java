@@ -10,10 +10,10 @@ import svenhjol.charmony.api.Api;
 import svenhjol.charmony.api.runestones.RunestoneDefinition;
 import svenhjol.charmony.api.runestones.RunestoneDefinitionProvider;
 import svenhjol.charmony.api.runestones.RunestoneLocation;
+import svenhjol.charmony.api.runestones.RunestoneType;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.runestones.RunestonesMod;
 import svenhjol.charmony.runestones.common.features.runestones.Helpers;
-import svenhjol.charmony.runestones.common.features.runestones.Runestones;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,8 +37,8 @@ public class RunestoneDefinitions extends Setup<StoneCircles> implements Runesto
     private RunestoneDefinition stoneCircleRunestoneDefinition() {
         return new RunestoneDefinition() {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return Runestones.feature().registers.stoneBlock;
+            public RunestoneType type() {
+                return RunestoneType.Stone;
             }
 
             @Override
@@ -64,8 +64,8 @@ public class RunestoneDefinitions extends Setup<StoneCircles> implements Runesto
     private RunestoneDefinition blackstoneCircleRunestoneDefinition() {
         return new RunestoneDefinition() {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return Runestones.feature().registers.blackstoneBlock;
+            public RunestoneType type() {
+                return RunestoneType.Blackstone;
             }
 
             @Override
@@ -91,8 +91,8 @@ public class RunestoneDefinitions extends Setup<StoneCircles> implements Runesto
     private RunestoneDefinition obsidianCircleRunestoneDefinition() {
         return new RunestoneDefinition() {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return Runestones.feature().registers.obsidianBlock;
+            public RunestoneType type() {
+                return RunestoneType.Obsidian;
             }
 
             @Override

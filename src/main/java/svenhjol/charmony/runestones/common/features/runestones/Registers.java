@@ -93,7 +93,7 @@ public class Registers extends Setup<Runestones> {
             Api.consume(RunestoneDefinitionProvider.class, providers -> {
                 for (var definition : providers.getRunestoneDefinitions()) {
                     // Add the block to the runestone block entity.
-                    var blockSupplier = definition.runestoneBlock();
+                    var blockSupplier = Helpers.getBlocksForType(definition.type());
                     registry.blocksForBlockEntity(feature().registers.blockEntity, List.of(blockSupplier));
 
                     // Add the definition to the full set for mapping later.

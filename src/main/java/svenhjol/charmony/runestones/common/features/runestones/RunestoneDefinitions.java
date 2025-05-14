@@ -12,6 +12,7 @@ import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import svenhjol.charmony.api.runestones.RunestoneDefinition;
 import svenhjol.charmony.api.runestones.RunestoneDefinitionProvider;
 import svenhjol.charmony.api.runestones.RunestoneLocation;
+import svenhjol.charmony.api.runestones.RunestoneType;
 import svenhjol.charmony.core.Api;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.runestones.RunestonesMod;
@@ -44,8 +45,8 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
     private RunestoneDefinition stoneCommon() {
         return new CustomRunestoneDefinition(0.5d, 0.9d, false) {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return feature().registers.stoneBlock;
+            public RunestoneType type() {
+                return RunestoneType.Stone;
             }
 
             @Override
@@ -73,8 +74,8 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
     private RunestoneDefinition stoneUncommon() {
         return new CustomRunestoneDefinition(0.32d, 0.55d, false) {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return feature().registers.stoneBlock;
+            public RunestoneType type() {
+                return RunestoneType.Stone;
             }
 
             @Override
@@ -102,8 +103,8 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
     private RunestoneDefinition stoneRare() {
         return new CustomRunestoneDefinition(0.2d, 0.33d, true) {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return feature().registers.stoneBlock;
+            public RunestoneType type() {
+                return RunestoneType.Stone;
             }
 
             @Override
@@ -131,8 +132,8 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
     private RunestoneDefinition stoneSpawnPoint() {
         return new RunestoneDefinition() {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return feature().registers.stoneBlock;
+            public RunestoneType type() {
+                return RunestoneType.Stone;
             }
 
             @Override
@@ -158,8 +159,8 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
     private RunestoneDefinition stoneStronghold() {
         return new RunestoneDefinition() {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return feature().registers.stoneBlock;
+            public RunestoneType type() {
+                return RunestoneType.Stone;
             }
 
             @Override
@@ -185,8 +186,8 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
     private RunestoneDefinition blackstone() {
         return new CustomRunestoneDefinition(0.45d, 0.9d, false) {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return feature().registers.blackstoneBlock;
+            public RunestoneType type() {
+                return RunestoneType.Blackstone;
             }
 
             @Override
@@ -214,8 +215,8 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
     private RunestoneDefinition blackstoneSpawnPoint() {
         return new RunestoneDefinition() {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return feature().registers.blackstoneBlock;
+            public RunestoneType type() {
+                return RunestoneType.Blackstone;
             }
 
             @Override
@@ -241,8 +242,8 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
     private RunestoneDefinition obsidian() {
         return new CustomRunestoneDefinition(0.5d, 0.9d, false) {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return feature().registers.obsidianBlock;
+            public RunestoneType type() {
+                return RunestoneType.Obsidian;
             }
 
             @Override
@@ -270,8 +271,8 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
     private RunestoneDefinition obsidianSpawnPoint() {
         return new RunestoneDefinition() {
             @Override
-            public Supplier<? extends Block> runestoneBlock() {
-                return feature().registers.obsidianBlock;
+            public RunestoneType type() {
+                return RunestoneType.Obsidian;
             }
 
             @Override

@@ -48,8 +48,8 @@ public class Handlers extends Setup<Runestones> {
     public void serverStart(MinecraftServer server) {
         definitions.clear();
         for (var definition : feature().registers.definitions) {
-            definitions.computeIfAbsent(definition.runestoneBlock().get(),
-                a -> new ArrayList<>()).add(definition);
+            var block = Helpers.getBlocksForType(definition.type()).get();
+            definitions.computeIfAbsent(block, a -> new ArrayList<>()).add(definition);
         }
     }
 
