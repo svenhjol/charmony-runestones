@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.10.1
+
+- Use the charmony item lookup helper.
+
 ## 1.10.0
 
 - Update for API 1.21

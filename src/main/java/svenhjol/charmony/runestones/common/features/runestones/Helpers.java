@@ -14,6 +14,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import svenhjol.charmony.api.runestones.RunestoneLocation;
 import svenhjol.charmony.api.runestones.RunestoneType;
+import svenhjol.charmony.core.helpers.ItemStackHelper;
 import svenhjol.charmony.core.helpers.TagHelper;
 import svenhjol.charmony.runestones.RunestonesMod;
 
@@ -53,19 +54,8 @@ public final class Helpers {
         return Optional.empty();
     }
 
-    /**
-     * Get a random runestone sacrifice item from a given item tag.
-     */
-    public static Item randomItem(LevelAccessor level, RandomSource random, TagKey<Item> tag) {
-        var values = TagHelper.getValues(level.registryAccess().lookupOrThrow(Registries.ITEM), tag);
-        if (!values.isEmpty()) {
-            return values.get(random.nextInt(values.size()));
-        }
-        return Items.ROTTEN_FLESH;
-    }
-
     public static Item randomItem(LevelAccessor level, RandomSource random, String res) {
-        return randomItem(level, random, TagKey.create(Registries.ITEM, RunestonesMod.id(res)));
+        return ItemStackHelper.randomItem(level, random, TagKey.create(Registries.ITEM, RunestonesMod.id(res)), Items.ROTTEN_FLESH);
     }
 
     public static BlockPos addRandomOffset(Level level, BlockPos pos, RandomSource random, int min, int max) {
