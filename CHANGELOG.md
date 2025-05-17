@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.10.4
+
+- Use WrapOperation rather than Redirect in mixin.
+
 ## 1.10.3
 
 - Use the charmony random offset helper.
