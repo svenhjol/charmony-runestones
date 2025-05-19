@@ -1,7 +1,7 @@
 package svenhjol.charmony.runestones.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import svenhjol.charmony.core.enums.Side;
+import svenhjol.charmony.api.core.Side;
 import svenhjol.charmony.runestones.RunestonesMod;
 import svenhjol.charmony.runestones.client.features.runestones.Runestones;
 

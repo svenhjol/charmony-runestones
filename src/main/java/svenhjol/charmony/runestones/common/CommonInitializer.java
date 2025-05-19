@@ -1,7 +1,7 @@
 package svenhjol.charmony.runestones.common;
 
 import net.fabricmc.api.ModInitializer;
-import svenhjol.charmony.core.enums.Side;
+import svenhjol.charmony.api.core.Side;
 import svenhjol.charmony.runestones.RunestonesMod;
 import svenhjol.charmony.runestones.common.features.runestones.Runestones;
 import svenhjol.charmony.runestones.common.features.stone_circles.StoneCircles;

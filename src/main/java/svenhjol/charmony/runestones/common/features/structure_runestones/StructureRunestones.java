@@ -1,11 +1,11 @@
 package svenhjol.charmony.runestones.common.features.structure_runestones;
 
 import net.minecraft.util.Mth;
-import svenhjol.charmony.core.annotations.Configurable;
-import svenhjol.charmony.core.annotations.FeatureDefinition;
+import svenhjol.charmony.api.core.Configurable;
+import svenhjol.charmony.api.core.FeatureDefinition;
 import svenhjol.charmony.core.base.Mod;
 import svenhjol.charmony.core.base.SidedFeature;
-import svenhjol.charmony.core.enums.Side;
+import svenhjol.charmony.api.core.Side;
 import svenhjol.charmony.runestones.common.features.runestones.Runestones;
 
 import java.util.function.BooleanSupplier;
@@ -17,6 +17,7 @@ import java.util.function.BooleanSupplier;
         This makes some small changes to world generation that has a chance to not play well with other mods,
         so disable this feature if you run into problems."""
 )
+@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public final class StructureRunestones extends SidedFeature {
     public final Handlers handlers;
 

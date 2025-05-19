@@ -1,7 +1,7 @@
 package svenhjol.charmony.runestones.common.mixins;
 
 import svenhjol.charmony.core.base.MixinConfig;
-import svenhjol.charmony.core.enums.Side;
+import svenhjol.charmony.api.core.Side;
 import svenhjol.charmony.runestones.RunestonesMod;
 
 public class CommonMixinConfig extends MixinConfig {

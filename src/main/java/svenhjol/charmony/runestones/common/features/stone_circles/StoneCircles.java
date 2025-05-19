@@ -1,15 +1,16 @@
 package svenhjol.charmony.runestones.common.features.stone_circles;
 
 import net.minecraft.util.Mth;
-import svenhjol.charmony.core.annotations.Configurable;
-import svenhjol.charmony.core.annotations.FeatureDefinition;
+import svenhjol.charmony.api.core.Configurable;
+import svenhjol.charmony.api.core.FeatureDefinition;
 import svenhjol.charmony.core.base.Mod;
 import svenhjol.charmony.core.base.SidedFeature;
-import svenhjol.charmony.core.enums.Side;
+import svenhjol.charmony.api.core.Side;
 
 @FeatureDefinition(side = Side.Common, description = """
     Adds small pillars of stone in all three dimensions.
     Runestones can often be found on the top of the stone pillars.""")
+@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public final class StoneCircles extends SidedFeature {
     public static final String STRUCTURE_ID = "stone_circle";
 
