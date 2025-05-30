@@ -1,24 +1,24 @@
 package svenhjol.charmony.runestones.client.features.runestones;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.render.state.GuiItemRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import svenhjol.charmony.core.client.BaseHudRenderer;
+import svenhjol.charmony.runestones.common.features.runestones.Helpers;
 import svenhjol.charmony.runestones.common.features.runestones.Networking;
 import svenhjol.charmony.runestones.common.features.runestones.RunestoneBlockEntity;
-import svenhjol.charmony.runestones.common.features.runestones.Helpers;
 
 public class HudRenderer extends BaseHudRenderer {
-    private final int nameColor;
-    private final int runesColor;
-    private final int discoveredColor;
-    private final int targetColor;
+    private int nameColor;
+    private int runesColor;
+    private int discoveredColor;
+    private int targetColor;
 
     private BlockPos lastLookedAt = null;
     private MutableComponent runes;
@@ -28,11 +28,17 @@ public class HudRenderer extends BaseHudRenderer {
     private MutableComponent target;
     private ItemStack sacrifice;
 
-    public HudRenderer() {
+    private int ix = 0;
+    private int iy = 0;
+
+    @Override
+    protected void init() {
         runesColor = 0xbfaf9f;
         nameColor = 0xf8f8ff;
         discoveredColor = 0xf8f8ff;
         targetColor = 0xafbfcf;
+
+        withScaling();
     }
 
     @Override
@@ -96,8 +102,8 @@ public class HudRenderer extends BaseHudRenderer {
             int lx = (int) (midX - (float) (activateWithStringLength / 2) - 2);
             guiGraphics.drawString(font, activateWith, lx, y, nameColor | alpha, textShadow);
 
-            int ix = midX + (activateWithStringLength / 2) - 6;
-            int iy = y - 4;
+            ix = midX + (activateWithStringLength / 2) - 6;
+            iy = y - 5;
             renderScaledGuiItem(guiGraphics, sacrifice, ix, iy, scale, scale);
         }
 
@@ -162,12 +168,9 @@ public class HudRenderer extends BaseHudRenderer {
         return false;
     }
 
-    /**
-     * Render displayed item with scaling.
-     */
     @Override
-    public void scaleItem(ItemStack stack, PoseStack poseStack) {
-        poseStack.scale(scaleX, scaleY, 1.0f);
+    public void scaleItem(ItemStack stack, GuiItemRenderState state, Minecraft minecraft, int width, int height) {
+        state.pose().scaleAround(scaleX, scaleY, (float) ix + 7, iy + 8);
         scaleX = scaleY = 1.0f;
     }
 }

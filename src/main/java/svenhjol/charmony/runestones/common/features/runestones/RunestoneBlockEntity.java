@@ -1,7 +1,6 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
@@ -9,6 +8,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import svenhjol.charmony.api.runestones.RunestoneLocation;
 import svenhjol.charmony.core.common.SyncedBlockEntity;
 
@@ -33,26 +34,31 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
+    protected void loadAdditional(ValueInput valueInput) {
+        super.loadAdditional(valueInput);
 
-        tag.getCompound(LOCATION_TAG).ifPresent(t -> this.location = RunestoneLocation.load(t));
-        tag.getLong(SOURCE_TAG).ifPresent(t -> this.source = BlockPos.of(t));
-        tag.getLong(TARGET_TAG).ifPresent(t -> this.target = BlockPos.of(t));
-        tag.getCompound(SACRIFICE_TAG).ifPresent(t -> this.sacrifice = ItemStack.parse(provider, t)
-            .orElse(new ItemStack(Items.ROTTEN_FLESH))); // TODO: probably need to default to something other than rotten flesh...
-        tag.getString(DISCOVERED_TAG).ifPresent(t -> this.discovered = t);
+        valueInput.read(LOCATION_TAG, CompoundTag.CODEC).ifPresent(
+            val -> this.location = RunestoneLocation.load(val));
+        valueInput.getLong(SOURCE_TAG).ifPresent(
+            val -> this.source = BlockPos.of(val));
+        valueInput.getLong(TARGET_TAG).ifPresent(
+            val -> this.target = BlockPos.of(val));
+        valueInput.read(SACRIFICE_TAG, ItemStack.CODEC).ifPresentOrElse(
+            val -> this.sacrifice = val, () -> new ItemStack(Items.ROTTEN_FLESH));
+        valueInput.getString(DISCOVERED_TAG).ifPresent(
+            val -> this.discovered = val);
+
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
+    protected void saveAdditional(ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
 
-        tag.put(LOCATION_TAG, location.save());
-        tag.putLong(SOURCE_TAG, source.asLong());
-        tag.putLong(TARGET_TAG, target.asLong());
-        tag.put(SACRIFICE_TAG, sacrifice.save(provider));
-        tag.putString(DISCOVERED_TAG, discovered);
+        valueOutput.putLong(SOURCE_TAG, source.asLong());
+        valueOutput.putLong(TARGET_TAG, target.asLong());
+        valueOutput.putString(DISCOVERED_TAG, discovered);
+        valueOutput.store(LOCATION_TAG, CompoundTag.CODEC, location.save());
+        valueOutput.store(SACRIFICE_TAG, ItemStack.CODEC, sacrifice);
     }
 
     @Override
