@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.12.0
+
+- Consolidated namespace.
+- Fix hud renderer for runestones.
+
 ## 1.11.1
 
 - Fix for 1.21.6.

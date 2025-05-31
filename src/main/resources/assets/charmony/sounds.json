@@ -1,0 +1,32 @@
+{
+  "runestone_power_up": {
+    "sounds": [
+      {
+        "name": "charmony:runestone_resonance1",
+        "volume": 1.0
+      },
+      {
+        "name": "charmony:runestone_resonance2",
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.charmony.block.runestone.power_up"
+  },
+  "runestone_fizzle_item": {
+    "sounds": [
+      {
+        "name": "charmony:runestone_whispers",
+        "volume": 1.0
+      }
+    ]
+  },
+  "runestone_travel": {
+    "sounds": [
+      {
+        "name": "charmony:runestone_travel",
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.charmony.block.runestone.travel"
+  }
+}

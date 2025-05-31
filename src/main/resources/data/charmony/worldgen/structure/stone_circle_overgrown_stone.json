@@ -1,0 +1,7 @@
+{
+  "type": "charmony:stone_circle",
+  "biomes": "#charmony:has_structure/stone_circle_overgrown_stone",
+  "spawn_overrides": {},
+  "stone_circle_definition": "overgrown_stone",
+  "step": "surface_structures"
+}

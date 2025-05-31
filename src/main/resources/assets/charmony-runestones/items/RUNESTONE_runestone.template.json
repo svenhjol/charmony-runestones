@@ -1,9 +1,0 @@
-{
-  "template": {
-    "model": {
-      "type": "minecraft:model",
-      "model": "charmony-runestones:block/RUNESTONE_runestone"
-    }
-  },
-  "variants": "runestone"
-}

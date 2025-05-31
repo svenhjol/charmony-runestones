@@ -8,13 +8,13 @@ import svenhjol.charmony.runestones.common.features.runestones.Helpers;
 
 public class TeleportedLocationToast extends BaseToast {
     public static final Component TITLE = 
-        Component.translatable("toast.charmony-runestones.teleported_location.title");
+        Component.translatable("toast.charmony.teleported_location.title");
     
     public final Component description;
     
     public TeleportedLocationToast(RunestoneLocation location) {
         description = Component.translatable(
-            "toast.charmony-runestones.teleported_location.description",
+            "toast.charmony.teleported_location.description",
             Component.translatable(Helpers.localeKey(location)));
     }
     

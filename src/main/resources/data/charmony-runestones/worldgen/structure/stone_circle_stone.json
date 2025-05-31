@@ -1,7 +1,0 @@
-{
-  "type": "charmony-runestones:stone_circle",
-  "biomes": "#charmony-runestones:has_structure/stone_circle_stone",
-  "spawn_overrides": {},
-  "stone_circle_definition": "stone",
-  "step": "surface_structures"
-}

@@ -12,17 +12,17 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import svenhjol.charmony.api.runestones.RunestoneLocation;
 import svenhjol.charmony.api.runestones.RunestoneType;
+import svenhjol.charmony.core.Charmony;
 import svenhjol.charmony.core.helpers.ItemStackHelper;
 import svenhjol.charmony.core.helpers.TagHelper;
-import svenhjol.charmony.runestones.RunestonesMod;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
 public final class Helpers {
-    public static final ResourceLocation SPAWN_POINT_ID = RunestonesMod.id("spawn_point");
-    public static final ResourceLocation EMPTY_ID = RunestonesMod.id("empty");
+    public static final ResourceLocation SPAWN_POINT_ID = Charmony.id("spawn_point");
+    public static final ResourceLocation EMPTY_ID = Charmony.id("empty");
     public static final RunestoneLocation SPAWN_POINT = new RunestoneLocation(RunestoneLocation.Type.Player, SPAWN_POINT_ID);
     public static final RunestoneLocation EMPTY_LOCATION = new RunestoneLocation(RunestoneLocation.Type.Player, EMPTY_ID);
 
@@ -53,7 +53,7 @@ public final class Helpers {
     }
 
     public static Item randomItem(LevelAccessor level, RandomSource random, String res) {
-        return ItemStackHelper.randomItem(level, random, TagKey.create(Registries.ITEM, RunestonesMod.id(res)), Items.ROTTEN_FLESH);
+        return ItemStackHelper.randomItem(level, random, TagKey.create(Registries.ITEM, Charmony.id(res)), Items.ROTTEN_FLESH);
     }
 
     /**

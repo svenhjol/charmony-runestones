@@ -14,8 +14,8 @@ import svenhjol.charmony.api.runestones.RunestoneDefinitionProvider;
 import svenhjol.charmony.api.runestones.RunestoneLocation;
 import svenhjol.charmony.api.runestones.RunestoneType;
 import svenhjol.charmony.core.Api;
+import svenhjol.charmony.core.Charmony;
 import svenhjol.charmony.core.base.Setup;
-import svenhjol.charmony.runestones.RunestonesMod;
 
 import java.util.List;
 import java.util.Optional;
@@ -313,10 +313,10 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
         public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
             var qualityChance = isRare ? quality : 0;
             if (random.nextDouble() < (biomeChance + qualityChance)) {
-                return Helpers.randomBiome(level, random, TagKey.create(Registries.BIOME, RunestonesMod.id(biomeTagPath())));
+                return Helpers.randomBiome(level, random, TagKey.create(Registries.BIOME, Charmony.id(biomeTagPath())));
             }
             if (random.nextDouble() < (structureChance + qualityChance)) {
-                return Helpers.randomStructure(level, random, TagKey.create(Registries.STRUCTURE, RunestonesMod.id(structureTagPath())));
+                return Helpers.randomStructure(level, random, TagKey.create(Registries.STRUCTURE, Charmony.id(structureTagPath())));
             }
 
             return Optional.empty();

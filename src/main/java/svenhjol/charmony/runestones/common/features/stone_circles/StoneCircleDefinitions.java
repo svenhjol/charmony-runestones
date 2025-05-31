@@ -16,9 +16,9 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import svenhjol.charmony.api.stone_circles.StoneCircleDefinition;
 import svenhjol.charmony.api.stone_circles.StoneCircleDefinitionProvider;
 import svenhjol.charmony.core.Api;
+import svenhjol.charmony.core.Charmony;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.helpers.WorldHelper;
-import svenhjol.charmony.runestones.RunestonesMod;
 import svenhjol.charmony.runestones.common.features.runestones.Runestones;
 
 import java.util.List;
@@ -58,7 +58,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
             @Override
             public TagKey<Block> pillarBlocks() {
-                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/stone_pillar"));
+                return TagKey.create(Registries.BLOCK, Charmony.id("stone_circle/stone_pillar"));
             }
 
             @Override
@@ -139,7 +139,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
             @Override
             public TagKey<Block> pillarBlocks() {
-                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/overgrown_stone_pillar"));
+                return TagKey.create(Registries.BLOCK, Charmony.id("stone_circle/overgrown_stone_pillar"));
             }
 
             @Override
@@ -239,7 +239,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
             @Override
             public TagKey<Block> pillarBlocks() {
-                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/blackstone_pillar"));
+                return TagKey.create(Registries.BLOCK, Charmony.id("stone_circle/blackstone_pillar"));
             }
 
             @Override
@@ -356,7 +356,7 @@ public class StoneCircleDefinitions extends Setup<StoneCircles> implements Stone
 
             @Override
             public TagKey<Block> pillarBlocks() {
-                return TagKey.create(Registries.BLOCK, RunestonesMod.id("stone_circle/obsidian_pillar"));
+                return TagKey.create(Registries.BLOCK, Charmony.id("stone_circle/obsidian_pillar"));
             }
 
             @Override

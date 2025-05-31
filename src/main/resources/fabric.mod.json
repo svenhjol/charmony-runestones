@@ -9,7 +9,7 @@
   "authors": [
     "svenhjol"
   ],
-  "icon": "assets/charmony-runestones/textures/gui/sprites/icon.png",
+  "icon": "assets/charmony/textures/gui/sprites/charmony-runestones.png",
   "license": "MIT",
   "environment": "*",
   "accessWidener": "charmony-runestones.accesswidener",

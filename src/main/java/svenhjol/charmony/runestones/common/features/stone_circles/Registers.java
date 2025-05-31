@@ -53,7 +53,7 @@ public class Registers extends Setup<StoneCircles> {
                 () -> new VillagerTrades.TreasureMapForEmeralds(
                     7, // emerald cost
                     Tags.ON_STONE_CIRCLE_MAPS,
-                    "filled_map.charmony-runestones.stone_circle",
+                    "filled_map.charmony.stone_circle",
                     MapDecorationTypes.TARGET_X,
                     12, // max trades
                     5) // XP for villager

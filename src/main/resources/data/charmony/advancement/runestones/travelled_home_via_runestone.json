@@ -1,0 +1,31 @@
+{
+  "parent": "charmony:runestones/travelled_via_runestone",
+  "display": {
+    "icon": {
+      "id": "minecraft:white_bed"
+    },
+    "title": {
+      "translate": "advancements.charmony.travelled_home_via_runestone.title"
+    },
+    "description": {
+      "translate": "advancements.charmony.travelled_home_via_runestone.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "travelled_home_via_runestone": {
+      "trigger": "charmony_action_performed",
+      "conditions": {
+        "action": "charmony:travelled_home_via_runestone"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "travelled_home_via_runestone"
+    ]
+  ]
+}

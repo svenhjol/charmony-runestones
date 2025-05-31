@@ -37,8 +37,11 @@ public class HudRenderer extends BaseHudRenderer {
         nameColor = 0xf8f8ff;
         discoveredColor = 0xf8f8ff;
         targetColor = 0xafbfcf;
+    }
 
-        withScaling();
+    @Override
+    protected boolean withScaling() {
+        return true;
     }
 
     @Override
@@ -131,20 +134,20 @@ public class HudRenderer extends BaseHudRenderer {
 
             if (runestone.target().isPresent()) {
                 var targetPos = runestone.target().get();
-                target = Component.translatable("gui.charmony-runestones.runestone.target", targetPos.getX(), targetPos.getY(), targetPos.getZ());
+                target = Component.translatable("gui.charmony.runestone.target", targetPos.getX(), targetPos.getY(), targetPos.getZ());
             } else {
                 target = Component.literal("");
             }
 
             item = runestone.item;
-            activateWith = Component.translatable("gui.charmony-runestones.runestone.activate_with");
+            activateWith = Component.translatable("gui.charmony.runestone.activate_with");
 
             runes = Component.literal(feature.handlers.runicName(runestone.location))
                 .withStyle(feature.registers.runeFont);
 
             if (!runestone.discovered() && isCreative) {
                 name = Component.translatable(Helpers.localeKey(runestone.location));
-                discovered = Component.translatable("gui.charmony-runestones.runestone.discovered_by", "Creative mode");
+                discovered = Component.translatable("gui.charmony.runestone.discovered_by", "Creative mode");
                 return true;
             }
 
@@ -154,7 +157,7 @@ public class HudRenderer extends BaseHudRenderer {
 
                 if (runestone.discovered()) {
                     // Show the "Discovered by" message.
-                    discovered = Component.translatable("gui.charmony-runestones.runestone.discovered_by",
+                    discovered = Component.translatable("gui.charmony.runestone.discovered_by",
                         Component.translatable(runestone.discovered));
                 }
             } else {

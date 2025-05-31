@@ -1,0 +1,7 @@
+{
+  "type": "charmony:stone_circle",
+  "biomes": "#charmony:has_structure/stone_circle_blackstone",
+  "spawn_overrides": {},
+  "stone_circle_definition": "blackstone",
+  "step": "surface_structures"
+}

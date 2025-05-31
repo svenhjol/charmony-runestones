@@ -116,7 +116,7 @@ public final class Handlers extends Setup<Runestones> {
         var familiarity = isFamiliar(location, player);
 
         if (!familiarity) {
-            return Component.translatable("gui.charmony-runestones.runestone.unknown");
+            return Component.translatable("gui.charmony.runestone.unknown");
         }
 
         if (minecraft.level == null) {
@@ -131,7 +131,7 @@ public final class Handlers extends Setup<Runestones> {
         feature().log().debug("Rebuilding name cache");
         var translated = Component.translatable(Helpers.localeKey(location)).getString();
 
-        var name = Component.translatable("gui.charmony-runestones.runestone.familiar", translated);
+        var name = Component.translatable("gui.charmony.runestone.familiar", translated);
         cachedFamiliarNames.clear();
         cachedFamiliarNames.put(pos, name);
         lastFamiliarNameCache = gameTime;

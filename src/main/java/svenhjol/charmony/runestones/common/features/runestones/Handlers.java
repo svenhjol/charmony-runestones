@@ -32,7 +32,7 @@ import java.util.*;
 
 @SuppressWarnings("unused")
 public class Handlers extends Setup<Runestones> {
-    public static final String MULTIPLE_PLAYERS_KEY = "gui.charmony-runestones.runestone.multiple_players";
+    public static final String MULTIPLE_PLAYERS_KEY = "gui.charmony.runestone.multiple_players";
     public static final int MAX_WARMUP_TICKS = 8;
     public static final int WARMUP_CHECK = 10;
 

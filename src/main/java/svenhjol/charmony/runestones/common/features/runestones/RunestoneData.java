@@ -66,11 +66,11 @@ public record RunestoneData(
     public void addToTooltip(Item.TooltipContext tooltipContext, Consumer<Component> consumer, TooltipFlag tooltipFlag, DataComponentGetter dataComponentGetter) {
         if (!this.discovered().isEmpty()) {
             consumer.accept(Component.translatable(Helpers.localeKey(this.location())).withStyle(ChatFormatting.GOLD));
-            consumer.accept(Component.translatable("gui.charmony-runestones.runestone.discovered_by", this.discovered()).withStyle(ChatFormatting.GRAY));
+            consumer.accept(Component.translatable("gui.charmony.runestone.discovered_by", this.discovered()).withStyle(ChatFormatting.GRAY));
         }
         if (!this.activate().isEmpty()) {
             var hoverName = ((MutableComponent)this.activate().getHoverName()).withStyle(ChatFormatting.BLUE);
-            consumer.accept(Component.translatable("gui.charmony-runestones.runestone.activate_with_item_name", hoverName));
+            consumer.accept(Component.translatable("gui.charmony.runestone.activate_with_item_name", hoverName));
         }
     }
 }

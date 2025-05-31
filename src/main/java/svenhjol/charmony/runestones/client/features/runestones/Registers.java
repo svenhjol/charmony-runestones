@@ -29,9 +29,9 @@ public final class Registers extends Setup<Runestones> {
         hudRenderer = new HudRenderer();
 
         // Handle packets being sent from the server.
-        registry.packetReceiver(S2CTeleportedLocation.TYPE, () -> feature.handlers::handleTeleportedLocation);
-        registry.packetReceiver(S2CActivationWarmup.TYPE, () -> feature.handlers::handleActivationWarmup);
-        registry.packetReceiver(S2CDestroyRunestone.TYPE, () -> feature.handlers::handleDestroyRunestone);
+        registry.packetReceiver(S2CTeleportedLocation.TYPE, feature.handlers::handleTeleportedLocation);
+        registry.packetReceiver(S2CActivationWarmup.TYPE, feature.handlers::handleActivationWarmup);
+        registry.packetReceiver(S2CDestroyRunestone.TYPE, feature.handlers::handleDestroyRunestone);
     }
 
     @Override

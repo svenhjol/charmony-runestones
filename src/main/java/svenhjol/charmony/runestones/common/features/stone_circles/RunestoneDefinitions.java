@@ -11,8 +11,8 @@ import svenhjol.charmony.api.runestones.RunestoneDefinition;
 import svenhjol.charmony.api.runestones.RunestoneDefinitionProvider;
 import svenhjol.charmony.api.runestones.RunestoneLocation;
 import svenhjol.charmony.api.runestones.RunestoneType;
+import svenhjol.charmony.core.Charmony;
 import svenhjol.charmony.core.base.Setup;
-import svenhjol.charmony.runestones.RunestonesMod;
 import svenhjol.charmony.runestones.common.features.runestones.Helpers;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public class RunestoneDefinitions extends Setup<StoneCircles> implements Runesto
             @Override
             public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 if (feature().enabled() && random.nextDouble() < feature().stoneCircleRunestoneChance()) {
-                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, RunestonesMod.id("stone_circle_stone")));
+                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, Charmony.id("stone_circle_stone")));
                 }
                 return Optional.empty();
             }
@@ -76,7 +76,7 @@ public class RunestoneDefinitions extends Setup<StoneCircles> implements Runesto
             @Override
             public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 if (feature().enabled() && random.nextDouble() < feature().stoneCircleRunestoneChance()) {
-                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, RunestonesMod.id("stone_circle_blackstone")));
+                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, Charmony.id("stone_circle_blackstone")));
                 }
                 return Optional.empty();
             }
@@ -103,7 +103,7 @@ public class RunestoneDefinitions extends Setup<StoneCircles> implements Runesto
             @Override
             public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 if (feature().enabled() && random.nextDouble() < feature().stoneCircleRunestoneChance()) {
-                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, RunestonesMod.id("stone_circle_obsidian")));
+                    return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, Charmony.id("stone_circle_obsidian")));
                 }
                 return Optional.empty();
             }

@@ -1,7 +1,0 @@
-{
-  "type": "charmony-runestones:stone_circle",
-  "biomes": "#charmony-runestones:has_structure/stone_circle_overgrown_stone",
-  "spawn_overrides": {},
-  "stone_circle_definition": "overgrown_stone",
-  "step": "surface_structures"
-}
