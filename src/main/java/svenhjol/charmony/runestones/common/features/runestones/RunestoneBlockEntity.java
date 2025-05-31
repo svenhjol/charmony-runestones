@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -19,13 +21,13 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
     public static final String LOCATION_TAG = "location";
     public static final String SOURCE_TAG = "source";
     public static final String TARGET_TAG = "target";
-    public static final String SACRIFICE_TAG = "sacrifice";
+    public static final String ITEM_TAG = "item";
     public static final String DISCOVERED_TAG = "discovered";
 
     public RunestoneLocation location = Helpers.EMPTY_LOCATION;
     public BlockPos source = BlockPos.ZERO;
     public BlockPos target = BlockPos.ZERO;
-    public ItemStack sacrifice = ItemStack.EMPTY;
+    public ItemStack item = ItemStack.EMPTY;
     public String discovered = "";
     public int warmup = 0;
 
@@ -43,8 +45,16 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
             val -> this.source = BlockPos.of(val));
         valueInput.getLong(TARGET_TAG).ifPresent(
             val -> this.target = BlockPos.of(val));
-        valueInput.read(SACRIFICE_TAG, ItemStack.CODEC).ifPresentOrElse(
-            val -> this.sacrifice = val, () -> new ItemStack(Items.ROTTEN_FLESH));
+        valueInput.read(ITEM_TAG, ItemStack.CODEC).ifPresentOrElse(
+            val -> this.item = val, () -> {
+                Item i;
+                if (level instanceof ServerLevel serverLevel) {
+                    i = Helpers.randomItem(serverLevel, serverLevel.random, "runestone/stone/uncommon");
+                } else {
+                    i = Items.DIAMOND;
+                }
+                new ItemStack(i);
+            });
         valueInput.getString(DISCOVERED_TAG).ifPresent(
             val -> this.discovered = val);
 
@@ -58,7 +68,7 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
         valueOutput.putLong(TARGET_TAG, target.asLong());
         valueOutput.putString(DISCOVERED_TAG, discovered);
         valueOutput.store(LOCATION_TAG, CompoundTag.CODEC, location.save());
-        valueOutput.store(SACRIFICE_TAG, ItemStack.CODEC, sacrifice);
+        valueOutput.store(ITEM_TAG, ItemStack.CODEC, item);
     }
 
     @Override
@@ -70,7 +80,7 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
         this.location = runestoneData.location();
         this.source = runestoneData.source();
         this.target = runestoneData.target();
-        this.sacrifice = runestoneData.sacrifice();
+        this.item = runestoneData.activate();
         this.discovered = runestoneData.discovered();
     }
 
@@ -83,7 +93,7 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
             this.location,
             this.source,
             this.target,
-            this.sacrifice,
+            this.item,
             this.discovered
         ));
     }
@@ -95,7 +105,7 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
     public boolean isValid() {
         return source().isPresent()
             && location().isPresent()
-            && sacrifice().isPresent();
+            && item().isPresent();
     }
 
     public boolean discovered() {
@@ -106,8 +116,8 @@ public class RunestoneBlockEntity extends SyncedBlockEntity {
         return location != Helpers.EMPTY_LOCATION ? Optional.of(location) : Optional.empty();
     }
 
-    public Optional<ItemStack> sacrifice() {
-        return !sacrifice.isEmpty() ? Optional.of(sacrifice) : Optional.empty();
+    public Optional<ItemStack> item() {
+        return !item.isEmpty() ? Optional.of(item) : Optional.empty();
     }
 
     public Optional<BlockPos> source() {

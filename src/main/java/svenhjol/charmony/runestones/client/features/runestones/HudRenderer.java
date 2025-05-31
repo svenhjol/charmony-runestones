@@ -26,7 +26,7 @@ public class HudRenderer extends BaseHudRenderer {
     private MutableComponent discovered;
     private MutableComponent activateWith;
     private MutableComponent target;
-    private ItemStack sacrifice;
+    private ItemStack item;
 
     private int ix = 0;
     private int iy = 0;
@@ -97,14 +97,14 @@ public class HudRenderer extends BaseHudRenderer {
             guiGraphics.drawString(font, runes, lx, y, runesColor | alpha, textShadow);
         }
 
-        if (activateWithStringLength > 0 && !sacrifice.isEmpty()) {
+        if (activateWithStringLength > 0 && !item.isEmpty()) {
             y += lineHeight;
             int lx = (int) (midX - (float) (activateWithStringLength / 2) - 2);
             guiGraphics.drawString(font, activateWith, lx, y, nameColor | alpha, textShadow);
 
             ix = midX + (activateWithStringLength / 2) - 6;
             iy = y - 5;
-            renderScaledGuiItem(guiGraphics, sacrifice, ix, iy, scale, scale);
+            renderScaledGuiItem(guiGraphics, item, ix, iy, scale, scale);
         }
 
         doFadeTicks();
@@ -136,7 +136,7 @@ public class HudRenderer extends BaseHudRenderer {
                 target = Component.literal("");
             }
 
-            sacrifice = runestone.sacrifice;
+            item = runestone.item;
             activateWith = Component.translatable("gui.charmony-runestones.runestone.activate_with");
 
             runes = Component.literal(feature.handlers.runicName(runestone.location))

@@ -23,7 +23,7 @@ public record RunestoneData(
     RunestoneLocation location,
     BlockPos source,
     BlockPos target,
-    ItemStack sacrifice,
+    ItemStack activate,
     String discovered
 ) implements TooltipProvider {
     public static final Codec<RunestoneData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -33,12 +33,12 @@ public record RunestoneData(
             .forGetter(RunestoneData::source),
         BlockPos.CODEC.fieldOf("target")
             .forGetter(RunestoneData::target),
-        ItemStack.CODEC.fieldOf("sacrifice")
-            .forGetter(RunestoneData::sacrifice),
+        ItemStack.CODEC.fieldOf("item")
+            .forGetter(RunestoneData::activate),
         Codec.STRING.fieldOf("discovered")
             .forGetter(RunestoneData::discovered)
-    ).apply(instance, (tag, source, target, sacrifice, discovered)
-        -> new RunestoneData(RunestoneLocation.load(tag), source, target, sacrifice, discovered)));
+    ).apply(instance, (tag, source, target, item, discovered)
+        -> new RunestoneData(RunestoneLocation.load(tag), source, target, item, discovered)));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, RunestoneData> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.COMPOUND_TAG,
@@ -48,11 +48,11 @@ public record RunestoneData(
         BlockPos.STREAM_CODEC,
             RunestoneData::target,
         ItemStack.STREAM_CODEC,
-            RunestoneData::sacrifice,
+            RunestoneData::activate,
         ByteBufCodecs.STRING_UTF8,
             RunestoneData::discovered,
-        (tag, source, target, sacrifice, discovered)
-            -> new RunestoneData(RunestoneLocation.load(tag), source, target, sacrifice, discovered));
+        (tag, source, target, item, discovered)
+            -> new RunestoneData(RunestoneLocation.load(tag), source, target, item, discovered));
 
     public static final RunestoneData EMPTY = new RunestoneData(
         Helpers.EMPTY_LOCATION,
@@ -68,8 +68,8 @@ public record RunestoneData(
             consumer.accept(Component.translatable(Helpers.localeKey(this.location())).withStyle(ChatFormatting.GOLD));
             consumer.accept(Component.translatable("gui.charmony-runestones.runestone.discovered_by", this.discovered()).withStyle(ChatFormatting.GRAY));
         }
-        if (!this.sacrifice().isEmpty()) {
-            var hoverName = ((MutableComponent)this.sacrifice().getHoverName()).withStyle(ChatFormatting.BLUE);
+        if (!this.activate().isEmpty()) {
+            var hoverName = ((MutableComponent)this.activate().getHoverName()).withStyle(ChatFormatting.BLUE);
             consumer.accept(Component.translatable("gui.charmony-runestones.runestone.activate_with_item_name", hoverName));
         }
     }

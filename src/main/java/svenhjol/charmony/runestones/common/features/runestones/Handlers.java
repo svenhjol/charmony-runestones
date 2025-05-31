@@ -70,7 +70,7 @@ public class Handlers extends Setup<Runestones> {
             ItemEntity foundItem = null;
             var itemEntities = level.getEntitiesOfClass(ItemEntity.class, (new AABB(pos)).inflate(4.8d));
             for (var itemEntity : itemEntities) {
-                if (itemEntity.getItem().is(runestone.sacrifice.getItem())) {
+                if (itemEntity.getItem().is(runestone.item.getItem())) {
                     foundItem = itemEntity;
                     break;
                 }
@@ -213,13 +213,13 @@ public class Handlers extends Setup<Runestones> {
             random.nextInt(15335251);
 
             if (location.isPresent()) {
-                var sacrifice = blockDefinition.sacrifice(level, pos, random, quality).get();
+                var item = blockDefinition.item(level, pos, random, quality).get();
 
                 runestone.source = pos;
                 runestone.location = location.get();
-                runestone.sacrifice = new ItemStack(sacrifice);
+                runestone.item = new ItemStack(item);
 
-                log().debug("Set runestone location = " + runestone.location.id() + ", sacrifice = " + runestone.sacrifice.toString() + ", quality = " + quality + " at pos " + pos);
+                log().debug("Set runestone location = " + runestone.location.id() + ", activate = " + runestone.item.toString() + ", quality = " + quality + " at pos " + pos);
                 runestone.setChanged();
                 return;
             }

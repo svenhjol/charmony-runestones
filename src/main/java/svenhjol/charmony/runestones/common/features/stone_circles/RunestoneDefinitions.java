@@ -55,7 +55,7 @@ public class RunestoneDefinitions extends Setup<StoneCircles> implements Runesto
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/stone/common");
             }
         };
@@ -82,7 +82,7 @@ public class RunestoneDefinitions extends Setup<StoneCircles> implements Runesto
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/blackstone/common");
             }
         };
@@ -109,7 +109,7 @@ public class RunestoneDefinitions extends Setup<StoneCircles> implements Runesto
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/obsidian/common");
             }
         };

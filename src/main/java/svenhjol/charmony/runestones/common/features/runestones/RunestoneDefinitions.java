@@ -65,7 +65,7 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/stone/common");
             }
         };
@@ -94,7 +94,7 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/stone/uncommon");
             }
         };
@@ -123,7 +123,7 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/stone/rare");
             }
         };
@@ -150,7 +150,7 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/stone/spawn_point");
             }
         };
@@ -177,7 +177,7 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/stone/rare");
             }
         };
@@ -206,7 +206,7 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/blackstone/common");
             }
         };
@@ -233,7 +233,7 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/blackstone/spawn_point");
             }
         };
@@ -262,7 +262,7 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/obsidian/common");
             }
         };
@@ -289,7 +289,7 @@ public class RunestoneDefinitions extends Setup<Runestones> implements Runestone
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> Helpers.randomItem(level, random, "runestone/obsidian/spawn_point");
             }
         };
