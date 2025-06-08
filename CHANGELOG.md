@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.12.2
+
+- Remove music disc from loot.
+
 ## 1.12.1
 
 - Update toast text color.

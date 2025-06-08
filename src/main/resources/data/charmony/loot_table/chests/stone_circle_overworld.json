@@ -85,11 +85,6 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:music_disc_ward",
-          "weight": 1
-        },
-        {
-          "type": "minecraft:item",
           "name": "minecraft:name_tag",
           "weight": 5
         },
