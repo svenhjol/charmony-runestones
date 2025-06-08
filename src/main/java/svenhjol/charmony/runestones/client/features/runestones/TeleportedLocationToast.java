@@ -2,6 +2,7 @@ package svenhjol.charmony.runestones.client.features.runestones;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import svenhjol.charmony.api.core.Color;
 import svenhjol.charmony.api.runestones.RunestoneLocation;
 import svenhjol.charmony.core.client.BaseToast;
 import svenhjol.charmony.runestones.common.features.runestones.Helpers;
@@ -39,7 +40,7 @@ public class TeleportedLocationToast extends BaseToast {
     }
 
     @Override
-    protected int color() {
-        return 0x909090;
+    protected Color color() {
+        return new Color(0x909090);
     }
 }

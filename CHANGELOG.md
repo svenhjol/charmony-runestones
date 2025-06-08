@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.12.1
+
+- Update toast text color.
+
 ## 1.12.0
 
 - Consolidated namespace.
