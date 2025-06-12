@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.12.3
+
+- Increase the quality of stronghold and bastion runestones.
+- Update random method calls.
+
 ## 1.12.2
 
 - Remove music disc from loot.

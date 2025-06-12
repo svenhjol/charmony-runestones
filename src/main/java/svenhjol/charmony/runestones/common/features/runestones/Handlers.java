@@ -1,7 +1,7 @@
 package svenhjol.charmony.runestones.common.features.runestones;
 
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
@@ -202,11 +202,11 @@ public class Handlers extends Setup<Runestones> {
         var seed = WorldHelper.seedFromBlockPos(pos);
         var random = RandomSource.create(seed);
 
-        var cardinals = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
-        level.setBlock(pos, state.setValue(RunestoneBlock.FACING, cardinals.get(random.nextInt(cardinals.size()))), 2);
+        var direction = WorldHelper.randomCardinal(random);
+        level.setBlock(pos, state.setValue(RunestoneBlock.FACING, direction), 2);
 
         var blockDefinitions = new ArrayList<>(definitions.get(block));
-        Collections.shuffle(blockDefinitions, new Random(random.nextLong()));
+        Util.shuffle(blockDefinitions, random);
 
         for (var blockDefinition : blockDefinitions) {
             var location = blockDefinition.location(level, pos, random, quality);
