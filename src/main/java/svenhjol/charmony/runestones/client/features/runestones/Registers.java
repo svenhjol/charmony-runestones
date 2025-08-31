@@ -1,5 +1,6 @@
 package svenhjol.charmony.runestones.client.features.runestones;
 
+import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public final class Registers extends Setup<Runestones> {
-    private static final ResourceLocation ILLAGER_GLYPHS = ResourceLocation.withDefaultNamespace("illageralt");
+    private static final FontDescription.Resource ILLAGER_GLYPHS = new FontDescription.Resource(ResourceLocation.withDefaultNamespace("illageralt"));
 
     public final Style runeFont;
     public final HudRenderer hudRenderer;
